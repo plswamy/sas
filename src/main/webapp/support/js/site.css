@@ -1,0 +1,882 @@
+﻿/* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video
+{
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    margin: 0;
+    padding: 0;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section
+{
+    display: block;
+}
+
+body
+{
+    line-height: 1;
+}
+
+ol, ul
+{
+    list-style: none;
+}
+
+blockquote, q
+{
+    quotes: none;
+}
+
+    blockquote:before, blockquote:after, q:before, q:after
+    {
+        content: none;
+    }
+
+table
+{
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.clearfix:after
+{
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+
+.clearfix
+{
+    display: inline-block;
+}
+
+html[xmlns] .clearfix
+{
+    display: block;
+}
+
+* html .clearfix
+{
+    height: 1%;
+}
+/********************/
+
+
+
+body
+{
+    background: #edebea;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #675c53;
+}
+
+#outer
+{
+    text-align: center;
+}
+
+.inner
+{
+    width: 951px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+#header
+{
+    text-align: right;
+}
+
+#logo
+{
+    width: 196px;
+    height: 89px;
+    margin: 16px 0;
+    background: url('/img/logo.png') no-repeat;
+    display: inline-block;
+}
+
+#content_wrap
+{
+}
+
+.content
+{
+    background: #fff;
+    border-left: solid 1px #c3c2c2;
+    border-right: solid 1px #c3c2c2;
+    border-bottom: solid 1px #c3c2c2;
+    border-radius: 0px 0px 20px 0;
+    position: relative;
+}
+
+#footer
+{
+    text-align: left;
+    padding: 20px 0 60px 0px;
+}
+
+    #footer h1
+    {
+        color: #003591;
+        font-size: 22px;
+        margin: 0px;
+    }
+
+        #footer h1 span.grey
+        {
+            color: #675c53;
+            margin-left: 10px;
+        }
+
+/*********** Home page ***********/
+#sections_home {
+    height: 39px;
+    background: url('/img/sections.jpg') no-repeat;
+}
+   
+
+#reg_form
+{
+    padding: 20px;
+    margin-top: 28px;
+    margin-right: 38px;
+    margin-bottom: 28px;
+}
+
+    #reg_form .label
+    {
+        font-weight: bold;
+        width: 100px;
+    }
+
+    #reg_form .field
+    {
+    }
+
+    #reg_form .spacer
+    {
+        padding-right: 10px;
+    }
+
+    #reg_form .field input
+    {
+        width: 139px;
+        padding: 3px 0px;
+        margin: 5px 0px;
+        border: 1px solid #c7c2bf;
+    }
+
+    #reg_form .field select
+    {
+        width: 143px;
+        padding: 3px 0px;
+        margin: 5px 0px;
+        border: 1px solid #c7c2bf;
+    }
+
+    #reg_form .btn
+    {
+        margin: 0px;
+    }
+
+.arrow
+{
+    display: inline-block;
+    background: url('/img/arrow.png') no-repeat;
+    height: 20px;
+    width: 22px;
+    vertical-align: top;
+    margin-top: 2px;
+}
+
+/*********************************/
+
+/******** Assessment tool ********/
+#sections
+{
+    height: 60px;
+    z-index: 99;
+    position: relative;
+}
+
+.section_1 #sections
+{
+    background: url('/img/section_plan.png') no-repeat;
+}
+
+.section_2 #sections
+{
+    background: url('/img/section_do.png') no-repeat;
+}
+
+.section_3 #sections
+{
+    background: url('/img/section_check.png') no-repeat;
+}
+
+#assessment .content
+{
+    margin-top: -15px;
+    z-index: 1;
+}
+
+#assessment .left
+{
+    position: relative;
+}
+
+#assessment .question_image
+{
+    height: 396px;
+    background-repeat: no-repeat;
+}
+
+#assessment .right
+{
+    margin-top: 28px;
+}
+
+#assessment h3
+{
+    padding: 18px 24px;
+    margin-bottom: 0px;
+}
+
+#assessment .question_count_wrap
+{
+    width: 66px;
+    position: absolute;
+    right: 0px;
+    top: 28px;
+}
+
+#assessment .question_count_heading
+{
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 0px 0px;
+}
+
+#assessment .question_count
+{
+    text-align: center;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    padding: 4px 0px;
+}
+
+#assessment .answer_wrap
+{
+    text-align: center;
+    margin-top: 50px;
+}
+
+#progressBarWrap
+{
+    width: 450px;
+    position: absolute;
+    right: 70px;
+    bottom: 14px;
+}
+
+    #progressBarWrap h4
+    {
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+
+#progressBarOuter
+{
+    height: 10px;
+}
+
+#progressBarInner
+{
+    display: inline-block;
+    height: 10px;
+}
+
+/********** Question images **********/
+div.question[data-section-id="1"][data-question-id="1"] .question_image
+{
+    background-image: url('/img/questions/plan-1.png');
+}
+
+div.question[data-section-id="1"][data-question-id="2"] .question_image
+{
+    background-image: url('/img/questions/plan-2.png');
+}
+
+div.question[data-section-id="1"][data-question-id="3"] .question_image
+{
+    background-image: url('/img/questions/plan-3.png');
+}
+
+div.question[data-section-id="1"][data-question-id="4"] .question_image
+{
+    background-image: url('/img/questions/plan-4.png');
+}
+
+div.question[data-section-id="1"][data-question-id="5"] .question_image
+{
+    background-image: url('/img/questions/plan-5.png');
+}
+
+div.question[data-section-id="1"][data-question-id="6"] .question_image
+{
+    background-image: url('/img/questions/plan-6.png');
+}
+
+div.question[data-section-id="1"][data-question-id="7"] .question_image
+{
+    background-image: url('/img/questions/plan-7.png');
+}
+
+div.question[data-section-id="2"][data-question-id="1"] .question_image
+{
+    background-image: url('/img/questions/do-8.png');
+}
+
+div.question[data-section-id="2"][data-question-id="2"] .question_image
+{
+    background-image: url('/img/questions/do-9.png');
+}
+
+div.question[data-section-id="2"][data-question-id="3"] .question_image
+{
+    background-image: url('/img/questions/do-10.png');
+}
+
+div.question[data-section-id="2"][data-question-id="4"] .question_image
+{
+    background-image: url('/img/questions/do-11.png');
+}
+
+div.question[data-section-id="2"][data-question-id="5"] .question_image
+{
+    background-image: url('/img/questions/do-12.png');
+}
+
+div.question[data-section-id="2"][data-question-id="6"] .question_image
+{
+    background-image: url('/img/questions/do-13.png');
+}
+
+div.question[data-section-id="2"][data-question-id="7"] .question_image
+{
+    background-image: url('/img/questions/do-14.png');
+}
+
+div.question[data-section-id="2"][data-question-id="8"] .question_image
+{
+    background-image: url('/img/questions/do-15.png');
+}
+
+div.question[data-section-id="2"][data-question-id="9"] .question_image
+{
+    background-image: url('/img/questions/do-16.png');
+}
+
+div.question[data-section-id="2"][data-question-id="10"] .question_image
+{
+    background-image: url('/img/questions/do-17.png');
+}
+
+div.question[data-section-id="2"][data-question-id="11"] .question_image
+{
+    background-image: url('/img/questions/do-18.png');
+}
+
+div.question[data-section-id="2"][data-question-id="12"] .question_image
+{
+    background-image: url('/img/questions/do-19.png');
+}
+
+div.question[data-section-id="2"][data-question-id="13"] .question_image
+{
+    background-image: url('/img/questions/do-20.png');
+}
+
+div.question[data-section-id="2"][data-question-id="14"] .question_image
+{
+    background-image: url('/img/questions/do-21.png');
+}
+
+div.question[data-section-id="3"][data-question-id="1"] .question_image
+{
+    background-image: url('/img/questions/check-22.png');
+}
+
+div.question[data-section-id="3"][data-question-id="2"] .question_image
+{
+    background-image: url('/img/questions/check-23.png');
+}
+
+/*************************************/
+
+
+
+
+/********** Section 1 ***********/
+.section_1 h3
+{
+    color: #2f4696;
+}
+
+.section_1 .question_count_wrap
+{
+    background: #2f4696;
+}
+
+.section_1 .question_count_heading
+{
+    border-bottom: 1px solid #2f4696;
+}
+
+.section_1 .question_count
+{
+    border-top: 1px solid #2f4696;
+}
+
+.section_1 #progressBarWrap h4
+{
+    color: #2f4696;
+}
+
+.section_1 #progressBarInner
+{
+    background: #2f4696;
+}
+/********************************/
+
+
+/********** Section 2 ***********/
+.section_2 h3
+{
+    color: #232762;
+}
+
+.section_2 .question_count_wrap
+{
+    background: #232762;
+}
+
+.section_2 .question_count_heading
+{
+    border-bottom: 1px solid #232762;
+}
+
+.section_2 .question_count
+{
+    border-top: 1px solid #232762;
+}
+
+.section_2 #progressBarWrap h4
+{
+    color: #232762;
+}
+
+.section_2 #progressBarInner
+{
+    background: #232762;
+}
+/********************************/
+
+
+/********** Section 3 ***********/
+.section_3 h3
+{
+    color: #EF820F;
+}
+
+.section_3 .question_count_wrap
+{
+    background: #EF820F;
+}
+
+.section_3 .question_count_heading
+{
+    border-bottom: 1px solid #EF820F;
+}
+
+.section_3 .question_count
+{
+    border-top: 1px solid #EF820F;
+}
+
+.section_3 #progressBarWrap h4
+{
+    color: #EF820F;
+}
+
+.section_3 #progressBarInner
+{
+    background: #EF820F;
+}
+/********************************/
+
+/********** Results *************/
+.results_header
+{
+    background: url('/img/result_header.png') no-repeat;
+    height: 39px;
+}
+
+#results #btnPrintPDF
+{
+    display: inline-block;
+    height: 20px;
+    float: right;
+    width: 130px;
+    margin: 10px 10px 0 10px;
+}
+
+#results h2
+{
+    font-weight: bold;
+    color: #003591;
+    display: inline-block;
+    margin: 0px;
+    padding: 23px;
+}
+
+#results .content
+{
+    padding-top: 29px;
+}
+
+.results_h2_wrap
+{
+    width: 304px;
+}
+
+.answer_loading{
+    font-size: 20px;
+    text-align: right;
+    margin-top: 10px;
+}
+
+.results_padding
+{
+    padding: 0px 29px 29px 29px;
+}
+
+#graph
+{
+    height: 128px;
+    margin-bottom: 21px;
+}
+
+    #graph.action_none
+    {
+        background: url('/img/result_graph_action_none.png') no-repeat;
+    }
+
+    #graph.action_needed
+    {
+        background: url('/img/result_graph_action_needed.png') no-repeat;
+    }
+
+    #graph.action_consider
+    {
+        background: url('/img/result_graph_action_consider.png') no-repeat;
+    }
+
+
+.section_header
+{
+    height: 77px;
+    
+}
+
+#plan .section_header
+{
+    background: url('/img/result_header_plan.png') no-repeat;
+}
+
+#do .section_header
+{
+    background: url('/img/result_header_do.png') no-repeat;
+}
+
+#check .section_header
+{
+    background: url('/img/result_header_check.png') no-repeat;
+    height: 92px!important;
+}
+
+#results .section_padding
+{
+    padding: 10px 0;
+}
+
+#results .section_questions
+{
+    display: inline-block;
+    overflow: hidden;
+}
+
+#results .section_questions strong{
+    font-weight:bold;
+}
+
+#results .white_line
+{
+    display: inline-block;
+    background: url('/img/white_stripe.png') repeat-y 540px;
+}
+
+#results .row
+{
+    display: none;
+    margin: 18px 0;
+}
+
+#results .left
+{
+    width: 540px;
+    margin-right: 5px;
+}
+
+#results .right
+{
+    width: 345px;
+}
+
+#results .padding
+{
+    padding: 0 18px;
+}
+
+#results .question_number
+{
+    float: left;
+    margin-right: 10px;
+    line-height: 1.2em;
+    font-weight: bold;
+    font-size: 20px;
+    width: 40px;
+    text-align: right;
+}
+
+#results #plan .question_number
+{
+    color: #2f4696;
+}
+
+#results #do .question_number
+{
+    color: #232762;
+}
+
+#results #check .question_number
+{
+    color: #EF820F;
+}
+
+#results .row p
+{
+    margin: 0px 0 1.4em 0;
+    overflow: hidden;
+}
+
+#results .row .left p
+{
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0px;
+}
+
+#results .row .right p.last
+{
+    margin: 0px;
+}
+
+#results .row .right ul
+{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#results h3
+{
+    color: #665B52;
+    margin: 1.2em 0 0 0;
+    font-weight: normal;
+    font-size: 20px;
+}
+
+#results .diagram-area
+{
+    float: right;
+}
+#results .diagram-area .diagram
+{
+    margin: 1.2em 0 1.2em 1.2em;
+    width: 391px;
+    height: 293px;
+    background: url('/img/diagram-sml.png') no-repeat;
+}
+#results .diagram-area  a.marginleft{
+    margin-left:30px;
+}
+
+
+#results a:active, #results a:visited, #results a:link
+{
+    color: #003490;
+    text-decoration: none;
+}
+
+#results a:hover
+{
+    text-decoration: underline;
+}
+
+
+/********************************/
+
+
+
+
+
+/************ Classes ************/
+h2
+{
+    font-size: 22px;
+    color: #675c53;
+    line-height: 1.2em;
+    margin-bottom: 1em;
+}
+
+h3
+{
+    color: #003591;
+    font-size: 22px;
+    line-height: 1.2em;
+    margin-bottom: 1em;
+    font-weight: bold;
+}
+
+p
+{
+    margin-top: 1.4em;
+    line-height: 1.4em;
+}
+
+ul
+{
+    margin: 1.4em 0 1.4em 1.2em;
+    line-height: 1.4em;
+}
+
+li
+{
+    list-style-type: disc;
+    margin-left: 1.4em;
+}
+
+em
+{
+    font-style: italic;
+}
+
+
+.left
+{
+    float: left;
+    width: 427px;
+}
+
+.left_padding
+{
+    padding: 44px 28px 44px 38px;
+}
+
+.right
+{
+    float: left;
+    width: 521px;
+}
+
+#assessment .left
+{
+    width: 400px;
+}
+
+#assessment .right
+{
+    width: 549px;
+}
+
+.stripe
+{
+    background: #F9F7F7;
+}
+
+.stripe_progress
+{
+    background: #edebea;
+}
+
+.required
+{
+    font-size: 10px;
+}
+
+.btn
+{
+    font-size: 22px;
+    font-weight: bold;
+    width: 195px;
+    padding: 10px 0;
+    box-shadow: 1px 1px 1px rgb(121, 121, 121);
+    border: none;
+    color: #fff;
+    margin: 0px 20px;
+    text-decoration: none;
+    text-shadow: 1px 1px 2px rgb(77, 77, 77);
+    display: inline-block;
+    text-align: center;
+}
+
+    .btn:hover
+    {
+        cursor: pointer;
+    }
+
+.btn-green
+{
+    background: #6cbc20;
+}
+
+    .btn-green:hover
+    {
+        background: #4e9715;
+    }
+
+.btn-red
+{
+    background: #ba2222;
+}
+
+    .btn-red:hover
+    {
+        background: #961616;
+    }
+
+.pad-top
+{
+    padding-top: 10px;
+}

@@ -44,6 +44,34 @@ public class HelloWorldController {
 
   }
 
+  @RequestMapping(value="/survey", method = RequestMethod.POST)
+  public String survey(ModelMap model) {
+
+    return "report";
+
+  }
+
+  @RequestMapping(value="/survey", method = RequestMethod.GET)
+  public String surveyGet(ModelMap model) {
+
+    return "survey";
+
+  }
+
+  @RequestMapping(value="/home", method = RequestMethod.POST)
+  public String home(ModelMap model) {
+
+    return "survey";
+
+  }
+
+  @RequestMapping(value="/home", method = RequestMethod.GET)
+  public String homeGet(ModelMap model) {
+
+    return "index";
+
+  }
+
   @RequestMapping(value="/loginError", method = RequestMethod.GET)
   public String loginError(ModelMap model) {
     model.addAttribute("error", "true");
