@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-  <html xmlns="http://www.w3.org/1999/xhtml">
+  <%@page import="sas.bean.Question"%>
+<html xmlns="http://www.w3.org/1999/xhtml">
     <%@ page import="java.util.*" %>
     <head>
       <%
@@ -36,22 +37,17 @@
         var planSection = {}, doSection = {}, checkSection = {}, allSections = {};
 
         <%
-          int totalQuestions = 0;
-          HashMap<String,String> planSection =new HashMap<String,String>();
-          planSection.put("p1", "Can you locate all your current travellers?|plan-1.png");
-          planSection.put("p2", "Do you assess the risks to your employees in those locations?|plan-2.png");
-          planSection.put("p3", "Do you monitor the type and quantity of incidents your employees have been involved in over the last 2-3 years?|plan-3.png");
-          planSection.put("p4", "Does your company understand its Duty of Care obligations?|plan-4.png");
-          planSection.put("p5", "Do your policies cover the health, safety and security of employees abroad?|plan-5.png");
-          planSection.put("p6", "Do you know who is responsible for Travel Risk Management in your organisation?|plan-6.png");
-          planSection.put("p7", "Do you know how to integrate the components of Travel Risk Management into your risk management system?|plan-7.png");
-
-          for(Map.Entry m:planSection.entrySet()) {
-            System.out.println("Question #" + ++totalQuestions + ": QuestionId : " + m.getKey()+":Question : "+m.getValue());
+          Hashtable<String, List<Question>> hs = (Hashtable<String, List<Question>>) request.getAttribute("questions");  
+          List<Question> list = hs.get("plan");
+          int totalQuestions = 0;             
+          Question q = null;
+          System.out.println(list.size());
+          for(int i=0; i < list.size(); i++) {
+        	  q = list.get(i);
         %>
-        planSection["<%= m.getKey() %>"] =  {
-          "qry" : "<%= m.getValue() %>".split('|')[0],
-          "img" : "<%= m.getValue() %>".split('|')[1]
+          planSection["<%= q.getId() %>"] =  {
+          "qry" : "<%= q.getText() %>",
+          "img" : "<%= q.getImageName() %>"
         };
         <%
           }
@@ -75,8 +71,7 @@
           doSection.put("d13", "Do your employees have access to advice and support 24/7?|do-20.png");
           doSection.put("d14", "Do you have measures in place to check the health of employees returning to work?|do-21.png");
 
-          for(Map.Entry d:doSection.entrySet()) {
-            System.out.println("Question #" + ++totalQuestions + ": QuestionId : " + d.getKey()+":Question : "+d.getValue());
+          for(Map.Entry d:doSection.entrySet()) {            
         %>
             doSection["<%= d.getKey() %>"] =  {
               "qry" : "<%= d.getValue() %>".split('|')[0],
@@ -92,8 +87,7 @@
           checkSection.put("c1", "Are your plans and procedures tested for effectiveness?|check-22.png");
           checkSection.put("c2", "Do you have a system in place to ensure compliance with your policies and procedures|check-23.png");
 
-          for(Map.Entry c:checkSection.entrySet()) {
-            System.out.println("Question #" + ++totalQuestions + ": QuestionId : " + c.getKey()+":Question : "+c.getValue());
+          for(Map.Entry c:checkSection.entrySet()) {            
         %>
           checkSection["<%= c.getKey() %>"] =  {
           "qry" : "<%= c.getValue() %>".split('|')[0],
