@@ -52,35 +52,35 @@
 	<artifactId>com.batik</artifactId>
     <version>1.0</version>
     <scope>system</scope>
-    <systemPath>C:/chvsr/cmsedge/sas1/trunk/src/main/resources/lib/batik.jar</systemPath>
+    <systemPath>${basedir}/src/main/resources/lib/batik.jar</systemPath>
 </dependency>
 <dependency>
     <groupId>avalon-framework-cvs-20020806</groupId>
 	<artifactId>com.avalon</artifactId>
     <version>1.0</version>
     <scope>system</scope>
-    <systemPath>C:/chvsr/cmsedge/sas1/trunk/src/main/resources/lib/avalon-framework-cvs-20020806.jar</systemPath>
+    <systemPath>${basedir}/src/main/resources/lib/avalon-framework-cvs-20020806.jar</systemPath>
 </dependency>
 <dependency>
     <groupId>fop</groupId>
 	<artifactId>com.fop</artifactId>
     <version>1.0</version>
     <scope>system</scope>
-    <systemPath>C:/chvsr/cmsedge/sas1/trunk/src/main/resources/lib/fop.jar</systemPath>
+    <systemPath>${basedir}/src/main/resources/lib/fop.jar</systemPath>
 </dependency>
 <dependency>
     <groupId>jdom-1.0</groupId>
 	<artifactId>com.jdom</artifactId>
     <version>1.0</version>
     <scope>system</scope>
-    <systemPath>C:/chvsr/cmsedge/sas1/trunk/src/main/resources/lib/jdom-1.0.jar</systemPath>
+    <systemPath>${basedir}/src/main/resources/lib/jdom-1.0.jar</systemPath>
 </dependency>
 <dependency>
     <groupId>xalan</groupId>
 	<artifactId>com.xalan</artifactId>
     <version>1.0</version>
     <scope>system</scope>
-    <systemPath>C:/chvsr/cmsedge/sas1/trunk/src/main/resources/lib/xalan.jar</systemPath>
+    <systemPath>${basedir}/src/main/resources/lib/xalan.jar</systemPath>
 </dependency>
 
     </dependencies>
