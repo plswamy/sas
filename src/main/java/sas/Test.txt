@@ -1,0 +1,98 @@
+package sas;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.jdom.Document;
+import org.jdom.input.SAXBuilder;
+
+
+
+
+public class Test {
+	
+	public static void main1(String arg[]) throws Exception {
+		System.out.println("Abc");
+		File f = new File("C:\\chvsr");	
+		FilenameFilter filter = new FilenameFilter() {
+	        public boolean accept(File directory, String fileName) {
+	            return fileName.startsWith("c");
+	        }
+	    };
+		File[] str = f.listFiles(filter);
+		String fname = createFolder();
+		FileOutputStream fos = new FileOutputStream(fname+"\\java.zip");
+        ZipOutputStream outs = new ZipOutputStream(fos);
+        int bytes_read;
+        byte[] buffer = new byte[100];
+		
+		for(int i = 0; i < str.length; i++) {
+			if(str[i].isFile()) {
+				System.out.println(str[i].getName());
+				ZipEntry zipEntry = new ZipEntry(str[i].getName());
+	            zipEntry.setTime(str[i].lastModified());
+	            FileInputStream in = new FileInputStream(str[i]);
+	            outs.putNextEntry(zipEntry);	            
+	            while ((bytes_read = in.read(buffer)) != -1) {
+	                outs.write(buffer, 0, bytes_read);
+	            }
+	            outs.closeEntry();
+	            in.close();
+			}
+		}
+		outs.close();		
+	}
+	
+	public static String createFolder() {
+		Timestamp d = new Timestamp(System.currentTimeMillis());
+		SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd_HH.mm.ss");
+		String return1 = format.format(d);
+		File f = new File("c:\\chvsr\\"+return1);
+		System.out.println(f.mkdir());
+		return f.getPath();
+	}
+	
+	public static void main2(String arg[]) {	
+		Timestamp d = new Timestamp(System.currentTimeMillis());
+		SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd_HH.mm.ss");
+		String return1 = format.format(d);
+		System.out.println(return1);
+		File f = new File("c:\\chvsr\\"+return1);
+		System.out.println(f.mkdir());
+		System.out.println(f.getName()+"   "+f.getPath());
+	}
+	
+	public static void main(String arg[]) throws Exception {
+		System.out.println("begin");
+		String pdfFileName = "C:\\chvsr\\cmsedge\\sas1\\pdf\\pdf4.pdf";
+		String xslFileName = "C:\\chvsr\\cmsedge\\sas1\\pdf\\cmsedgexsl_lak.xsl";		
+		String xmlFileName = "C:\\chvsr\\cmsedge\\sas1\\pdf\\travel_lak.xml";
+		/*Document document = new Document();
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  
+	    DocumentBuilder builder;  
+	    try  
+	    {  
+	        builder = factory.newDocumentBuilder();  
+	        document = (org.jdom.Document) builder.parse( new FileInputStream(new File(xmlFileName)));  
+	    } catch (Exception e) {  
+	        e.printStackTrace();  
+	    } */
+		//document = getIndustrialPermitJDOM("");
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(xmlFileName);		
+		Doc2Pdf.start(document, xslFileName, pdfFileName);
+		System.out.println("end");
+	}
+
+}
