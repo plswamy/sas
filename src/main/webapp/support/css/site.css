@@ -13,6 +13,13 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 
 body {
   line-height: 1;
+  font-size: 12px !important;
+  color: #675c53 !important;
+}
+
+.sos-wrapper-ul li {
+    list-style-type: disc !important;
+    margin-left: 2em !important;
 }
 
 ol, ul {
@@ -21,6 +28,29 @@ ol, ul {
 
 h2 {
   font-size: 25px;
+}
+
+h2.index-header-2{
+	font-size: 22px !important;
+    color: #675c53 !important;
+    line-height: 1.2em !important;
+    margin-bottom: 1em !important;
+}
+
+h2.index-header-2.right-bar{
+	color: #003591 !important;
+    font-weight: bold !important;
+}
+
+.form-control {
+    height: 28px !important;
+    padding: 3px 6px !important;
+    font-size: 12px !important;
+}
+
+.sos-left-bar,
+.sos-right-bar {
+	margin-top: 25px;
 }
 
 blockquote, q {
@@ -148,6 +178,7 @@ body {
   width: 66px;
   position: absolute;
   right: 0px;
+  margin-right: 16px;
 }
 
 #assessment .question_count_heading {

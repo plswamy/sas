@@ -117,8 +117,8 @@
                                 alt="section image">
                                 </picture>-->
                             <div class="content col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="left col-xs-12 col-sm-12 col-md-6 col-lg-5">
-                                    <h2><%= welcomeHeader %></h2>
+                                <div class="sos-left-bar left col-xs-12 col-sm-12 col-md-6 col-lg-5">
+                                    <h2 class="index-header-2"><%= welcomeHeader %></h2>
                                     <p><%= welcomeDesc %></p>
                                     <ul>
                                         <%
@@ -129,9 +129,9 @@
                                     </ul>
                                     <p><%= welcomeFooter %></p>
                                 </div>
-                                <div class="right col-xs-12 col-sm-12 col-md-6 col-lg-7">
+                                <div class="right sos-right-bar col-xs-12 col-sm-12 col-md-6 col-lg-7">
                                     <div id="reg_form" class="stripe">
-                                        <h2><%= regFormHeaderMsg %></h2>
+                                        <h2 class="index-header-2 right-bar"><%= regFormHeaderMsg %></h2>
                                         <p id="validateMsg" style="display: none; margin: 1.4em 0; color: #ba2222;"><%= regFormHeaderErrorMsg %></p>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                             <label for="ctl00_ContentPlaceHolder1_tbxFirstName" id="ctl00_ContentPlaceHolder1_lblFirstName" class="required">First Name</label>
