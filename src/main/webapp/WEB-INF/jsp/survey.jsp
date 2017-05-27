@@ -1,6 +1,6 @@
 <!DOCTYPE html>
   <%@page import="sas.bean.Question"%>
-<html xmlns="http://www.w3.org/1999/xhtml">
+  <html xmlns="http://www.w3.org/1999/xhtml">
     <%@ page import="java.util.*" %>
     <head>
       <%
@@ -22,11 +22,14 @@
         }
       </script>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>Survey Page</title>
       <link href="<%=webContext%>support/css/site.css" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
       <%--<link href="<%=webContext%>support/lib/bootstrap.css" rel="stylesheet">--%>
       <script type="text/javascript" async="" src="<%=webContext%>support/js/ga.js"></script>
       <script src="<%=webContext%>/support/lib/jquery-3.2.0.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <%--<script src="<%=webContext%>/support/lib/bootstrap.js"></script>--%>
       <script type="text/javascript" async="" src="<%=webContext%>support/js/assessment.js"></script>
     </head>
@@ -39,7 +42,7 @@
         <%
           Hashtable<String, List<Question>> hs = (Hashtable<String, List<Question>>) request.getAttribute("questions");  
           List<Question> list = hs.get("plan");
-          int totalQuestions = 0;             
+          int totalQuestions = 0;
           Question q = null;
           System.out.println(list.size());
           for(int i=0; i < list.size(); i++) {
@@ -71,7 +74,8 @@
           doSection.put("d13", "Do your employees have access to advice and support 24/7?|do-20.png");
           doSection.put("d14", "Do you have measures in place to check the health of employees returning to work?|do-21.png");
 
-          for(Map.Entry d:doSection.entrySet()) {            
+          for(Map.Entry d:doSection.entrySet()) {
+            System.out.println("Question #" + ++totalQuestions + ": QuestionId : " + d.getKey()+":Question : "+d.getValue());
         %>
             doSection["<%= d.getKey() %>"] =  {
               "qry" : "<%= d.getValue() %>".split('|')[0],
@@ -87,7 +91,8 @@
           checkSection.put("c1", "Are your plans and procedures tested for effectiveness?|check-22.png");
           checkSection.put("c2", "Do you have a system in place to ensure compliance with your policies and procedures|check-23.png");
 
-          for(Map.Entry c:checkSection.entrySet()) {            
+          for(Map.Entry c:checkSection.entrySet()) {
+            System.out.println("Question #" + ++totalQuestions + ": QuestionId : " + c.getKey()+":Question : "+c.getValue());
         %>
           checkSection["<%= c.getKey() %>"] =  {
           "qry" : "<%= c.getValue() %>".split('|')[0],
@@ -174,9 +179,12 @@
             $(".question_text").ready(function() {
               //targetQuestion.currentSection = "plan";
               $(".answer_wrap").attr('data-section', targetQuestion.currentSection);
+              $(".section_1").addClass('section_' + targetQuestion.currentSection);
               $(".answer_wrap").attr('data-qid', targetQuestion.qid);
-              $("#assessment").removeClass().addClass("section_" + targetQuestion.currentSection);
-              $(".question_image").css("background-image", "url('support/img/resourceFiles/" + targetQuestion.img + "')");
+              //$("#assessment").removeClass().addClass("section_" + targetQuestion.currentSection);
+              $(".section-imgage").attr("src", "support/img/section_" + targetQuestion.currentSection + ".png");
+              //$(".question_image").css("background-image", "url('support/img/resourceFiles/" + targetQuestion.img + "')");
+              $(".question_image").attr("src", "support/img/resourceFiles/" + targetQuestion.img);
               $(".question_text")[0].innerHTML = targetQuestion.qry;
               $(".question_count")[0].innerHTML = totalIndexOfCurrent + 1;
 
@@ -194,46 +202,59 @@
       </script>
 
       <form name="surveyForm" method="post" action="" id="surveyForm">
-        <div id="outer">
-          <div id="header" class="inner">
-            <div id="logo"></div>
-          </div>
-          <div id="content_wrap">
-            <div class="inner">
-              <div id="assessment" class="section_1">
-                <div id="sections"></div>
-                <div class="content">
-                  <div class="question clearfix" data-section-id="1" data-question-id="1" style="">
-                    <div class="left">
-                      <div class="question_count_wrap">
-                        <div class="question_count_heading">Question</div>
-                        <div class="question_count">1</div>
+        <div class="container">
+          <div id="outer" class="row">
+            <div id="header" class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <div id="logo" class="pull-right"></div>
+            </div>
+            <div id="content_wrap" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <div class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div id="assessment" class="section_1">
+                  <!--<div id="sections"></div>-->
+                  <img class="section-imgage cover-width" src="support/img/section_plan.png" alt="Sections"/>
+                  <%--<img class="section-img-do cover-width" src="support/img/section_do.png" alt="Sections"/>--%>
+                  <%--<img class="section-img-check cover-width" src="support/img/section_check.png" alt="Sections"/>--%>
+                  <div class="content col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="question clearfix" data-section-id="1" data-question-id="1" style="">
+                      <div class="left col-xs-12 col-sm-12 col-md-6 col-lg-5">
+                        <div class="question_count_wrap">
+                          <div class="question_count_heading">Question</div>
+                          <div class="question_count">1</div>
+                        </div>
+                        <%--<div class="question_image"></div><!-- TODO: replace images-->--%>
+                        <img class="question_image" src="support/img/resourceFiles/plan-2.png"/>
                       </div>
-                      <div class="question_image"></div>
-                    </div>
-                    <div class="right">
-                      <div class="stripe">
-                        <h3 class="question_text"></h3>
+                      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
+                        <div class="right">
+                          <div class="stripe col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <h3 class="question_text"></h3>
+                          </div>
+                          <div class="answer_wrap col-xs-12 col-sm-12 col-md-12 col-lg-12" data-section="" data-qid="">
+                            <a href="javascript:;" class="btn btn-success" data-value="yes">Yes</a>
+                            <a href="javascript:;" class="btn btn-danger" data-value="no">No</a>
+                            <a href="javascript:;" class="btn btn-warning" data-value="notsure">Not Sure</a>
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="spacer"></div>
+                        </div>
+                        <div id="progressBarWrap">
+                          <h4>Progress:</h4>
+                          <div id="progressBarOuter" class="stripe_progress progress">
+                            <%--<div id="progressBarInner" class="progress-bar" width="0%">​</div>--%>
+                            <div id="progressBarInner" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" width="0%" style="width: 14.29%;">
+                              <span class="sr-only">14.29% Complete</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div class="answer_wrap" data-section="" data-qid="">
-                        <a href="javascript:;" class="btn btn-green" data-value="yes">Yes</a>
-                        <a href="javascript:;" class="btn btn-red" data-value="no">No</a>
-                        <a href="javascript:;" class="btn btn-orange" data-value="notsure">Not Sure</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="progressBarWrap">
-                    <h4>Progress:</h4>
-                    <div id="progressBarOuter" class="stripe_progress">
-                      <div id="progressBarInner" width="0%">​</div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div id="footer" class="inner">
-            <img src="<%=webContext%>support/img/strapline.png" alt="Worldwide reach. Human touch.">
+            <div id="footer" class="inner img-responsive">
+              <img class="image-max-width" src="<%=webContext%>support/img/strapline.png" alt="Worldwide reach. Human touch.">
+            </div>
           </div>
         </div>
       </form>
