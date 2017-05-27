@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ page import="java.util.*" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -88,12 +89,18 @@
                 //]]>
             </script>
             <%
-                // expecting from response
-                String welcomeHeader = "Welcome to the travel risk mitigation self-assessment tool.";
+                Hashtable<String, String> hs = (Hashtable<String, String>) request.getAttribute("labels");  
+                System.out.println("labels length.....:"+hs.size());
+                String welcomeHeader = hs.get("welcomeHeader");
+                String welcomeDesc = hs.get("welcomeDesc");
+                String[] welcomePoints = {"A broad indication of your organisations current maturity with regard to travel risk mitigation systems, processes and tools", "The level of remedial action required to minimise the risks facing your organisation and employees", "Recommended steps to improve your systems", "Outline of the Duty of Care Plan-Do-Check approach"};
+                String welcomeFooter = hs.get("welcomeFooter");
+                String regFormHeaderMsg = hs.get("regFormHeaderMsg");
+                /*String welcomeHeader = "Welcome to the travel risk mitigation self-assessment tool.";
                 String welcomeDesc = "This best practice travel risk mitigation tool is based on our Duty of Care Plan-Do-Check approach. At the end of this assessment you will receive a report outlining:";
                 String[] welcomePoints = {"A broad indication of your organisations current maturity with regard to travel risk mitigation systems, processes and tools", "The level of remedial action required to minimise the risks facing your organisation and employees", "Recommended steps to improve your systems", "Outline of the Duty of Care Plan-Do-Check approach"};
                 String welcomeFooter = "It should take you approximately 5 minutes to complete the review.";
-                String regFormHeaderMsg = "Fill out the form below to begin your risk mitigation evaluation";
+                String regFormHeaderMsg = "Fill out the form below to begin your risk mitigation evaluation";*/
                 String regFormHeaderErrorMsg = "Please fill in the following fields correctly and click the Start button again.";
                 %>
             <div class="container">
@@ -120,7 +127,7 @@
                                 <div class="sos-left-bar left col-xs-12 col-sm-12 col-md-6 col-lg-5">
                                     <h2 class="index-header-2"><%= welcomeHeader %></h2>
                                     <p><%= welcomeDesc %></p>
-                                    <ul>
+                                    <ul class="sos-wrapper-ul">
                                         <%
                                             for (int i = 0; i < welcomePoints.length; i++) {
                                                 out.println("<li>" + welcomePoints[i] + "</li>");
