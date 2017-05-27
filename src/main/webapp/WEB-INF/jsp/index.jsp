@@ -68,8 +68,8 @@
                 }
                 //]]>
             </script>
-            <script src="support/js/WebResource.axd" type="text/javascript"></script>
-            <script src="support/js/WebResource(1).axd" type="text/javascript"></script>
+            <script src="support/js/WebResource.js" type="text/javascript"></script>
+            <script src="support/js/WebResource(1).js" type="text/javascript"></script>
             <script type="text/javascript">
                 //<![CDATA[
                 function WebForm_OnSubmit() {
