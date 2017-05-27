@@ -50,7 +50,7 @@
                 <div id="results" style="">
                   <div class="results-header">
                     <img class="cover-width" src="./support/img/result_header.png" alt="Sections">
-                    <a id="btnPrintPDF" href="return false;" target="_blank"></a>
+                    <a id="btnPrintPDF" href="/print" target="_blank"></a>
                   </div>
                   <div class="content">
                     <div class="results_h2_wrap stripe">
