@@ -1,25 +1,25 @@
 
---Create REGISTRATION_Info Table
+--Create REGISTRATION_Info Table;
 
 Create table registrationinfo(id integer PRIMARY KEY ,firstname varchar(20),lastname varchar(40),jobtitle varchar(10),email varchar(30) NOT NULL,company varchar(40), businesstype varchar(50), country varchar(50), state varchar(50), lang varchar(10));
 
---Create Business_Industry Table
+--Create Business_Industry Table;
 
 Create table businessindustry(id integer PRIMARY KEY ,btype varchar(60), lang varchar(10));
 
---Create Country Table
+--Create Country Table;
 
 Create table country(id integer PRIMARY KEY ,countrytype varchar(20), lang varchar(10));
 
---Create State Table
+--Create State Table;
 
 Create table state(id integer PRIMARY KEY ,statetype varchar(20), lang varchar(10));
 
---Create Questions Table
+--Create Questions Table;
 
 Create table questions(id integer PRIMARY KEY ,qtype varchar(70),imagename varchar(100),qtext varchar(1000), qdesc varchar(1000), lang varchar(10));
 
---Inserting values In Questions
+--Inserting values In Questions;
 
 Insert into questions values(1, 'plan', 'plan-1.png','Can you locate all your current travellers?','Here travellers description goes', 'english');
 
@@ -70,14 +70,29 @@ Insert into questions values(22, 'check','check-22.png', 'Are your plans and pro
 
 Insert into questions values(23, 'check','check-23.png', 'Do you have a system in place to ensure compliance with your policies and procedures?','System of policies and procedures description goes','english');
 
---CREATE ANSWERS TABLE  
+--CREATE ANSWERS TABLE;  
 
 Create table answers(id integer PRIMARY KEY ,answertype varchar(10), lang varchar(10));
 
---Inserting values In Answers Table
+--Inserting values In Answers Table;
 
 Insert into answers values(1, 'Yes', 'english');                                      
 
 Insert into answers values(2, 'No', 'english');
 
 Insert into answers values(3, 'Not Sure', 'english');
+
+--CREATE LABELS TABLE;  
+
+Create table labels(id integer PRIMARY KEY , lang varchar(10), labelkey varchar(100) , labelvalue varchar(1000));
+
+--Inserting values In Answers Table;
+
+Insert into labels values(1, 'english', 'welcomeHeader', 'Welcome to the travel risk mitigation self-assessment tool.');                                      
+
+Insert into labels values(2, 'english', 'welcomeDesc', 'This best practice travel risk mitigation tool is based on our Duty of Care Plan-Do-Check approach. At the end of this assessment you will receive a report outlining:');
+
+Insert into labels values(3, 'english', 'welcomeFooter', 'It should take you approximately 5 minutes to complete the review.');
+
+Insert into labels values(4, 'english', 'regFormHeaderMsg', 'Fill out the form below to begin your risk mitigation evaluation Ravi');
+
