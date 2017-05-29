@@ -230,15 +230,22 @@
                             <h3 class="question_text"></h3>
                           </div>
                           <div class="answer_wrap col-xs-12 col-sm-12 col-md-12 col-lg-12" data-section="" data-qid="">
-                            <a href="javascript:;" class="btn btn-success" data-value="yes">Yes</a>
-                            <a href="javascript:;" class="btn btn-danger" data-value="no">No</a>
-                            <a href="javascript:;" class="btn btn-warning" data-value="notsure">Not Sure</a>
+						  <%
+								String yes=	"Yes";//hs.get("yes");
+								String no=	"No";//hs.get("no");
+								String notsure=	"Not Sure";//hs.get("notsure");
+								String progress = "Progress";//hs.get("progress");
+
+						  %>
+                            <a href="javascript:;" class="btn btn-success" data-value="yes"><%=yes%></a>
+                            <a href="javascript:;" class="btn btn-danger" data-value="no"><%=no%></a>
+                            <a href="javascript:;" class="btn btn-warning" data-value="notsure"><%=notsure%></a>
                           </div>
                           <div class="clearfix"></div>
                           <div class="spacer"></div>
                         </div>
                         <div id="progressBarWrap">
-                          <h4>Progress:</h4>
+                          <h4><%=progress%>:</h4>
                           <div id="progressBarOuter" class="stripe_progress progress">
                             <%--<div id="progressBarInner" class="progress-bar" width="0%">​</div>--%>
                             <div id="progressBarInner" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" width="0%" style="width: 14.29%;">

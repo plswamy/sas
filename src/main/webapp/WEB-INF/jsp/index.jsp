@@ -101,7 +101,7 @@
                 String[] welcomePoints = {"A broad indication of your organisations current maturity with regard to travel risk mitigation systems, processes and tools", "The level of remedial action required to minimise the risks facing your organisation and employees", "Recommended steps to improve your systems", "Outline of the Duty of Care Plan-Do-Check approach"};
                 String welcomeFooter = "It should take you approximately 5 minutes to complete the review.";
                 String regFormHeaderMsg = "Fill out the form below to begin your risk mitigation evaluation";*/
-                String regFormHeaderErrorMsg = "Please fill in the following fields correctly and click the Start button again.";
+                String regFormHeaderErrorMsg = hs.get("regFormHeaderErrorMsg");;
                 %>
             <div class="container">
                 <div id="outer" class="row">
@@ -141,12 +141,18 @@
                                         <h2 class="index-header-2 right-bar"><%= regFormHeaderMsg %></h2>
                                         <p id="validateMsg" style="display: none; margin: 1.4em 0; color: #ba2222;"><%= regFormHeaderErrorMsg %></p>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                            <label for="ctl00_ContentPlaceHolder1_tbxFirstName" id="ctl00_ContentPlaceHolder1_lblFirstName" class="required">First Name</label>
+										<%
+											String firstName = hs.get("firstName");
+										%>
+                                            <label for="ctl00_ContentPlaceHolder1_tbxFirstName" id="ctl00_ContentPlaceHolder1_lblFirstName" class="required"><%=firstName%></label>
                                             <input class="form-control" name="ctl00$ContentPlaceHolder1$tbxFirstName" type="text" maxlength="40" id="ctl00_ContentPlaceHolder1_tbxFirstName" value="Rahul">
                                             <div id="ctl00_ContentPlaceHolder1_reqFirstName" style="color:Red;display:none;"></div>
                                         </div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                            <label for="ctl00_ContentPlaceHolder1_tbxLastName" id="ctl00_ContentPlaceHolder1_lblLastName" class="required">Last Name</label>
+										<%
+											String lastName = hs.get("lastName");
+										%>
+                                            <label for="ctl00_ContentPlaceHolder1_tbxLastName" id="ctl00_ContentPlaceHolder1_lblLastName" class="required"><%=lastName%></label>
                                             <input name="ctl00$ContentPlaceHolder1$tbxLastName" type="text" maxlength="40"
                                                 id="ctl00_ContentPlaceHolder1_tbxLastName" value="Dravid" class="form-control">
                                             <div id="ctl00_ContentPlaceHolder1_Requiredfieldvalidator1"
@@ -154,16 +160,21 @@
                                         </div>
                                         <div class="clearfix"></div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                          <%
+											String jobTitle = hs.get("jobTitle");
+										%>
                                             <label for="ctl00_ContentPlaceHolder1_tbxJobTitle"
-                                                id="ctl00_ContentPlaceHolder1_lblJobTitle" class="required">Job Title</label>
+                                                id="ctl00_ContentPlaceHolder1_lblJobTitle" class="required"><%=jobTitle%></label>
                                             <input class="form-control" name="ctl00$ContentPlaceHolder1$tbxJobTitle" type="text" maxlength="100"
                                                 id="ctl00_ContentPlaceHolder1_tbxJobTitle" value="Coach">
                                             <div id="ctl00_ContentPlaceHolder1_Requiredfieldvalidator2"
                                                 style="color:Red;display:none;"></div>
                                         </div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+										<% String email=hs.get("email");
+										%>
                                             <label for="ctl00_ContentPlaceHolder1_tbxEmail"
-                                                id="ctl00_ContentPlaceHolder1_lblEmail" class="required">Email</label>
+                                                id="ctl00_ContentPlaceHolder1_lblEmail" class="required"><%= email%></label>
                                             <input class="form-control" name="ctl00$ContentPlaceHolder1$tbxEmail" type="text" maxlength="100"
                                                 id="ctl00_ContentPlaceHolder1_tbxEmail" value="rahul.dravid@india.com">
                                             <div id="ctl00_ContentPlaceHolder1_Requiredfieldvalidator3"
@@ -173,21 +184,27 @@
                                         </div>
                                         <div class="clearfix"></div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+										<% String company=hs.get("company");
+										%>
                                             <label for="ctl00_ContentPlaceHolder1_tbxCompany"
-                                                id="ctl00_ContentPlaceHolder1_lblCompany" class="required">Company</label>
+                                                id="ctl00_ContentPlaceHolder1_lblCompany" class="required"><%=company%></label>
                                             <input class="form-control" name="ctl00$ContentPlaceHolder1$tbxCompany" type="text" maxlength="100"
                                                 id="ctl00_ContentPlaceHolder1_tbxCompany" value="BCCI">
                                             <div id="ctl00_ContentPlaceHolder1_Requiredfieldvalidator4"
                                                 style="color:Red;display:none;"></div>
                                         </div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                        <% String businessIndustry=hs.get("businessIndustry");
+										%>
                                             <label for="ctl00_ContentPlaceHolder1_ddlBusinessIndustry" class="required"
-                                                id="ctl00_ContentPlaceHolder1_lblBusinessIndustry">Business
-                                            Industry</label>
+                                                id="ctl00_ContentPlaceHolder1_lblBusinessIndustry"><%=businessIndustry%></label>
+										<%
+											String pleaseSelect = hs.get("pleaseselect");
+										%>
                                             <select class="form-control" name="ctl00$ContentPlaceHolder1$ddlBusinessIndustry"
                                                 id="ctl00_ContentPlaceHolder1_ddlBusinessIndustry"
                                                 value="Aviation: BGA">
-                                                <option value="">Please select...</option>
+                                                <option value=""><%=pleaseSelect%>...chvsr</option>
                                                 <option value="Agent">Agent</option>
                                                 <option value="Automobile, Aerospace and Defence Industry">Automobile,
                                                     Aerospace and Defence Industry
@@ -256,8 +273,10 @@
                                         </div>
                                         <div class="clearfix"></div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+										<% String country=hs.get("country");
+										%>
                                             <label for="ctl00_ContentPlaceHolder1_ddlCountry"
-                                                id="ctl00_ContentPlaceHolder1_lblCountry" class="required">Country</label>
+                                                id="ctl00_ContentPlaceHolder1_lblCountry" class="required"><%=country%></label>
                                             <select class="form-control" name="ctl00$ContentPlaceHolder1$ddlCountry" value="India"
                                                 id="ctl00_ContentPlaceHolder1_ddlCountry"
                                                 onchange="load_states(&#39;ctl00_ContentPlaceHolder1_ddlState&#39;,this.selectedIndex);">
@@ -534,8 +553,10 @@
                                                 style="color:Red;display:none;"></div>
                                         </div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
+										<% String state=hs.get("state");
+										%>
                                             <label for="ctl00_ContentPlaceHolder1_ddlState"
-                                                id="ctl00_ContentPlaceHolder1_lblState" class="required">State</label>
+                                                id="ctl00_ContentPlaceHolder1_lblState" class="required"><%=state%></label>
                                             <select class="form-control" name="ctl00$ContentPlaceHolder1$ddlState"
                                                 id="ctl00_ContentPlaceHolder1_ddlState">
                                                 <option value="">Choose country first...</option>
@@ -550,7 +571,9 @@
                                                 id="ctl00_ContentPlaceHolder1_hidStateCode">
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                            <span class="required-text pull-left">* Required fields</span>
+                                 <% String requiredFields=hs.get("requiredFields");
+										%>
+                                            <span class="required-text pull-left">* <%=requiredFields%></span>
                                             <span class="pull-right">
                                             <a id="ctl00_ContentPlaceHolder1_btnRegister" class="btn btn-success" href="javascript:WebForm_DoPostBackWithOptions(new
                                                 WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$btnRegister&quot;, &quot;&quot;, true,
