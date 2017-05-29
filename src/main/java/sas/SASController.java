@@ -73,6 +73,7 @@ public class SASController {
   public String surveyGet(ModelMap model) {
 	System.out.println("survey get called");
 	req.setAttribute("questions", getQuestions());
+	req.setAttribute("answertypes", getData("answers", "answertype", "answertypevalue"));
     return "survey";
 
   }
@@ -116,9 +117,13 @@ public class SASController {
   private void generatePDF() {
 	  try{
 	  	System.out.println("begin");
-		String pdfFileName = "C:\\chvsr\\cmsedge\\sas1\\pdf\\pdf5.pdf";
-		String xslFileName = "C:\\chvsr\\cmsedge\\sas1\\pdf\\cmsedgexsl_lak.xsl";		
-		String xmlFileName = "C:\\chvsr\\cmsedge\\sas1\\pdf\\travel_lak.xml";		
+	  	long l = System.currentTimeMillis();	
+	  	String realPath = req.getRealPath("/");
+	  	System.out.println("realPath:"+realPath);
+		String pdfFileName = realPath+"/pdf/pdf"+l+".pdf";
+		req.setAttribute("pdffile", "pdf"+l+".pdf");				
+		String xslFileName = realPath+"/xsl/cmsedgexsl.xsl";		
+		String xmlFileName = realPath+"/xsl/travel.xml";		
 		SAXBuilder builder = new SAXBuilder();
 		Document document = builder.build(xmlFileName);		
 		Doc2Pdf.start(document, xslFileName, pdfFileName);
@@ -183,22 +188,25 @@ public class SASController {
     }
     
     private void loadData() {
-  	  	req.setAttribute("labels", getLabels());
+  	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));
+	  	req.setAttribute("businessindustry", getData("businessindustry", "btype", "bvalue"));
+	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));
+	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));	  	
   	  	
   	  	// load country list
   	  	// load business industry
   	  	// load state
     }
     
-    public Hashtable<String, String> getLabels() {
+    public Hashtable<String, String> getData(String table, String cKey, String cValue) {
     	Hashtable<String, String> hs = new Hashtable<String, String>();
     	try {
     		Connection con = dataSource.getConnection();
     		Statement stmt = con.createStatement();
-    		ResultSet rs = stmt.executeQuery("select * from labels order by id");
+    		ResultSet rs = stmt.executeQuery("select * from "+table+" order by id");
     		while(rs.next()) 
     		{
-    			hs.put(rs.getString("labelkey"), rs.getString("labelvalue"));
+    			hs.put(rs.getString("cKey"), rs.getString(cValue));
     		}    		
     	} catch(Exception exp) {
     		exp.printStackTrace();
