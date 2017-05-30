@@ -20,6 +20,7 @@ import sas.bean.Question;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Enumeration;
 import java.util.List;
 @Controller
 public class SASController {
@@ -71,11 +72,16 @@ public class SASController {
 
   @RequestMapping(value="/survey", method = RequestMethod.GET)
   public String surveyGet(ModelMap model) {
-	System.out.println("survey get called");
-	req.setAttribute("questions", getQuestions());
-	req.setAttribute("answertypes", getData("answers", "answertype", "answertypevalue"));
-    return "survey";
-
+		
+		System.out.println("survey get called....");
+		Enumeration<String> params = req.getParameterNames();
+		while(params.hasMoreElements()) {
+		  System.out.println(params.nextElement());
+		}
+		req.setAttribute("questions", getQuestions());
+  	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));
+		req.setAttribute("answertypes", getData("answers", "answertype", "answertypevalue"));
+		return "survey";
   }
 
   @RequestMapping(value="/home", method = RequestMethod.POST)
@@ -189,9 +195,9 @@ public class SASController {
     
     private void loadData() {
   	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));
-	  	req.setAttribute("businessindustry", getData("businessindustry", "btype", "bvalue"));
-	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));
-	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));	  	
+	  	req.setAttribute("businessindustry", getData("businessindustry", "boption", "boptionvalue"));
+	  	req.setAttribute("country", getData("country", "coption", "coptionvalue"));
+	  	//req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));	  	
   	  	
   	  	// load country list
   	  	// load business industry
@@ -206,7 +212,7 @@ public class SASController {
     		ResultSet rs = stmt.executeQuery("select * from "+table+" order by id");
     		while(rs.next()) 
     		{
-    			hs.put(rs.getString("cKey"), rs.getString(cValue));
+    			hs.put(rs.getString(cKey), rs.getString(cValue));
     		}    		
     	} catch(Exception exp) {
     		exp.printStackTrace();

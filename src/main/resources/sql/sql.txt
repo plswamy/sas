@@ -73,14 +73,16 @@ Insert into questions values(23, 'check','check-23.png', 'Do you have a system i
 --CREATE ANSWERS TABLE;  
 
 Create table answers(id integer PRIMARY KEY ,answertype varchar(10), lang varchar(10));
+drop table answers;
+Create table answers(id integer PRIMARY KEY, lang varchar(10), answertype varchar(10), answertypevalue varchar(100));
 
 --Inserting values In Answers Table;
 
-Insert into answers values(1, 'Yes', 'english');                                      
+Insert into answers values(1, 'english', 'yes', 'Yes');                                      
 
-Insert into answers values(2, 'No', 'english');
+Insert into answers values(2, 'english', 'no', 'No');
 
-Insert into answers values(3, 'Not Sure', 'english');
+Insert into answers values(3, 'english', 'notsure', 'Not Sure');
 
 --CREATE LABELS TABLE;  
 
@@ -110,6 +112,7 @@ Insert into labels values(13, 'english', 'state', 'State Label From DB');
 Insert into labels values(12, 'english', 'country', 'Country Label From DB');
 Insert into labels values(14, 'english', 'requiredFields', 'Required Fields From DB');
 Insert into labels values(15, 'english', 'pleaseSelect', 'Please select');
+Insert into labels values(16, 'english', 'progress', 'Question Progress');
 
 --Inserting values in Business_Industry Table
 
@@ -155,7 +158,9 @@ insert into businessindustry value (39, 'english', 'Trading', 'Trading');
 insert into businessindustry value (40, 'english', 'Transport Services', 'Transport Services');
 insert into businessindustry value (41, 'english', 'Travel, Tourism and Hospitality', 'Travel, Tourism and Hospitality');
 
-
+-- drop country table
+drop table country;
+Create table country(id integer PRIMARY KEY ,lang varchar(10),coption varchar(1000), coptionvalue varchar(1000));
 --Inserting values in country Table
 
 insert into country value(1,'english','Afghanistan','Afghanistan');

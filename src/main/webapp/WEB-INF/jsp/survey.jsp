@@ -231,11 +231,12 @@
                           </div>
                           <div class="answer_wrap col-xs-12 col-sm-12 col-md-12 col-lg-12" data-section="" data-qid="">
 						  <%
-								String yes=	"Yes";//hs.get("yes");
-								String no=	"No";//hs.get("no");
-								String notsure=	"Not Sure";//hs.get("notsure");
-								String progress = "Progress";//hs.get("progress");
-
+				                Hashtable<String, String> lhs = (Hashtable<String, String>) request.getAttribute("labels");  
+				                Hashtable<String, String> ahs = (Hashtable<String, String>) request.getAttribute("answertypes");  
+								String yes=	ahs.get("yes");
+								String no=	ahs.get("no");
+								String notsure=	ahs.get("notsure");
+								String progress = lhs.get("progress");
 						  %>
                             <a href="javascript:;" class="btn btn-success" data-value="yes"><%=yes%></a>
                             <a href="javascript:;" class="btn btn-danger" data-value="no"><%=no%></a>

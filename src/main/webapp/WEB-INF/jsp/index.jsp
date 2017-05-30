@@ -273,14 +273,15 @@
                                         </div>
                                         <div class="clearfix"></div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-										<% String country=hs.get("country");
+										<% 
+											String country=hs.get("country");
 										%>
                                             <label for="ctl00_ContentPlaceHolder1_ddlCountry"
                                                 id="ctl00_ContentPlaceHolder1_lblCountry" class="required"><%=country%></label>
                                             <select class="form-control" name="ctl00$ContentPlaceHolder1$ddlCountry" value="India"
                                                 id="ctl00_ContentPlaceHolder1_ddlCountry"
                                                 onchange="load_states(&#39;ctl00_ContentPlaceHolder1_ddlState&#39;,this.selectedIndex);">
-                                                <option value="">Please select...</option>
+                                                <option value=""><%=pleaseSelect %></option>
                                                 <option value="Afghanistan">Afghanistan</option>
                                                 <option value="Aland Islands">Aland Islands</option>
                                                 <option value="Albania">Albania</option>
