@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import sas.bean.Question;
 
@@ -27,10 +30,10 @@ public class SASController {
 
 	@Autowired
 	DataSource dataSource;
-	
+
 	@Autowired
 	private HttpServletRequest req;
-	
+
   @RequestMapping("/helloworld")
   public ModelAndView hello(ModelMap model,Principal principal) {
 
@@ -64,15 +67,17 @@ public class SASController {
   }
 
   @RequestMapping(value="/survey", method = RequestMethod.POST)
-  public String survey(ModelMap model) {
-
+  public String survey(ModelMap model, HttpSession session, HttpServletRequest request) {
+    System.out.println("survey post called....");
+    System.out.println("ctl00$ContentPlaceHolder1$tbxLastName ==="+model.get("ctl00$ContentPlaceHolder1$tbxLastName"));
+    System.out.println("request getParameter ===="+request.getParameter("ctl00$ContentPlaceHolder1$tbxLastName"));
     return "report";
 
   }
 
   @RequestMapping(value="/survey", method = RequestMethod.GET)
   public String surveyGet(ModelMap model) {
-		
+
 		System.out.println("survey get called....");
 		Enumeration<String> params = req.getParameterNames();
 		while(params.hasMoreElements()) {
@@ -96,7 +101,7 @@ public class SASController {
 	System.out.println("home1 called");
     return "survey";
   }
-  
+
   @RequestMapping(value="/", method = RequestMethod.GET)
   public String homeGet1(ModelMap model) {
 	  System.out.println("homeGet1");
@@ -104,7 +109,7 @@ public class SASController {
 	  return "index";
 
   }
-  
+
   @RequestMapping(value="/home", method = RequestMethod.GET)
   public String homeGet(ModelMap model) {
 	  System.out.println("homeGet");
@@ -112,26 +117,26 @@ public class SASController {
     return "index";
 
   }
-  
+
   @RequestMapping(value="/print", method = RequestMethod.GET)
   public String printGet(ModelMap model) {
 	  System.out.println("printGet");
 	  generatePDF();
 	  return "print";
   }
-  
+
   private void generatePDF() {
 	  try{
 	  	System.out.println("begin");
-	  	long l = System.currentTimeMillis();	
+	  	long l = System.currentTimeMillis();
 	  	String realPath = req.getRealPath("/");
 	  	System.out.println("realPath:"+realPath);
 		String pdfFileName = realPath+"/pdf/pdf"+l+".pdf";
-		req.setAttribute("pdffile", "pdf"+l+".pdf");				
-		String xslFileName = realPath+"/xsl/cmsedgexsl.xsl";		
-		String xmlFileName = realPath+"/xsl/travel.xml";		
+		req.setAttribute("pdffile", "pdf"+l+".pdf");
+		String xslFileName = realPath+"/xsl/cmsedgexsl.xsl";
+		String xmlFileName = realPath+"/xsl/travel.xml";
 		SAXBuilder builder = new SAXBuilder();
-		Document document = builder.build(xmlFileName);		
+		Document document = builder.build(xmlFileName);
 		Doc2Pdf.start(document, xslFileName, pdfFileName);
 		System.out.println("end");
 	  } catch(Exception exp) {
@@ -162,7 +167,7 @@ public class SASController {
       model.setViewName("403");
       return model;
     }
-    
+
     public Hashtable<String, List<Question>> getQuestions() {
     	Hashtable<String, List<Question>> hs = new Hashtable<String, List<Question>>();
     	List<Question> list = null;
@@ -171,8 +176,8 @@ public class SASController {
     		Connection con = dataSource.getConnection();
     		Statement stmt = con.createStatement();
     		ResultSet rs = stmt.executeQuery("select * from questions order by id");
-    		while(rs.next()) 
-    		{    		
+    		while(rs.next())
+    		{
     			q = new Question();
     			q.setId(rs.getString("id"));
     			q.setType(rs.getString("qtype"));
@@ -185,35 +190,35 @@ public class SASController {
     				list = new ArrayList<Question>();
     			}
 				list.add(q);
-				hs.put(q.getType(), list);    				    			
+				hs.put(q.getType(), list);
     		}
     	} catch(Exception exp) {
     		exp.printStackTrace();
     	}
     	return hs;
     }
-    
+
     private void loadData() {
   	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));
 	  	req.setAttribute("businessindustry", getData("businessindustry", "boption", "boptionvalue"));
 	  	req.setAttribute("country", getData("country", "coption", "coptionvalue"));
-	  	//req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));	  	
-  	  	
+	  	//req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));
+
   	  	// load country list
   	  	// load business industry
   	  	// load state
     }
-    
+
     public Hashtable<String, String> getData(String table, String cKey, String cValue) {
     	Hashtable<String, String> hs = new Hashtable<String, String>();
     	try {
     		Connection con = dataSource.getConnection();
     		Statement stmt = con.createStatement();
     		ResultSet rs = stmt.executeQuery("select * from "+table+" order by id");
-    		while(rs.next()) 
+    		while(rs.next())
     		{
     			hs.put(rs.getString(cKey), rs.getString(cValue));
-    		}    		
+    		}
     	} catch(Exception exp) {
     		exp.printStackTrace();
     	}
