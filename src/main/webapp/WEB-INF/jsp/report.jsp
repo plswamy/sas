@@ -7,7 +7,8 @@
       %>
       <script>
         var userSession = JSON.parse(localStorage.getItem("userInfo")),
-        surveyProgress = {};
+        surveyProgress = {},
+        answers = {};
 
         if(!!userSession && !!userSession.email) {
           //user session is still alive, let's move-on.
@@ -19,6 +20,7 @@
               String scoreLable = "You scored ";
               int score = 0;
             %>
+                answers = !!userSession.surveyProgress ? userSession.surveyProgress : {};
           } else {
             document.location.href = "survey";
           }
@@ -69,7 +71,11 @@
                                 var qNum = 0;
                                 $.each(surveyProgress[sectionName], function(qid) {
                                   qNum++;
-                                  if(this.val !== 'yes') {
+                                  var showQuestion = this.val;
+                                  if(showQuestion === undefined) {
+                                      showQuestion = answers[this.currentSection][this.qid].val;
+                                  }
+                                  if(showQuestion !== 'yes') {
                                     var tmpl = $('.question_template').clone(true);
                                     tmpl.find('.question_id').id = qid;
                                     tmpl.find('.question_number')[0].innerText = "Q" + qNum;
