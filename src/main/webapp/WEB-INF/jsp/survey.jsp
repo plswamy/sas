@@ -177,6 +177,15 @@
             document.location.href = "report";
           } else {
             $(".question_text").ready(function() {
+                $('#email').val(userSession.email);
+                $('#firstname').val(userSession.firstname);
+                $('#lastname').val(userSession.lastname);
+                $('#jobtitle').val(userSession.jobtitle);
+                $('#company').val(userSession.company);
+                $('#businessindustry').val(userSession.businessindustry);
+                $('#country').val(userSession.country);
+                $('#state').val(userSession.state);
+
               //targetQuestion.currentSection = "plan";
               $(".answer_wrap").attr('data-section', targetQuestion.currentSection);
               $(".section_1").addClass('section_' + targetQuestion.currentSection);
@@ -202,6 +211,14 @@
       </script>
 
       <form name="surveyForm" method="post" action="" id="surveyForm">
+        <input type="hidden" id="email" />
+        <input type="hidden" id="firstname" />
+        <input type="hidden" id="lastname" />
+        <input type="hidden" id="jobtitle" />
+        <input type="hidden" id="company" />
+        <input type="hidden" id="businessindustry" />
+        <input type="hidden" id="country" />
+        <input type="hidden" id="state" />
         <div class="container">
           <div id="outer" class="row">
             <div id="header" class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
