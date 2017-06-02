@@ -45,6 +45,8 @@
         </script>
         <link href="support/css/site.css" rel="stylesheet">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <script src="support/lib/bootstrap-dialog.min.js"></script>
+        <link href="support/lib/bootstrap-dialog.min.css" rel="stylesheet">
     </head>
     <body>
         <form name="gsatForm" method="post" action="survey" onsubmit="javascript:return WebForm_OnSubmit();" id="gsatForm">
@@ -80,8 +82,15 @@
                     }
                     console.log("======================== success : " + $("#ctl00_ContentPlaceHolder1_tbxEmail").val());
                     var userInfo = {
-                        "email": $("#ctl00_ContentPlaceHolder1_tbxEmail").val()
-                    };
+                        "email": $("#ctl00_ContentPlaceHolder1_tbxEmail").val(),
+                        "firstname": $("#ctl00_ContentPlaceHolder1_tbxFirstName").val(),
+                        "lastname": $("#ctl00_ContentPlaceHolder1_tbxLastName").val(),
+                        "jobtitle": $("#ctl00_ContentPlaceHolder1_tbxJobTitle").val(),
+                        "company": $("#ctl00_ContentPlaceHolder1_tbxCompany").val(),
+                        "businessindustry": $("#ctl00_ContentPlaceHolder1_ddlBusinessIndustry").val(),
+                        "country": $("#ctl00_ContentPlaceHolder1_ddlCountry").val(),
+                        "state": $("#ctl00_ContentPlaceHolder1_ddlState").val()
+                    };                        
                     localStorage.setItem("userInfo", JSON.stringify(userInfo));
                     //JSON.parse(localStorage.getItem('userInfo'))
                     return true;
@@ -741,7 +750,23 @@
         var userInfo = localStorage.getItem('userInfo'),
         userSession = !!userInfo ? JSON.parse(userInfo) : {};
         if(!!userSession && !!userSession.email) {
-        document.location.href = "survey";
+
+             BootstrapDialog.confirm({
+                title: 'Session exists!',
+                message: 'Hi '+ userSession.firstname + ' ' + userSession.lastname+'! your session is still exists.',
+                draggable: true, // <-- Default value is false
+                btnCancelLabel: 'Start over', // <-- Default value is 'Cancel',
+                btnOKLabel: 'Resume',
+                btnOKClass: 'btn-primary',
+                callback: function(result) {
+                    // result will be true if button was click, while it will be false if users close the dialog directly.
+                    if(result) {
+                        document.location.href = "survey";
+                    }else {
+                        localStorage.removeItem('userInfo');
+                    }
+                }
+            });
         }
         ValidatorOnLoad();
         }
@@ -756,6 +781,12 @@
         }
         //]]>
     </script>
+
+
+    
+
+
+
     </form>
     <script type="text/javascript">
         var _gaq = _gaq || [];
