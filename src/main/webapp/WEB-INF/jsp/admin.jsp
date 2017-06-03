@@ -40,7 +40,7 @@
             %>
 
             <%
-                list = hs.get("Do");
+                list = hs.get("do");
 
                 for(int i=0; i < list.size(); i++) {
                     q = list.get(i);
@@ -108,7 +108,7 @@
                 });
                 
                 $("#sos-labels").val(allGenerals);
-                $("#sos-questions").val(sectionFields);
+                $("#sos-questions").val(allSections);
                 //console.log("allGenerals : " + allGenerals);
                 //console.log("allSections : " + allSections);
                 //console.log("allSections : " + allSections);
