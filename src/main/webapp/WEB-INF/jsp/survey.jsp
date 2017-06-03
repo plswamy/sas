@@ -56,51 +56,41 @@
           }
         %>
           allSections["plan"] = planSection;
-        <%
 
-          HashMap<String,String> doSection =new HashMap<String,String>();
-          doSection.put("d1", "Do you have a travel approval process that includes travel risk assessments?|do-8.png");
-          doSection.put("d2", "Do your employees have access to relevant information & advice to support them when making these risk assessments?|do-9.png");
-          doSection.put("d3", "Do you have plans in place if things go wrong?|do-10.png");
-          doSection.put("d4", "Do you check the safety and security of hotels and accommodation?|do-11.png");
-          doSection.put("d5", "Do you know how many RTA's (Road Traffic Accidents) your company has experienced in the last 3 years?|do-12.png");
-          doSection.put("d6", "Do you assess the fitness for travel for expatriate or travelling staff?|do-13.png");
-          doSection.put("d7", "Do you have a program to help employees understand and manage their existing health issues whist away?|do-14.png");
-          doSection.put("d8", "Are your employees aware of your Travel Risk Mitigation plans and their responsibilities?|do-15.png");
-          doSection.put("d9", "Do your employees receive training about the risks at the destinations they are travelling to?|do-16.png");
-          doSection.put("d10", "Do your managers understand their responsibilities when approving travel?|do-17.png");
-          doSection.put("d11", "Do you have a system in place to inform your people of a situation that may impact them?|do-18.png");
-          doSection.put("d12", "Do you have a system in place to quickly account for employees in an emergency?|do-19.png");
-          doSection.put("d13", "Do your employees have access to advice and support 24/7?|do-20.png");
-          doSection.put("d14", "Do you have measures in place to check the health of employees returning to work?|do-21.png");
-
-          for(Map.Entry d:doSection.entrySet()) {
-            System.out.println("Question #" + ++totalQuestions + ": QuestionId : " + d.getKey()+":Question : "+d.getValue());
+          <%
+          list = hs.get("Do");
+          q = null;
+          System.out.println(list.size());
+          for(int i=0; i < list.size(); i++) {
+        	  q = list.get(i);
         %>
-            doSection["<%= d.getKey() %>"] =  {
-              "qry" : "<%= d.getValue() %>".split('|')[0],
-              "img" : "<%= d.getValue() %>".split('|')[1]
-              };
+          doSection["<%= q.getId() %>"] =  {
+          "qry" : "<%= q.getText() %>",
+          "img" : "<%= q.getImageName() %>"
+        };
         <%
           }
         %>
+        
           allSections["do"] = doSection;
-        <%
 
-          HashMap<String,String> checkSection =new HashMap<String,String>();
-          checkSection.put("c1", "Are your plans and procedures tested for effectiveness?|check-22.png");
-          checkSection.put("c2", "Do you have a system in place to ensure compliance with your policies and procedures|check-23.png");
 
-          for(Map.Entry c:checkSection.entrySet()) {
-            System.out.println("Question #" + ++totalQuestions + ": QuestionId : " + c.getKey()+":Question : "+c.getValue());
+        
+          <%
+          list = hs.get("check");
+          q = null;
+          System.out.println(list.size());
+          for(int i=0; i < list.size(); i++) {
+        	  q = list.get(i);
         %>
-          checkSection["<%= c.getKey() %>"] =  {
-          "qry" : "<%= c.getValue() %>".split('|')[0],
-          "img" : "<%= c.getValue() %>".split('|')[1]
-          };
+          checkSection["<%= q.getId() %>"] =  {
+          "qry" : "<%= q.getText() %>",
+          "img" : "<%= q.getImageName() %>"
+        };
         <%
           }
         %>
+        
           allSections["check"] = checkSection;
         <%
           System.out.println("Total Question : " + totalQuestions);
@@ -174,7 +164,8 @@
             userInfo.finished = true;
             userInfo.fullData = currentValues;
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
-            document.location.href = "report";
+            //document.location.href = "report";
+            $("#surveyForm").submit();
           } else {
             $(".question_text").ready(function() {
                 $('#email').val(userSession.email);
@@ -208,17 +199,38 @@
           }
         };
         fillForm(currentValues);
+
+        function beforeSubmit() {
+            console.log('before submit');
+            var finalObj = "";
+            var planObj = JSON.parse(localStorage.getItem("userInfo")).surveyProgress.plan;
+            for(var propt in planObj){
+                finalObj += propt + ":" + planObj[propt].val + "|";
+            }
+            var doObj = JSON.parse(localStorage.getItem("userInfo")).surveyProgress.do;
+            for(var propt in doObj){
+                finalObj += propt + ":" + doObj[propt].val + "|";
+            }
+            var checkObj = JSON.parse(localStorage.getItem("userInfo")).surveyProgress.check;
+            for(var propt in checkObj){
+                finalObj += propt + ":" + checkObj[propt].val + "|";
+            }
+            console.log("finalObj : " + finalObj);
+            $('#userResponse').val(finalObj);
+            return true;
+        }
       </script>
 
-      <form name="surveyForm" method="post" action="" id="surveyForm">
-        <input type="hidden" id="email" />
-        <input type="hidden" id="firstname" />
-        <input type="hidden" id="lastname" />
-        <input type="hidden" id="jobtitle" />
-        <input type="hidden" id="company" />
-        <input type="hidden" id="businessindustry" />
-        <input type="hidden" id="country" />
-        <input type="hidden" id="state" />
+      <form name="surveyForm" method="post" action="report" id="surveyForm" onsubmit="javascript:return beforeSubmit();">
+        <input type="hidden" id="email" name="email"/>
+        <input type="hidden" id="firstname" name="firstname"/>
+        <input type="hidden" id="lastname" name="lastname"/>
+        <input type="hidden" id="jobtitle" name="jobtitle"/>
+        <input type="hidden" id="company" name="company"/>
+        <input type="hidden" id="businessindustry" name="businessindustry"/>
+        <input type="hidden" id="country" name="country"/>
+        <input type="hidden" id="state" name="state"/>
+        <input type="hidden" id="userResponse" name="userResponse"/>
         <div class="container">
           <div id="outer" class="row">
             <div id="header" class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
