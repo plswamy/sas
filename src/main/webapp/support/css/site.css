@@ -511,3 +511,120 @@ em {
 .stripe_progress {
   background: #edebea;
 }
+
+
+/*** ADMIN CSS: START ***/
+/*accordion panels*/
+#item_panels .ui-accordion-header{
+	
+    color: #fff;
+    border-right: 0;
+    border: 0;
+    border-radius: 0;
+    font-size: 20px;
+    padding: 8px 14px;
+	}
+
+	.admin-locale-wrapper {
+		padding: 20px;
+	}
+	.admin-lang {
+		height: 29px;
+	}
+	.admin-lang-btn {
+		margin-left: 10px;
+	}
+	.admin-locale-submit {
+		float: right;
+		padding: 10px;
+	}
+	.labels-wrapper {
+		margin: 10px;
+		}
+		/*
+		.sos-admin-label-key {
+			width:1px
+		}
+		.sos-admin-label-value{
+			width:100%;
+		}
+		.sos-admin-label-key,.sos-admin-label-value{
+			display:table-cell;
+			}
+			*/
+	#item_panels h3.ui-accordion-header.general_section{
+		background: #4b7e7a;
+	}
+	#item_panels h3.ui-accordion-header.plan_header{
+		background: #2f4696;
+	}
+	#item_panels h3.ui-accordion-header.do_header{
+		background: #232762;
+	}
+	#item_panels h3.ui-accordion-header.check_header{
+		background: #EF820F;
+	}
+	#item_panels .ui-accordion-header.ui-corner-all{
+		border-top: 0px solid #696B6E;
+		color: #fff;
+	}
+	#item_panels .ui-accordion-header-icon{
+		float:right;
+	}
+	#item_panels .ui-state-default .ui-accordion-header-icon.ui-icon {
+		<!-- background-image: url(ui-icons_ff0000_256x240.png); -->
+	}
+	#item_panels .ui-state-default.ui-corner-all .ui-accordion-header-icon.ui-icon {
+		<!-- background-image: url("ui-icons_444444_256x240.png"); -->
+		background-position: -65px 0;
+	}
+  
+  /*end accordion*/
+
+
+
+.table > tbody > tr > td {
+     vertical-align: middle;
+}
+.img_size{width:40px; }
+.fa-trash-o{padding-left:5px;}
+.row-readonly .file-input,
+.row-editable .img_size{
+  display: none;
+}
+.row-editable .file-input,
+.row-readonly .img_size{
+  display: block;
+}
+
+
+.ui-accordion .ui-accordion-content {
+  padding: 0px;
+}
+
+.fa {
+  cursor: pointer;
+}
+.btn-section{
+  margin-bottom: 10px;
+  margin-right: 10px;
+  overflow:hidden
+ }
+ .ui-state-active .ui-icon, .ui-button:active .ui-icon, .ui-state-active .ui-icon:active, .ui-button:hover .ui-icon{
+   background-image:none;   
+ }
+ .ui-state-hover .ui-icon, .ui-state-focus .ui-icon, .ui-button:hover .ui-icon, .ui-buui-icon, .ui-widget-content .ui-icon{
+   background-image:none; 
+ }
+ .ui-button:hover{
+   background-image:none; 
+ }
+ .ui-icon{
+   background-image:none; 
+ }
+
+ .admin-textarea {
+  width: 100% !important;
+  height: 100% !important;
+}
+/*** ADMIN CSS: END ***/
