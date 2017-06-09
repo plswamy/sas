@@ -58,7 +58,7 @@
           allSections["plan"] = planSection;
 
           <%
-          list = hs.get("Do");
+          list = hs.get("do");
           q = null;
           System.out.println(list.size());
           for(int i=0; i < list.size(); i++) {
@@ -260,11 +260,10 @@
                           </div>
                           <div class="answer_wrap col-xs-12 col-sm-12 col-md-12 col-lg-12" data-section="" data-qid="">
 						  <%
-				                Hashtable<String, String> lhs = (Hashtable<String, String>) request.getAttribute("labels");  
-				                Hashtable<String, String> ahs = (Hashtable<String, String>) request.getAttribute("answertypes");  
-								String yes=	ahs.get("yes");
-								String no=	ahs.get("no");
-								String notsure=	ahs.get("notsure");
+				                Hashtable<String, String> lhs = (Hashtable<String, String>) request.getAttribute("labels");  				                  
+								String yes=	lhs.get("yes");
+								String no=	lhs.get("no");
+								String notsure=	lhs.get("notsure");
 								String progress = lhs.get("progress");
 						  %>
                             <a href="javascript:;" class="btn btn-success" data-value="yes"><%=yes%></a>

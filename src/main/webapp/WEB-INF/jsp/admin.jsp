@@ -141,19 +141,23 @@
 
     </head>
     <body>
+		<%
+                String lang = (String) request.getAttribute("language");
+				System.out.println("\n\n\n\n\n lang: "+lang);
+                if(lang == null) {
+                    lang = "en";
+                }
+
+				System.out.println("\n\n\n\n\n lang: "+lang);
+            %>
         <form name="localeForm" id="localeForm" method="get" action="admin" onsubmit="" >
             <div class="admin-locale-wrapper">
-                Locale: <input class="admin-lang" name="language" id="language" type="text" value="en" />
+                Locale: <input class="admin-lang" name="language" id="language" type="text" value="<%=lang%>" />
                 <button class="btn btn-primary admin-lang-btn" onclick="javascript: return getLocaleData();">Go!</button>
             </div>
         </form>
         <form name="localeForm1" id="localeForm1" method="post" type="multipart/form-data" action="admin" onsubmit="javascript: gatherInfo();" >
-            <%
-                String lang = (String) request.getAttribute("langugae");
-                if(lang == null) {
-                    lang = "en";
-                }
-            %>
+            
             <input type="hidden" id="sos-lang" name="lang" value="<%= lang %>" />
             <input type="hidden" id="sos-labels"  name="labels" value="" />
             <input type="hidden" id="sos-questions"  name="questions" value="" />
