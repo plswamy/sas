@@ -40,7 +40,7 @@
             %>
 
             <%
-                list = hs.get("do");
+                list = hs.get("Do");
 
                 for(int i=0; i < list.size(); i++) {
                     q = list.get(i);
@@ -156,7 +156,7 @@
                 <button class="btn btn-primary admin-lang-btn" onclick="javascript: return getLocaleData();">Go!</button>
             </div>
         </form>
-        <form name="localeForm1" id="localeForm1" method="post" type="multipart/form-data" action="admin" onsubmit="javascript: gatherInfo();" >
+        <form name="localeForm1" id="localeForm1" method="post" type="multipart/form-data" action="admin" class="sos-admin-primary-wrapper<%=lang%>" onsubmit="javascript: gatherInfo();" >
             
             <input type="hidden" id="sos-lang" name="lang" value="<%= lang %>" />
             <input type="hidden" id="sos-labels"  name="labels" value="" />
@@ -196,7 +196,7 @@
                         </thead>
                         <tbody></tbody>
                     </table>
-                    <div class="btn-section">
+                    <div class="btn-section sos-btn-section">
                         <button class="btn btn-primary pull-right" id="addFieldBtn" onclick="FieldView.addField('plan'); return false;">Add Item</button>
                     </div>
                 </div>              
@@ -214,7 +214,7 @@
                         </thead>
                         <tbody></tbody>
                     </table>
-                    <div class="btn-section">
+                    <div class="btn-section sos-btn-section">
                         <button class="btn btn-primary pull-right" id="addFieldBtn" onclick="FieldView.addField('do'); return false;">Add Item</button>
                     </div>
                 </div>
@@ -233,7 +233,7 @@
                         <tbody></tbody>
                     </table>
 
-                    <div class="btn-section">
+                    <div class="btn-section sos-btn-section">
                         <button class="btn btn-primary pull-right" id="addFieldBtn" onclick="FieldView.addField('check'); return false;">Add Item</button>
                     </div>
                  </div>

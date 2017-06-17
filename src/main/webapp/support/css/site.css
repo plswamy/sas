@@ -514,6 +514,19 @@ em {
 
 
 /*** ADMIN CSS: START ***/
+
+.sos-delete-icon, .sos-btn-section {
+    display: none;
+    visibility: hidden;
+}
+
+.sos-admin-primary-wrapperen .sos-delete-icon,
+.sos-admin-primary-wrapperen .sos-btn-section {
+    display: inline-block;
+    visibility: visible;
+}
+
+
 /*accordion panels*/
 #item_panels .ui-accordion-header{
 	

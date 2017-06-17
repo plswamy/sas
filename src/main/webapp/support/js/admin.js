@@ -104,7 +104,6 @@
     };
 
     var deleteField = function deleteField(id, type) {
-    debugger;
       var index = -1;
       for (var i=0; i < _FieldData.length; i++) {
         if (_FieldData[i].id === id) {
@@ -147,8 +146,8 @@
         <input type="file" id="file%id%" class="file-input sos-input-file-%id%" name="file_%type%_%id%">\
         </td>\
         <td>\
-          <i title="Edit" class="fa fa-pencil fa-lg" id="editItem-%id%" data-type="%type%" onclick="FieldView.enableFieldFields(%id%)"></i>\
-          <i title="Delete" class="fa fa-trash-o fa-lg" id="deleteItem-%id%" data-type="%type%" onclick="FieldView.deleteField(%id%)"></i>\
+          <i title="Edit" class="sos-edit-icon fa fa-pencil fa-lg" id="editItem-%id%" data-type="%type%" onclick="FieldView.enableFieldFields(%id%)"></i>\
+          <i title="Delete" class="sos-delete-icon fa fa-trash-o fa-lg" id="deleteItem-%id%" data-type="%type%" onclick="FieldView.deleteField(%id%)"></i>\
         </td>\
       </tr>';
 
