@@ -18,7 +18,6 @@
             //TODO: let's continue to show report page.
             <%
               String scoreLable = "You scored ";
-              int score = 0;
             %>
                 answers = !!userSession.surveyProgress ? userSession.surveyProgress : {};
           } else {
@@ -56,24 +55,36 @@
                   </div>
                   <div class="content">
                     <div class="results_h2_wrap stripe">
-                      <h2><%= scoreLable %> <span id="score"><%= score %></span>%</h2>
+                      <h2><%= scoreLable %> <span id="score"></span>%</h2>
                     </div>
                     <div class="results_padding">
-                      <div id="graph" class="action_needed">
-                        <img class="cover-width action-none" src="./support/img/result_graph_action_none.png" alt="Action None">
-                        <img class="cover-width action-needed" src="./support/img/result_graph_action_needed.png" alt="Action Needed">
-                        <img class="cover-width action-consider" src="./support/img/result_graph_action_consider.png" alt="Action Consider">
+                      <div id="graph" class="action_needed1">
+                        <img class="cover-width action-consider" id="sos-graph" src="" alt="Action Consider">
                       </div>
 
                       <script>
                         $(document).ready(function () {
-                          var generateForm = function (sectionName){
+                          var totalQuestions = 0,
+                              totalYes = 0,
+                              totalNo = 0,
+                              totalNotsure = 0,
+                              generateForm = function (sectionName){
                                 var qNum = 0;
                                 $.each(surveyProgress[sectionName], function(qid) {
                                   qNum++;
                                   var showQuestion = this.val;
                                   if(showQuestion === undefined) {
                                       showQuestion = answers[this.currentSection][this.qid].val;
+                                  }
+                                  
+                                  if(showQuestion === 'yes') {
+                                      totalYes++;
+                                  }
+                                  if(showQuestion === 'no') {
+                                      totalNo++;
+                                  }
+                                  if(showQuestion === 'notsure') {
+                                      totalNotsure++;
                                   }
                                   if(showQuestion !== 'yes') {
                                     var tmpl = $('.question_template').clone(true);
@@ -85,6 +96,7 @@
                                     $("." + sectionName + "_section")[0].appendChild(tmpl[0]);
                                   }
                                 });
+                                totalQuestions += qNum;
                                 if(qNum > 0) {
                                   $("#" + sectionName).show();
                                 }
@@ -92,6 +104,17 @@
                           generateForm('plan');
                           generateForm('do');
                           generateForm('check');
+                          var scoreVal = Math.round((totalYes / totalQuestions) * 100);
+                          $("#score").html(scoreVal);
+                          var imgSrc = './support/img/notsure.png';
+                          if(totalYes === totalQuestions) {
+                              imgSrc = './support/img/yes.png';
+                          } else if(totalNo === totalQuestions) {
+                              imgSrc = './support/img/no.png';
+                          }
+
+                          $("#sos-graph").prop("src", imgSrc);
+
                         });
                       </script>
 
