@@ -58,7 +58,7 @@
           allSections["plan"] = planSection;
 
           <%
-          list = hs.get("do");
+          list = hs.get("Do");
           q = null;
           System.out.println(list.size());
           for(int i=0; i < list.size(); i++) {
