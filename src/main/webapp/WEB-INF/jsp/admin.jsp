@@ -161,6 +161,7 @@
             <input type="hidden" id="sos-lang" name="lang" value="<%= lang %>" />
             <input type="hidden" id="sos-labels"  name="labels" value="" />
             <input type="hidden" id="sos-questions"  name="questions" value="" />
+            <input type="hidden" id="sos-deleted-questions"  name="deletedquestions" value="" />
 
             <div id="item_panels">
                 <h3 class="general_section">General Labels</h3>        
