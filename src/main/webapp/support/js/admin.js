@@ -173,7 +173,9 @@
     };
 
     var deleteField = function deleteField(id) {
-      var _type = $('#deleteItem-'+id).attr('data-type');
+	  var deletedQuestions = $('#sos-deleted-questions').val(),
+          _type = $('#deleteItem-'+id).attr('data-type');
+	  $('#sos-deleted-questions').val(deletedQuestions + "|" + id);
       FieldController.deleteField(id, _type);
       //render();
     }
@@ -198,51 +200,6 @@
   })();
   var _doData = allData;
   
-  /*[
-  {
-   id: 1,
-   text: 'text1',
-   description: 'discription1',
-   imagePath: 'https://s-media-cache-ak0.pinimg.com/originals/5e/7a/d0/5e7ad09e561998934826f2888d6f63a0.jpg',
-   type: 'plan'
-  }, 
-  {
-   id: 2,
-   text: 'text2',
-   description: 'discription2',
-   imagePath: 'https://s-media-cache-ak0.pinimg.com/originals/5e/7a/d0/5e7ad09e561998934826f2888d6f63a0.jpg',
-   type: 'plan'
-  }, 
-  {
-   id: 3,
-   text: 'text3',
-   description: 'discription3',
-   imagePath: 'https://s-media-cache-ak0.pinimg.com/originals/5e/7a/d0/5e7ad09e561998934826f2888d6f63a0.jpg',
-   type: 'plan'
-  }, 
-  {
-   id: 4,
-   text: 'text4',
-   description: 'discription4',
-   imagePath: 'https://s-media-cache-ak0.pinimg.com/originals/5e/7a/d0/5e7ad09e561998934826f2888d6f63a0.jpg',
-   type: 'do'
-  }, 
-  {
-   id: 5,
-   text: 'text5',
-   description: 'discription5',
-   imagePath: 'https://s-media-cache-ak0.pinimg.com/originals/5e/7a/d0/5e7ad09e561998934826f2888d6f63a0.jpg',
-   type: 'check'
-  }, 
-  {
-   id: 6,
-   text: 'text6',
-   description: 'discription6',
-   imagePath: 'https://s-media-cache-ak0.pinimg.com/originals/5e/7a/d0/5e7ad09e561998934826f2888d6f63a0.jpg',
-   type: 'check'
-  }];
-  */
-
   function init() {
     FieldController.initFieldData(_doData);
     FieldView.render();
