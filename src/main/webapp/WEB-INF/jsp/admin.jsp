@@ -156,7 +156,7 @@
                 <button class="btn btn-primary admin-lang-btn" onclick="javascript: return getLocaleData();">Go!</button>
             </div>
         </form>
-        <form name="localeForm1" id="localeForm1" method="post" type="multipart/form-data" action="admin" class="sos-admin-primary-wrapper<%=lang%>" onsubmit="javascript: gatherInfo();" >
+        <form name="localeForm1" id="localeForm1" method="post" enctype="multipart/form-data" action="admin" class="sos-admin-primary-wrapper<%=lang%>" onsubmit="javascript: gatherInfo();" >
             
             <input type="hidden" id="sos-lang" name="lang" value="<%= lang %>" />
             <input type="hidden" id="sos-labels"  name="labels" value="" />
