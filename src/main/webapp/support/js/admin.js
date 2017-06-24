@@ -105,7 +105,7 @@
     var deleteField = function deleteField(id, type) {
       var index = -1;
       for (var i=0; i < _FieldData.length; i++) {
-        if (_FieldData[i].id === id) {
+        if (_FieldData[i].id === id + '') {
           index = i;
           break;
         }
