@@ -64,12 +64,11 @@
   }
 
   var FieldController = (function(){
-    var _count = 1;
     var _FieldData = [];
 
     var initFieldData = function initFieldData(data) {
       for (var i=0; i < data.length; i++) {
-        _FieldData.push(new Field(_count++, data[i].text, data[i].description, data[i].imagePath, data[i].type))
+        _FieldData.push(new Field(data[i].id, data[i].text, data[i].description, data[i].imagePath, data[i].type));
       }
     };
 
@@ -98,7 +97,7 @@
     };
 
     var addField = function addField(type) {
-      var newField = new Field(-1, "", "Enter Description", "", type, true);
+      var newField = new Field(-1, "", "", "", type, true);
       _FieldData.push(newField);
       return newField;
     };
@@ -137,10 +136,10 @@
     var FieldTemplate = '<tr id="row_%type%_%id%" class="row-readonly">\
         <td>%id%</td>\
         <td>\
-           <input type="text" class="form-control sos-input sos-input-question" data-section="%type%" data-id="%id%" value="%text%" title="%text%" name="text%id%" id="text_%id%" %disabled% placeholder="Enter text">\
+           <input type="text" class="form-control sos-input sos-input-question" data-section="%type%" data-id="%id%" value="%text%" title="%text%" name="text%id%" id="text_%id%" %disabled% placeholder="Enter question">\
         </td>\
         <td>\
-          <textarea class="form-control admin-textarea sos-input-desc-%id%"  %disabled% name="desc%id%" id="desc_%id%">%desc%</textarea>\
+          <textarea placeholder="Enter description" class="form-control admin-textarea sos-input-desc-%id%"  %disabled% name="desc%id%" id="desc_%id%">%desc%</textarea>\
         </td>\
         <td><img src="%img%" id="sos-img-%id%" class="img_size">\
         <input type="file" id="file%id%" class="file-input sos-input-file-%id%" name="file_%type%_%id%">\
