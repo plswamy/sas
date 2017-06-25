@@ -85,7 +85,7 @@ public class SASController {
   @RequestMapping(value="/survey", method = RequestMethod.GET)
   public String surveyGet(ModelMap model) {
 		
-		System.out.println("survey get called....");
+		System.out.println("survey get called....");		
 		req.setAttribute("questions", getQuestions(null));
   	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", null));
 		//req.setAttribute("answertypes", getData("answers", "answertype", "answertypevalue"));
@@ -118,6 +118,8 @@ public class SASController {
   @RequestMapping(value="/report", method = RequestMethod.GET)
   public String getReport(ModelMap model) {
 	  System.out.println("report get called....");
+	  req.setAttribute("questions", getQuestions(null));
+	  req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", null));
     return "survey";
 
   }
@@ -178,7 +180,12 @@ public class SASController {
 		String xslFileName = realPath+"/xsl/cmsedgexsl.xsl";		
 		String xmlFileName = realPath+"/xsl/travel.xml";		
 		SAXBuilder builder = new SAXBuilder();
-		Document document = builder.build(xmlFileName);		
+		Document document = builder.build(xmlFileName);
+		String score = req.getParameter("score1");
+		String user = req.getParameter("username1");
+		document.getRootElement().getChild("data").getChild("main").getChild("score").setText(score);
+		document.getRootElement().getChild("data").getChild("main").getChild("user").setText(user);
+		System.out.println("root element"+document.getRootElement().getChild("data").getChild("main").getChildText("score"));
 		Doc2Pdf.start(document, xslFileName, pdfFileName);
 		System.out.println("end");
 	  } catch(Exception exp) {
@@ -210,7 +217,12 @@ public class SASController {
       return model;
     }
     
-    public Hashtable<String, List<Question>> getQuestions(String lang) {
+    public Hashtable<String, List<Question>> getQuestions(String lang1) {
+    	String lang = req.getParameter("lang");
+    	System.out.println("lang from parameter...:"+lang);
+		if(lang == null || lang.length() ==0) {
+			lang = lang1;
+		}
     	Hashtable<String, List<Question>> hs = new Hashtable<String, List<Question>>();
     	List<Question> list = null;
     	Question q = null;
@@ -286,7 +298,12 @@ public class SASController {
   	  	// load state
     }
     
-    public Hashtable<String, String> getData(String table, String cKey, String cValue, String lang) {    	
+    public Hashtable<String, String> getData(String table, String cKey, String cValue, String lang1) {
+    	String lang = req.getParameter("lang");
+    	System.out.println("lang from parameter...:"+lang);
+		if(lang == null || lang.length() == 0) {
+			lang = lang1;
+		}
     	Hashtable<String, String> hs = new Hashtable<String, String>();
     	try {
     		con = dataSource.getConnection();
@@ -390,20 +407,175 @@ public class SASController {
     private void saveLangData() {
     	try {    	    		    	
     		String lang = req.getParameter("lang");
-	    	boolean update = getData(lang);
-	    	if(update) {
-	    		System.out.println("updating data for lang:"+lang);
-	    		updateData();
-	    	} else {
-	    		System.out.println("inserting data for lang:"+lang);
-	    		insertData();
-		    	
-	    	}
+    		if(nullCheck(lang).length() == 0 || lang.equals("en")) {
+    			lang = "english";
+    		}
+    		if(lang.equals("english")) {
+    			updateEnglishData();
+    		} else {
+    			boolean update = getData(lang);
+		    	if(update) {
+		    		System.out.println("updating data for lang:"+lang);
+		    		updateData();
+		    	} else {
+		    		System.out.println("inserting data for lang:"+lang);
+		    		insertData();			    	
+		    	}
+    		}
     	} catch(Exception exp) {
     		exp.printStackTrace();
     	} finally {
     		close();
     	}
+    }
+    
+    private void updateEnglishData() {
+    	String labels = req.getParameter("labels");
+    	String questions = req.getParameter("questions");
+    	String lang = req.getParameter("lang");
+    	String deletedquestions = req.getParameter("deletedquestions");
+    	System.out.println("lang:"+lang);
+    	System.out.println("labels:"+labels);	    	
+    	System.out.println("questions:"+questions);
+    	System.out.println("deletedquestions:"+deletedquestions);
+    	PreparedStatement pstmt = null;
+    	try {
+    		String temp1 = null;
+    		String temp2 = null;
+    		String temp3 = null;
+    		String temp4 = null;
+    		String temp5 = null;
+			List<String> langs = getLangs();
+			
+    		con = dataSource.getConnection();
+    		StringTokenizer st = null;
+    		//update labels set labelvalue='test' where labelkey='welcomeDesc' and lang='en1';
+	    	String labelInsert = "update labels set labelvalue=? where labelkey=? and lang=?";
+	    	stmt = con.prepareStatement(labelInsert);
+	    	StringTokenizer labelsToken = new StringTokenizer(labels, "|");
+	    	while(labelsToken.hasMoreElements()) {
+	    		st = new StringTokenizer(labelsToken.nextToken(), ":");
+	    		//labelKey:labelvalue
+	    		temp1 = st.nextToken();
+	    		temp2 = st.nextToken();
+	    		stmt.setString(1, temp2);
+	    		stmt.setString(2, temp1);
+	    		stmt.setString(3, lang);
+		    	stmt.executeUpdate();
+	    	}
+	    	
+	    	String questionInsert = "update questions set qtext = ?, qdesc = ?, imagename = ? where id = ?";	
+	    	String questionEnglishInsert = "insert into questions (qtype, qtext, qdesc, imagename, lang, pqid) value (?,?,?,?,?,?)";
+	    	stmt = con.prepareStatement(questionInsert);
+	    	pstmt = con.prepareStatement(questionEnglishInsert);
+	    	StringTokenizer qToken = new StringTokenizer(questions, "|");
+	    	String eqid = null;
+	    	while(qToken.hasMoreElements()) {
+	    		st = new StringTokenizer(qToken.nextToken(), ":");
+	    		//id:section:question:desc:imageName
+	    		temp1 = st.nextToken(); //id
+	    		temp2 = st.nextToken(); //qtype
+	    		temp3 = st.nextToken(); //qtext
+	    		temp4 = st.nextToken(); //qdesc
+	    		if(st.countTokens() > 0) {
+	    			temp5 = st.nextToken(); //imagename
+	    		} else {
+	    			temp5 = "plan-1.png";	// TODO
+	    			temp1 = null;
+	    		}
+	    		if(nullCheck(temp1).length() > 0) {
+		    		stmt.setString(1, temp3); 
+		    		stmt.setString(2, temp4);
+		    		stmt.setString(3, temp5);
+		    		stmt.setString(4, temp1);
+		    		stmt.executeUpdate();
+	    		} else {
+	    			pstmt.setString(1, temp2);
+	    			pstmt.setString(2, temp3);
+	    			pstmt.setString(3, temp4);
+	    			pstmt.setString(4, temp5);
+	    			pstmt.setString(5, "english");
+	    			pstmt.setString(6, null);
+	    			pstmt.executeUpdate();
+	    			eqid = getEnglishQId(temp2, temp3, temp4, temp5);
+	    			for(int i=0; i < langs.size(); i++) {
+	    				System.out.println("inserting question for the language: "+langs.get(i));
+	    				pstmt.setString(5, langs.get(i));
+	    				pstmt.setString(6, eqid);
+	    				pstmt.executeUpdate();
+	    			}
+	    		}
+	    	}
+	    	//deletedquestions = deletedquestions.replaceAll("|", ",");
+	    	if(deletedquestions != null && deletedquestions.length() > 1) {
+		    	deletedquestions = deletedquestions.substring(1);
+		    	System.out.print(deletedquestions);
+		    	stmt = con.prepareStatement("delete from questions where id in ("+deletedquestions+")");
+		    	stmt.executeUpdate();
+		    	stmt = con.prepareStatement("delete from questions where pqid in ("+deletedquestions+")");
+		    	stmt.executeUpdate();
+	    	}
+    	} catch(Exception exp) {
+    		exp.printStackTrace();
+    	} finally {
+    		close();
+    		try { 
+    			if(pstmt != null) pstmt.close();
+    		} catch(Exception exp) { }
+    	}
+    }
+    
+    private String getEnglishQId(String qtype, String qtext, String qdesc, String imagename) {
+    	String returnValue = null;
+    	Connection con1 = null;
+    	PreparedStatement pstmt1 = null;
+    	try {
+    		String sql = "select id from questions where qtype = ? and qtext = ? and qdesc = ? and imagename = ? and lang = ?";
+    		con1 = dataSource.getConnection();
+			pstmt1 = con.prepareStatement(sql);
+			pstmt1.setString(1, qtype);
+			pstmt1.setString(2, qtext);
+			pstmt1.setString(3, qdesc);
+			pstmt1.setString(4, imagename);
+			pstmt1.setString(5, "english");
+			ResultSet rs = pstmt1.executeQuery();
+			if(rs.next()) {
+				returnValue = rs.getString(1);
+			}
+    	} catch(Exception exp) {
+    		exp.printStackTrace();
+    	} finally {
+    		try {
+    			if(con1 != null) con1.close();
+    			if(pstmt1 != null) pstmt1.close();
+    		} catch(Exception exp) {
+    			exp.printStackTrace();
+    		}
+    	}
+    	return returnValue;
+    }
+    
+    private List<String> getLangs() {
+    	List<String> list = new ArrayList<String>();
+    	String temp = null;
+    	try {
+			String sql = "select distinct(lang) from questions;";			
+			con = dataSource.getConnection();
+			stmt = con.prepareStatement(sql);
+			System.out.println("sql stmt for lang....:"+sql);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				temp = rs.getString(1);
+				if(temp!= null && !temp.equalsIgnoreCase("english")) {
+					list.add(rs.getString(1));
+				}
+			}
+    	} catch(Exception exp) {
+    		exp.printStackTrace();
+    	} finally {
+    		close();
+    	}
+    	return list;
     }
     
     private void updateData() {
@@ -441,6 +613,7 @@ public class SASController {
 	    	StringTokenizer qToken = new StringTokenizer(questions, "|");
 	    	while(qToken.hasMoreElements()) {
 	    		st = new StringTokenizer(qToken.nextToken(), ":");
+	    		System.out.println("st token length....:"+st.countTokens());
 	    		//id:section:question:desc:imageName
 	    		temp1 = st.nextToken(); //id
 	    		temp2 = st.nextToken(); //qtype
@@ -479,18 +652,19 @@ public class SASController {
 		    	stmt.executeUpdate();
 	    	}
 	    	
-	    	String questionInsert = "insert into questions (qtype, qtext, qdesc, imagename, lang) value (?,?,?,?,?)";
+	    	String questionInsert = "insert into questions (qtype, qtext, qdesc, imagename, pqid, lang) value (?,?,?,?,?,?)";
 	    	stmt = con.prepareStatement(questionInsert);
 	    	StringTokenizer qToken = new StringTokenizer(questions, "|");
 	    	while(qToken.hasMoreElements()) {
 	    		st = new StringTokenizer(qToken.nextToken(), ":");
 	    		//id:section:question:desc:imageName
-	    		st.nextToken(); //id avoid
+	    		//st.nextToken(); //id avoid
+	    		stmt.setString(5, st.nextToken()); 
 	    		stmt.setString(1, st.nextToken()); 
 	    		stmt.setString(2, st.nextToken());
 	    		stmt.setString(3, st.nextToken());
 	    		stmt.setString(4, st.nextToken());
-	    		stmt.setString(5, lang);
+	    		stmt.setString(6, lang);
 	    		stmt.executeUpdate();
 	    	}
     	} catch(Exception exp) {
