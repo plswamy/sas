@@ -174,7 +174,7 @@
     var deleteField = function deleteField(id) {
 	  var deletedQuestions = $('#sos-deleted-questions').val(),
           _type = $('#deleteItem-'+id).attr('data-type');
-	  $('#sos-deleted-questions').val(deletedQuestions + "|" + id);
+	  $('#sos-deleted-questions').val(deletedQuestions + "," + id);
       FieldController.deleteField(id, _type);
       //render();
     }
