@@ -90,7 +90,7 @@
                     allGenerals = "",
                     allSections = "";
                 generalFields.each(function(cur) {
-                    allGenerals += $(this).attr("id") + ":" + $(this).attr("value") + "|";
+                    allGenerals += $(this).attr("id") + ":" + $(this).val() + "|";
                 });
                 sectionFields.each(function(cur) {
                     var objId = $(this).data('id');
