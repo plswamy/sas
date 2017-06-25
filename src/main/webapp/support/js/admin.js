@@ -90,8 +90,10 @@
         $(this).attr('disabled', true);
       });
       $('.row-editable').removeClass('row-editable').addClass('row-readonly');
-      $('#row_'+type+'_'+id).addClass('row-editable').removeClass('row-readonly');
-      $('#row_'+type+'_'+id).find('.form-control').each(function() {
+
+      var currentTarget = $(event.target).closest("tr");
+      currentTarget.addClass('row-editable').removeClass('row-readonly');
+      currentTarget.find('.form-control').each(function() {
         $(this).attr('disabled', false);
       });
     };
@@ -113,7 +115,9 @@
       if (index !== -1) {
         _FieldData.splice(index, 1);
         $('#row_'+type+'_'+id).remove();
-      }
+      } else {
+        $(event.target).closest("tr").remove();
+      };
     }
 
     var getFields = function getFields() {
