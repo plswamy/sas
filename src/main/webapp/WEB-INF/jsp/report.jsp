@@ -116,10 +116,11 @@
                           }
 
                           $("#sos-graph").prop("src", imgSrc);
+                          $("#scoreinfo").val(scoreVal + '%|' + imgSrc);
 
                         });
                       </script>
-
+                       <input type="hidden" id="scoreinfo" name="scoreinfo" value="" />
 
                       <div class="question_template col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: none;">
                         <div class="question_id" style="display: block;">
