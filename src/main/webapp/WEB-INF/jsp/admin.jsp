@@ -40,7 +40,7 @@
             %>
 
             <%
-                list = hs.get("Do");
+                list = hs.get("do");
 
                 for(int i=0; i < list.size(); i++) {
                     q = list.get(i);

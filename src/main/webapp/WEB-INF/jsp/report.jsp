@@ -41,6 +41,8 @@
 
     <body>
       <form name="reportForm" method="post" action="" id="reportForm">
+		<input type="hidden" id="score1" name="score1" value="42"/>
+		<input type="hidden" id="username1" name="username1" value="scas"/>
         <div class="container">
           <div id="outer" class="row">
             <div id="header" class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
