@@ -19,58 +19,58 @@ Create table state(id integer PRIMARY KEY ,statetype varchar(20), lang varchar(1
 --Create Questions Table;
 drop table questions;
 
-Create table questions(id integer PRIMARY KEY ,qtype varchar(70),imagename varchar(100),qtext varchar(1000), qdesc varchar(1000), lang varchar(10));
+Create table questions(id integer PRIMARY KEY AUTO_INCREMENT, qtype varchar(70),imagename varchar(100),qtext varchar(1000), qdesc varchar(1000), pqid varchar(100), lang varchar(10));
 
 --Inserting values In Questions;
 
-Insert into questions values(1, 'plan', 'plan-1.png','Can you locate all your current travellers?','Here travellers description goes', 'english');
+Insert into questions values(1, 'plan', 'plan-1.png','Can you locate all your current travellers?','Here travellers description goes', null, 'english');
 
-Insert into questions values(2, 'plan','plan-2.png','Do you access the risks to your employees in those locations?','Employees risk accessibilty description goes','english');
+Insert into questions values(2, 'plan','plan-2.png','Do you access the risks to your employees in those locations?','Employees risk accessibilty description goes', null, 'english');
 
-Insert into questions values(3, 'plan','plan-3.png','Do you monitor the type and quantity of incidents your employees have been involved in over the last 2-3 years?','Type and quantity of incidents description goes','english'); 
+Insert into questions values(3, 'plan','plan-3.png','Do you monitor the type and quantity of incidents your employees have been involved in over the last 2-3 years?','Type and quantity of incidents description goes',null,'english'); 
 
-Insert into questions values(4, 'plan','plan-4.png','Does your company understand its Duty of Care obligations?','Duty of care obligations description goes','english');
+Insert into questions values(4, 'plan','plan-4.png','Does your company understand its Duty of Care obligations?','Duty of care obligations description goes',null,'english');
 
-Insert into questions values(5, 'plan','plan-5.png','Do your policies cover the health, safety and security of employees abroad?','Policies description goes', 'english');
+Insert into questions values(5, 'plan','plan-5.png','Do your policies cover the health, safety and security of employees abroad?','Policies description goes', null,'english');
 
-Insert into questions values(6, 'plan','plan-6.png','Do you know who is responsible for Travel Risk Management in your organisation?','Travel Risk Management description goes','english');
+Insert into questions values(6, 'plan','plan-6.png','Do you know who is responsible for Travel Risk Management in your organisation?','Travel Risk Management description goes',null,'english');
 
-Insert into questions values(7, 'plan','plan-7.png','Do you know how to integrate the components of Travel Risk Management into your risk management system?','Integration of travel risk management components into risk management system description goes ','english');
-
-
-
-Insert into questions values(8, 'do','do-8.png', 'Do you have a travel approval process that includes travel risk assessments?','Travel approval process description goes','english');
-
-Insert into questions values(9, 'do','do-9.png',  'Do your employees have access to relevant information & advice to support them when making these risk assessments?','Employees risk assessments making description goes','english');
-
-Insert into questions values(10, 'do','do-10.png', 'Do you have plans in place if things go wrong?','Alternate plans if things goes wrong description goes','english');
-
-Insert into questions values(11, 'do','do-11.png', 'Do you check the safety and security of hotels and accommodation?','To check the safety and security of hotels','english');
-
-Insert into questions values(12, 'do','do-12.png', 'Do you know how many RTA\'s(Road Traffic Accidents) your company has experienced in the last 3 years?','Road Traffic Accidents experiences description goes ','english');
-
-Insert into questions values(13, 'do','do-13.png', 'Do you assess the fitness for travel for expatriate or travelling staff?','Assess the fitness for travel description', 'english');
-
-Insert into questions values(14, 'do','do-14.png', 'Do you have a program to help employees understand and manage their existing health issues whist away?','Managing health issues description goes','english');
+Insert into questions values(7, 'plan','plan-7.png','Do you know how to integrate the components of Travel Risk Management into your risk management system?','Integration of travel risk management components into risk management system description goes ',null,'english');
 
 
-Insert into questions values(15, 'do','do-15.png', 'Are your employees aware of your Travel Risk Mitigation plans and their responsibilities?','Employees Travel Risk Mitigation plans and  responsibilities description goes','english');
 
-Insert into questions values(16, 'do','do-16.png', 'Do your employees receive training about the risks at the destinations they are travelling to?','Training about risks at the destinations when employee travels ','english');
+Insert into questions values(8, 'do','do-8.png', 'Do you have a travel approval process that includes travel risk assessments?','Travel approval process description goes',null,'english');
 
-Insert into questions values(17, 'do','do-17.png', 'Do your managers understand their responsibilities when approving travel?','Responsibilities of managers when approving travel description goes ','english');
+Insert into questions values(9, 'do','do-9.png',  'Do your employees have access to relevant information & advice to support them when making these risk assessments?','Employees risk assessments making description goes',null,'english');
 
-Insert into questions values(18, 'do','do-18.png','Do you have a system in place to inform your people of a situation that may impact them?', 'Informing about a situation that impact people description goes', 'english');
+Insert into questions values(10, 'do','do-10.png', 'Do you have plans in place if things go wrong?','Alternate plans if things goes wrong description goes',null,'english');
 
-Insert into questions values(19, 'do','do-19.png', 'Do you have a system in place to quickly account for employees in an emergency?','Emergency account for employees description goes','english');
+Insert into questions values(11, 'do','do-11.png', 'Do you check the safety and security of hotels and accommodation?','To check the safety and security of hotels',null,'english');
 
-Insert into questions values(20, 'do','do-20.png', 'Do your employees have access to advice and support 24/7?','24/7 accessibility to advice and support description goes','english');
+Insert into questions values(12, 'do','do-12.png', 'Do you know how many RTA\'s(Road Traffic Accidents) your company has experienced in the last 3 years?','Road Traffic Accidents experiences description goes ',null,'english');
 
-Insert into questions values(21, 'do','do-21.png','Do you have measures in place to check the health of employees returning to work?','Measuring health of employees returning to work description goes','english');
+Insert into questions values(13, 'do','do-13.png', 'Do you assess the fitness for travel for expatriate or travelling staff?','Assess the fitness for travel description', null,'english');
 
-Insert into questions values(22, 'check','check-22.png', 'Are your plans and procedures tested for effectiveness?','Effectiveness testing for plans and procedures description goes','english');
+Insert into questions values(14, 'do','do-14.png', 'Do you have a program to help employees understand and manage their existing health issues whist away?','Managing health issues description goes',null,'english');
 
-Insert into questions values(23, 'check','check-23.png', 'Do you have a system in place to ensure compliance with your policies and procedures?','System of policies and procedures description goes','english');
+
+Insert into questions values(15, 'do','do-15.png', 'Are your employees aware of your Travel Risk Mitigation plans and their responsibilities?','Employees Travel Risk Mitigation plans and  responsibilities description goes',null,'english');
+
+Insert into questions values(16, 'do','do-16.png', 'Do your employees receive training about the risks at the destinations they are travelling to?','Training about risks at the destinations when employee travels ',null,'english');
+
+Insert into questions values(17, 'do','do-17.png', 'Do your managers understand their responsibilities when approving travel?','Responsibilities of managers when approving travel description goes ',null,'english');
+
+Insert into questions values(18, 'do','do-18.png','Do you have a system in place to inform your people of a situation that may impact them?', 'Informing about a situation that impact people description goes', null,'english');
+
+Insert into questions values(19, 'do','do-19.png', 'Do you have a system in place to quickly account for employees in an emergency?','Emergency account for employees description goes',null,'english');
+
+Insert into questions values(20, 'do','do-20.png', 'Do your employees have access to advice and support 24/7?','24/7 accessibility to advice and support description goes',null,'english');
+
+Insert into questions values(21, 'do','do-21.png','Do you have measures in place to check the health of employees returning to work?','Measuring health of employees returning to work description goes',null,'english');
+
+Insert into questions values(22, 'check','check-22.png', 'Are your plans and procedures tested for effectiveness?','Effectiveness testing for plans and procedures description goes',null,'english');
+
+Insert into questions values(23, 'check','check-23.png', 'Do you have a system in place to ensure compliance with your policies and procedures?','System of policies and procedures description goes',null,'english');
 
 --CREATE ANSWERS TABLE;  
 
@@ -87,10 +87,15 @@ Insert into answers values(2, 'english', 'no', 'No');
 Insert into answers values(3, 'english', 'notsure', 'Not Sure');
 
 --CREATE LABELS TABLE;  
-
-Create table labels(id integer PRIMARY KEY , lang varchar(10), labelkey varchar(100) , labelvalue varchar(1000));
+drop table labels;
+Create table labels(id integer PRIMARY KEY AUTO_INCREMENT, lang varchar(10), labelkey varchar(100) , labelvalue varchar(1000));
 
 --Inserting values In Answers Table;
+Insert into labels values(17, 'english', 'yes', 'Yes');                                      
+
+Insert into labels values(18, 'english', 'no', 'No');
+
+Insert into labels values(19, 'english', 'notsure', 'Not Sure');
 
 Insert into labels values(1, 'english', 'welcomeHeader', 'Welcome to the travel risk mitigation self-assessment tool.');                                      
 

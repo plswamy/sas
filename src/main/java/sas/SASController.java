@@ -26,6 +26,17 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 @Controller
 public class SASController {
 
@@ -34,7 +45,10 @@ public class SASController {
 	
 	@Autowired
 	private HttpServletRequest req;
-	
+
+	@Autowired
+	private HttpServletResponse res;
+		
 	Connection con = null;
 	PreparedStatement stmt = null;
 	
@@ -405,7 +419,8 @@ public class SASController {
     }
     
     private void saveLangData() {
-    	try {    	    		    	
+    	try {    	    		 
+    		uploadFiles();
     		String lang = req.getParameter("lang");
     		if(nullCheck(lang).length() == 0 || lang.equals("en")) {
     			lang = "english";
@@ -427,6 +442,54 @@ public class SASController {
     	} finally {
     		close();
     	}
+    }
+    
+    private void uploadFiles() {
+    	try {
+	        // location to store file uploaded
+	        String UPLOAD_DIRECTORY = "support\\img\\resourceFiles\\123\\";
+	       
+	         // checks if the request actually contains upload file
+	        if (!ServletFileUpload.isMultipartContent(req)) {
+	            // if not, we stop here
+	            PrintWriter writer = res.getWriter();
+	            writer.println("Error: Form must has enctype=multipart/form-data.");
+	            writer.flush();
+	            return;
+	        }
+	     
+	        // configures upload settings
+	        DiskFileItemFactory factory = new DiskFileItemFactory();
+	        factory.setRepository(new File(System.getProperty("java.io.tmpdir"))); 
+	        ServletFileUpload upload = new ServletFileUpload(factory);
+	        String realPath = req.getRealPath("/");
+	        String uploadPath = realPath + File.separator + UPLOAD_DIRECTORY;
+	        File uploadDir = new File(uploadPath);
+	        if (!uploadDir.exists()) {
+	            uploadDir.mkdir();
+	        }
+        
+            // parses the request's content to extract file data
+            @SuppressWarnings("unchecked")
+            List<FileItem> formItems = upload.parseRequest(req);
+
+            if (formItems != null && formItems.size() > 0) {
+                // iterates over form's fields
+                for (FileItem item : formItems) {
+                    // processes only fields that are not form fields
+                    if (!item.isFormField() && !item.getName().equals("")) {
+                        String fileName = new File(item.getName()).getName();
+                        String filePath = uploadPath + File.separator + fileName;
+                        File storeFile = new File(filePath);
+                        // saves the file on disk
+                        item.write(storeFile);
+                        System.out.println("filename uploaded...:"+fileName);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("There was an error: " + ex.getMessage());
+        }
     }
     
     private void updateEnglishData() {
