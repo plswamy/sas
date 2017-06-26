@@ -82,6 +82,20 @@
     <scope>system</scope>
     <systemPath>${basedir}/src/main/resources/lib/xalan.jar</systemPath>
 </dependency>
+<dependency>
+    <groupId>commons-io</groupId>
+	<artifactId>org.apache</artifactId>
+    <version>2.2</version>
+    <scope>system</scope>
+    <systemPath>${basedir}/src/main/resources/lib/commons-io-2.2.jar</systemPath>
+</dependency>
+<dependency>
+    <groupId>commons-fileupload</groupId>
+	<artifactId>com.fileupload</artifactId>
+    <version>1.2.2</version>
+    <scope>system</scope>
+    <systemPath>${basedir}/src/main/resources/lib/commons-fileupload-1.2.2.jar</systemPath>
+</dependency>
 
     </dependencies>
 
