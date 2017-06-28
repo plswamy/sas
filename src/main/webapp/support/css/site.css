@@ -515,11 +515,12 @@ em {
 
 /*** ADMIN CSS: START ***/
 
-.sos-delete-icon, .sos-btn-section {
+.sos-delete-icon, .sos-btn-section, .sos-order-direction {
     display: none;
     visibility: hidden;
 }
 
+.sos-admin-primary-wrapperen .sos-order-direction,
 .sos-admin-primary-wrapperen .sos-delete-icon,
 .sos-admin-primary-wrapperen .sos-btn-section {
     display: inline-block;

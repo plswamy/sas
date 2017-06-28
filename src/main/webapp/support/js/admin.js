@@ -176,8 +176,8 @@
         </td>\
         <td>\
 		  <input type="hidden" value="%order%" id="order_%id%">\
-          <i title="Up" class="sos-up-icon fa fa-arrow-up fa-lg" id="up-%id%" data-type="%type%" onclick="FieldView.upField(%id%)"></i>\
-          <i title="Down" class="sos-down-icon fa fa-arrow-down fa-lg" id="down-%id%" data-type="%type%" onclick="FieldView.downField(%id%)"></i>\
+          <i title="Up" class="sos-order-direction sos-up-icon fa fa-arrow-up fa-lg" id="up-%id%" data-type="%type%" onclick="FieldView.upField(%id%)"></i>\
+          <i title="Down" class="sos-order-direction sos-down-icon fa fa-arrow-down fa-lg" id="down-%id%" data-type="%type%" onclick="FieldView.downField(%id%)"></i>\
         </td>\
       </tr>';
 
