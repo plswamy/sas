@@ -257,6 +257,8 @@ public class SASController {
     			q.setText(rs.getString("qtext"));
     			q.setDesc(rs.getString("qdesc"));
     			q.setLang(rs.getString("lang"));
+    			q.setQorder(rs.getString("qorder"));
+    			q.setSubtype(rs.getString("qsubtype"));
     			list = hs.get(q.getType());
     			if(list == null) {
     				list = new ArrayList<Question>();
@@ -275,7 +277,7 @@ public class SASController {
     	return hs;
     }
     
-    public List<Question> getQuestionsAsList() {
+   /* public List<Question> getQuestionsAsList() {
     	List<Question> list = new ArrayList<Question>();
     	Question q = null;
     	try {
@@ -299,7 +301,7 @@ public class SASController {
     		close();
     	}
     	return list;
-    }
+    }*/
     
     private void loadData() {
   	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", null));
@@ -472,6 +474,8 @@ public class SASController {
             // parses the request's content to extract file data
             @SuppressWarnings("unchecked")
             List<FileItem> formItems = upload.parseRequest(req);
+            System.out.println("formItems.....:"+formItems);
+            System.out.println("formItems.....:"+formItems.size());
 
             if (formItems != null && formItems.size() > 0) {
                 // iterates over form's fields
@@ -508,6 +512,8 @@ public class SASController {
     		String temp3 = null;
     		String temp4 = null;
     		String temp5 = null;
+    		String temp6 = null;
+    		String temp7 = null;
 			List<String> langs = getLangs();
 			
     		con = dataSource.getConnection();
@@ -527,18 +533,19 @@ public class SASController {
 		    	stmt.executeUpdate();
 	    	}
 	    	
-	    	String questionInsert = "update questions set qtext = ?, qdesc = ?, imagename = ? where id = ?";	
-	    	String questionEnglishInsert = "insert into questions (qtype, qtext, qdesc, imagename, lang, pqid) value (?,?,?,?,?,?)";
+	    	String questionInsert = "update questions set qtext = ?, qdesc = ?, imagename = ?, qsubtype = ?, qorder = ? where id = ?";	
+	    	String questionEnglishInsert = "insert into questions (qtype, qtext, qdesc, imagename, lang, pqid, qsubtype, qorder) value (?,?,?,?,?,?,?,?)";
 	    	stmt = con.prepareStatement(questionInsert);
 	    	pstmt = con.prepareStatement(questionEnglishInsert);
 	    	StringTokenizer qToken = new StringTokenizer(questions, "|");
 	    	String eqid = null;
 	    	while(qToken.hasMoreElements()) {
 	    		st = new StringTokenizer(qToken.nextToken(), ":");
-	    		//id:section:question:desc:imageName
+	    		//id:section:question:subsection:desc:imageName:order
 	    		temp1 = st.nextToken(); //id
 	    		temp2 = st.nextToken(); //qtype
 	    		temp3 = st.nextToken(); //qtext
+	    		temp6 = st.nextToken(); //qsubtype
 	    		temp4 = st.nextToken(); //qdesc
 	    		if(st.countTokens() > 0) {
 	    			temp5 = st.nextToken(); //imagename
@@ -546,11 +553,14 @@ public class SASController {
 	    			temp5 = "plan-1.png";	// TODO
 	    			temp1 = null;
 	    		}
-	    		if(nullCheck(temp1).length() > 0) {
+	    		temp7 = st.nextToken(); //order
+	    		if(!nullCheck(temp1).equals("-1")) {
 		    		stmt.setString(1, temp3); 
 		    		stmt.setString(2, temp4);
 		    		stmt.setString(3, temp5);
-		    		stmt.setString(4, temp1);
+		    		stmt.setString(4, temp6);
+		    		stmt.setString(5, temp7);
+		    		stmt.setString(6, temp1);
 		    		stmt.executeUpdate();
 	    		} else {
 	    			pstmt.setString(1, temp2);
@@ -559,6 +569,8 @@ public class SASController {
 	    			pstmt.setString(4, temp5);
 	    			pstmt.setString(5, "english");
 	    			pstmt.setString(6, null);
+	    			pstmt.setString(7, temp6);
+	    			pstmt.setString(8, temp7);
 	    			pstmt.executeUpdate();
 	    			eqid = getEnglishQId(temp2, temp3, temp4, temp5);
 	    			for(int i=0; i < langs.size(); i++) {
@@ -654,6 +666,8 @@ public class SASController {
     		String temp3 = null;
     		String temp4 = null;
     		String temp5 = null;
+    		String temp6 = null;
+    		String temp7 = null;
     		con = dataSource.getConnection();
     		StringTokenizer st = null;
     		//update labels set labelvalue='test' where labelkey='welcomeDesc' and lang='en1';
@@ -671,22 +685,27 @@ public class SASController {
 		    	stmt.executeUpdate();
 	    	}
 	    	
-	    	String questionInsert = "update questions set qtext = ?, qdesc = ?, imagename = ? where id = ?";	    	
+	    	String questionInsert = "update questions set qtext = ?, qdesc = ?, imagename = ?, qsubtype = ?, qorder = ? where id = ?";	    	
 	    	stmt = con.prepareStatement(questionInsert);
 	    	StringTokenizer qToken = new StringTokenizer(questions, "|");
 	    	while(qToken.hasMoreElements()) {
 	    		st = new StringTokenizer(qToken.nextToken(), ":");
 	    		System.out.println("st token length....:"+st.countTokens());
 	    		//id:section:question:desc:imageName
+	    		//id:section:question:subsection:desc:imageName:order
 	    		temp1 = st.nextToken(); //id
 	    		temp2 = st.nextToken(); //qtype
 	    		temp3 = st.nextToken(); //qtext
-	    		temp4 = st.nextToken(); //qdesc
-	    		temp5 = st.nextToken(); //imagename
+	    		temp4 = st.nextToken(); //qsubtype
+	    		temp5 = st.nextToken(); //qdesc
+	    		temp6 = st.nextToken(); //imagename
+	    		temp7 = st.nextToken(); //qorder
 	    		stmt.setString(1, temp3); 
-	    		stmt.setString(2, temp4);
-	    		stmt.setString(3, temp5);
-	    		stmt.setString(4, temp1);
+	    		stmt.setString(2, temp5);
+	    		stmt.setString(3, temp6);
+	    		stmt.setString(4, temp4);
+	    		stmt.setString(5, temp7);
+	    		stmt.setString(6, temp1);
 	    		stmt.executeUpdate();
 	    	}
     	} catch(Exception exp) {
@@ -715,18 +734,20 @@ public class SASController {
 		    	stmt.executeUpdate();
 	    	}
 	    	
-	    	String questionInsert = "insert into questions (qtype, qtext, qdesc, imagename, pqid, lang) value (?,?,?,?,?,?)";
+	    	//String questionInsert = "insert into questions (qtype, qtext, qdesc, imagename, pqid, lang) value (?,?,?,?,?,?)";
+	    	String questionInsert = "insert into questions (qtype, qtext, qdesc, imagename, lang, pqid, qsubtype, qorder) value (?,?,?,?,?,?,?,?)";
 	    	stmt = con.prepareStatement(questionInsert);
 	    	StringTokenizer qToken = new StringTokenizer(questions, "|");
 	    	while(qToken.hasMoreElements()) {
 	    		st = new StringTokenizer(qToken.nextToken(), ":");
-	    		//id:section:question:desc:imageName
+	    		//id:section:question:desc:imageName	    		
+	    		//id:section:question:subsection:desc:imageName:order
 	    		//st.nextToken(); //id avoid
 	    		stmt.setString(5, st.nextToken()); 
 	    		stmt.setString(1, st.nextToken()); 
 	    		stmt.setString(2, st.nextToken());
 	    		stmt.setString(3, st.nextToken());
-	    		stmt.setString(4, st.nextToken());
+	    		stmt.setString(4, st.nextToken());	    		
 	    		stmt.setString(6, lang);
 	    		stmt.executeUpdate();
 	    	}
