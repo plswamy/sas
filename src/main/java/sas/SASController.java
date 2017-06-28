@@ -186,6 +186,7 @@ public class SASController {
   private void generatePDF() {
 	  try{
 	  	System.out.println("begin");
+	  	System.out.println("scoreinfo"+req.getParameter("scoreinfo"));
 	  	long l = System.currentTimeMillis();	
 	  	String realPath = req.getRealPath("/");
 	  	System.out.println("realPath:"+realPath);
@@ -242,7 +243,7 @@ public class SASController {
     	Question q = null;
     	try {
     		con = dataSource.getConnection();
-    		stmt = con.prepareStatement("select * from questions where lang = ? order by id");
+    		stmt = con.prepareStatement("select * from questions where lang = ? order by qorder");
     		if(nullCheck(lang).length() == 0 || lang.equals("en")) {
     			lang = "english";
     		}
