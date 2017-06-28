@@ -8,6 +8,8 @@ public class Question {
 	private String text;
 	private String desc;
 	private String lang;
+	private String qorder;
+	private String subtype;
 	
 	
 	public String getId() {
@@ -45,6 +47,18 @@ public class Question {
 	}
 	public void setLang(String lang) {
 		this.lang = lang;
+	}
+	public String getQorder() {
+		return qorder;
+	}
+	public void setQorder(String qorder) {
+		this.qorder = qorder;
+	}
+	public String getSubtype() {
+		return subtype;
+	}
+	public void setSubtype(String subtype) {
+		this.subtype = subtype;
 	}
 
 }
