@@ -19,29 +19,29 @@ Create table state(id integer PRIMARY KEY ,statetype varchar(20), lang varchar(1
 --Create Questions Table;
 drop table questions;
 
-Create table questions(id integer PRIMARY KEY AUTO_INCREMENT, qtype varchar(70),imagename varchar(100),qtext varchar(1000), qdesc varchar(1000), pqid varchar(100), lang varchar(10));
+Create table questions(id integer PRIMARY KEY AUTO_INCREMENT, qtype varchar(70),imagename varchar(100),qtext varchar(1000), qdesc varchar(1000), pqid varchar(100), qsubtype varchar2(50), qorder integer, lang varchar(10));
 
 --Inserting values In Questions;
 
-Insert into questions values(1, 'plan', 'plan-1.png','Can you locate all your current travellers?','Here travellers description goes', null, 'english');
+Insert into questions values(1, 'plan', 'plan-1.png','Can you locate all your current travellers?','Here travellers description goes', null, 'sec1', 1, 'english');
 
-Insert into questions values(2, 'plan','plan-2.png','Do you access the risks to your employees in those locations?','Employees risk accessibilty description goes', null, 'english');
+Insert into questions values(2, 'plan','plan-2.png','Do you access the risks to your employees in those locations?','Employees risk accessibilty description goes', null, 'sec1', 2, 'english');
 
-Insert into questions values(3, 'plan','plan-3.png','Do you monitor the type and quantity of incidents your employees have been involved in over the last 2-3 years?','Type and quantity of incidents description goes',null,'english'); 
+Insert into questions values(3, 'plan','plan-3.png','Do you monitor the type and quantity of incidents your employees have been involved in over the last 2-3 years?','Type and quantity of incidents description goes',null,'sec2', 3, 'english'); 
 
-Insert into questions values(4, 'plan','plan-4.png','Does your company understand its Duty of Care obligations?','Duty of care obligations description goes',null,'english');
+Insert into questions values(4, 'plan','plan-4.png','Does your company understand its Duty of Care obligations?','Duty of care obligations description goes',null,'sec2', 4, 'english');
 
-Insert into questions values(5, 'plan','plan-5.png','Do your policies cover the health, safety and security of employees abroad?','Policies description goes', null,'english');
+Insert into questions values(5, 'plan','plan-5.png','Do your policies cover the health, safety and security of employees abroad?','Policies description goes', null,'sec2', 4, 'english');
 
-Insert into questions values(6, 'plan','plan-6.png','Do you know who is responsible for Travel Risk Management in your organisation?','Travel Risk Management description goes',null,'english');
+Insert into questions values(6, 'plan','plan-6.png','Do you know who is responsible for Travel Risk Management in your organisation?','Travel Risk Management description goes',null,'sec2', 4, 'english');
 
-Insert into questions values(7, 'plan','plan-7.png','Do you know how to integrate the components of Travel Risk Management into your risk management system?','Integration of travel risk management components into risk management system description goes ',null,'english');
+Insert into questions values(7, 'plan','plan-7.png','Do you know how to integrate the components of Travel Risk Management into your risk management system?','Integration of travel risk management components into risk management system description goes ',null,'sec2', 4, 'english');
 
 
 
-Insert into questions values(8, 'do','do-8.png', 'Do you have a travel approval process that includes travel risk assessments?','Travel approval process description goes',null,'english');
+Insert into questions values(8, 'do','do-8.png', 'Do you have a travel approval process that includes travel risk assessments?','Travel approval process description goes',null,'sec1', 1, 'english');
 
-Insert into questions values(9, 'do','do-9.png',  'Do your employees have access to relevant information & advice to support them when making these risk assessments?','Employees risk assessments making description goes',null,'english');
+Insert into questions values(9, 'do','do-9.png',  'Do your employees have access to relevant information & advice to support them when making these risk assessments?','Employees risk assessments making description goes',null, 'sec1',2, 'english');
 
 Insert into questions values(10, 'do','do-10.png', 'Do you have plans in place if things go wrong?','Alternate plans if things goes wrong description goes',null,'english');
 
