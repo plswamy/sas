@@ -48,7 +48,7 @@
   'use strict';
 
   var Field = function(qorder, id, text, subsection, desc, image, type, enabled) {
-    this.qorder = qorder;
+    this.qorder = qorder || ($('[id^=row_'+type+']').length + 1);
     this.id = id;
     this.text = text;
     this.subsection = subsection;
@@ -103,7 +103,7 @@
     };
 
     var addField = function addField(type) {
-      var newField = new Field(-1, "", "", "", type, true);
+      var newField = new Field("", -1, "", "", "", "", type, true);
       _FieldData.push(newField);
       return newField;
     };
@@ -118,6 +118,20 @@
       }
       if (index !== -1) {
         _FieldData.splice(index, 1);
+
+		var currRow = $('#row_'+type+'_'+id),
+			nextAllRows = $('#row_'+type+'_'+id).nextAll();
+			nextAllRows.each(function(){
+				var currRow = $(this);
+				    currRowQorder = currRow.find(".sos-qorder"),
+				    currRowQorderLabel = currRow.find(".sos-qorder-label"),
+					currRowUpdateQorder = parseInt(currRow.find(".sos-qorder").val()) - 1;
+				console.log(currRowUpdateQorder);
+				currRowQorder.val(currRowUpdateQorder);
+				currRowQorderLabel.html(currRowUpdateQorder);
+			});
+
+
         $('#row_'+type+'_'+id).remove();
       } else {
         $(event.target).closest("tr").remove();
