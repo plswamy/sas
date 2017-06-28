@@ -714,6 +714,7 @@ public class SASController {
     }
     
     private void insertData() {
+    	String temp = null;
     	String labels = req.getParameter("labels");
     	String questions = req.getParameter("questions");
     	String lang = req.getParameter("lang");
@@ -742,13 +743,16 @@ public class SASController {
 	    		st = new StringTokenizer(qToken.nextToken(), ":");
 	    		//id:section:question:desc:imageName	    		
 	    		//id:section:question:subsection:desc:imageName:order
-	    		//st.nextToken(); //id avoid
-	    		stmt.setString(5, st.nextToken()); 
-	    		stmt.setString(1, st.nextToken()); 
-	    		stmt.setString(2, st.nextToken());
-	    		stmt.setString(3, st.nextToken());
-	    		stmt.setString(4, st.nextToken());	    		
-	    		stmt.setString(6, lang);
+	    		temp = st.nextToken(); //id avoid
+	    		stmt.setString(1, st.nextToken()); //qtype 
+	    		stmt.setString(2, st.nextToken()); //qtext 
+	    		stmt.setString(7, st.nextToken()); //subsection 
+	    		stmt.setString(3, st.nextToken()); //qdesc
+	    		stmt.setString(4, st.nextToken()); //imagename	    		
+	    		stmt.setString(5, lang);
+	    		stmt.setString(6, temp); // parentquestion
+	    		stmt.setString(8, st.nextToken());
+	    		
 	    		stmt.executeUpdate();
 	    	}
     	} catch(Exception exp) {
