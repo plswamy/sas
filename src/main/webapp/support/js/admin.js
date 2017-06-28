@@ -47,17 +47,21 @@
 
   'use strict';
 
-  var Field = function(id, text, desc, image, type, enabled) {
+  var Field = function(qorder, id, text, subsection, desc, image, type, enabled) {
+    this.qorder = qorder;
     this.id = id;
     this.text = text;
+    this.subsection = subsection;
     this.desc = desc;
     this.image = image;
     this.enabled = enabled ? enabled : false;
     this.type = type;
   }
 
-  Field.prototype.edit = function(text, desc, image) {
+  Field.prototype.edit = function(qorder, text, subsection, desc, image) {
+    this.qorder = newField.qorder;
     this.text = newField.text;
+    this.subsection = newField.subsection;
     this.desc = newField.desc;
     this.image = newField.image;
     this.type = newField.type;
@@ -68,11 +72,11 @@
 
     var initFieldData = function initFieldData(data) {
       for (var i=0; i < data.length; i++) {
-        _FieldData.push(new Field(data[i].id, data[i].text, data[i].description, data[i].imagePath, data[i].type));
+        _FieldData.push(new Field(data[i].qorder, data[i].id, data[i].text, data[i].subsection, data[i].description, data[i].imagePath, data[i].type));
       }
     };
 
-    var editField = function editField(id, text, desc, image, type) {
+    var editField = function editField(qorder, id, text, subsection, desc, image, type) {
       var oldField;
       for (var i=0; i < _FieldData.length; i++) {
         if (_FieldData[i].id === id) {
@@ -81,7 +85,7 @@
         }
       }
       if (oldField) {
-        oldField.edit(text, desc, image);
+        oldField.edit(qorder, text, subsection, desc, image);
       }
     };
 
@@ -138,9 +142,13 @@
   var FieldView = (function() {
 
     var FieldTemplate = '<tr id="row_%type%_%id%" class="row-readonly">\
-        <td>%id%</td>\
+        <td><span class="sos-qorder-label">%qorder%</span>\
+		<input class="sos-qorder sos-qorder-%id%" type="hidden" data-qorder="%qorder%" value="%qorder%"></td>\
         <td>\
            <input type="text" class="form-control sos-input sos-input-question" data-section="%type%" data-id="%id%" value="%text%" title="%text%" name="text%id%" id="text_%id%" %disabled% placeholder="Enter question">\
+        </td>\
+        <td>\
+           <input type="text" class="form-control sos-input sos-subsection-%id%" data-section="%type%" data-id="subsection%id%" value="%subsection%" title="%text%" name="subsection%id%" id="subsection_%id%" %disabled% placeholder="Enter subsection">\
         </td>\
         <td>\
           <textarea placeholder="Enter description" class="form-control admin-textarea sos-input-desc-%id%"  %disabled% name="desc%id%" id="desc_%id%">%desc%</textarea>\
@@ -152,13 +160,20 @@
           <i title="Edit" class="sos-edit-icon fa fa-pencil fa-lg" id="editItem-%id%" data-type="%type%" onclick="FieldView.enableFieldFields(%id%)"></i>\
           <i title="Delete" class="sos-delete-icon fa fa-trash-o fa-lg" id="deleteItem-%id%" data-type="%type%" onclick="FieldView.deleteField(%id%)"></i>\
         </td>\
+        <td>\
+		  <input type="hidden" value="%order%" id="order_%id%">\
+          <i title="Up" class="sos-up-icon fa fa-arrow-up fa-lg" id="up-%id%" data-type="%type%" onclick="FieldView.upField(%id%)"></i>\
+          <i title="Down" class="sos-down-icon fa fa-arrow-down fa-lg" id="down-%id%" data-type="%type%" onclick="FieldView.downField(%id%)"></i>\
+        </td>\
       </tr>';
 
     //var $tbody = document.querySelector('tbody');
 
     var generateHTML = function generateHTML(Field) {
-      return FieldTemplate.replace(/%id%/g, Field.id)
+      return FieldTemplate.replace(/%qorder%/g, Field.qorder)
+		          .replace(/%id%/g, Field.id)
                   .replace(/%text%/g, Field.text)
+                  .replace(/%subsection%/g, Field.subsection)
                   .replace(/%desc%/g, Field.desc)
                   .replace(/%img%/g, Field.image)
                   .replace(/%type%/g, Field.type)
@@ -173,6 +188,28 @@
         innerHTML = generateHTML(Field);
         $($tbody).append(innerHTML);
       });
+    };
+
+	var upField = function upField(id) {
+      var currRow = $(event.target).closest("tr"),
+		  prevRow = currRow.prev();
+      if(prevRow.length > 0) {
+		var preOrder = prevRow.find(".sos-qorder").val(),
+			curOrder = currRow.find(".sos-qorder").val();
+		currRow.find(".sos-qorder").val(preOrder);
+		currRow.find(".sos-qorder-label").html(preOrder);
+		prevRow.find(".sos-qorder").val(curOrder);
+		prevRow.find(".sos-qorder-label").html(curOrder);
+		currRow.insertBefore(prevRow);
+	  }
+    };
+
+	var downField = function upField(id) {
+      var currRow = $(event.target).closest("tr"),
+		  nextRow = currRow.next();
+	  if(nextRow.length > 0) {
+		currRow.insertAfter(nextRow);
+	  }
     };
 
     var deleteField = function deleteField(id) {
@@ -198,6 +235,8 @@
       render: render,
       deleteField: deleteField,
       enableFieldFields: enableFieldFields,
+      upField: upField,
+      downField: downField,
       addField: addField
     };
   })();
