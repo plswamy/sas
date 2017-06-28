@@ -53,7 +53,7 @@
                 <div id="results" style="">
                   <div class="results-header">
                     <img class="cover-width" src="./support/img/result_header.png" alt="Sections">
-                    <a id="btnPrintPDF" href="/print" target="_blank"></a>
+                    <a id="btnPrintPDF" href="/print" target="_blank" onClick="javascript:updateA();"></a>
                   </div>
                   <div class="content">
                     <div class="results_h2_wrap stripe">
@@ -65,6 +65,9 @@
                       </div>
 
                       <script>
+						function updateA() {
+							$("#btnPrintPDF").attr("href", $("#btnPrintPDF").attr("href")+"?scoreinfo=" + $("#scoreinfo").val());
+						}
                         $(document).ready(function () {
                           var totalQuestions = 0,
                               totalYes = 0,
@@ -109,14 +112,17 @@
                           var scoreVal = Math.round((totalYes / totalQuestions) * 100);
                           $("#score").html(scoreVal);
                           var imgSrc = './support/img/notsure.png';
+						  var timgSrc = 'notsure.png';
                           if(totalYes === totalQuestions) {
                               imgSrc = './support/img/yes.png';
+							  timgSrc = 'yes.png';
                           } else if(totalNo === totalQuestions) {
                               imgSrc = './support/img/no.png';
+							  timgSrc = 'no.png';
                           }
 
                           $("#sos-graph").prop("src", imgSrc);
-                          $("#scoreinfo").val(scoreVal + '%|' + imgSrc);
+                          $("#scoreinfo").val(scoreVal + '|' + timgSrc + '|' + userSession.firstname + '|' + userSession.lastname);
 
                         });
                       </script>
