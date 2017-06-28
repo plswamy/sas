@@ -50,6 +50,7 @@
         %>
           planSection["<%= q.getId() %>"] =  {
           "qry" : "<%= q.getText() %>",
+          "subsection" : "<%= q.getSubtype() %>",
           "img" : "<%= q.getImageName() %>"
         };
         <%
@@ -66,6 +67,7 @@
         %>
           doSection["<%= q.getId() %>"] =  {
           "qry" : "<%= q.getText() %>",
+          "subsection" : "<%= q.getSubtype() %>",
           "img" : "<%= q.getImageName() %>"
         };
         <%
@@ -85,6 +87,7 @@
         %>
           checkSection["<%= q.getId() %>"] =  {
           "qry" : "<%= q.getText() %>",
+          "subsection" : "<%= q.getSubtype() %>",
           "img" : "<%= q.getImageName() %>"
         };
         <%
@@ -185,6 +188,7 @@
               $(".section-imgage").attr("src", "support/img/section_" + targetQuestion.currentSection + ".png");
               //$(".question_image").css("background-image", "url('support/img/resourceFiles/" + targetQuestion.img + "')");
               $(".question_image").attr("src", "support/img/resourceFiles/" + targetQuestion.img);
+              $(".question_subsection")[0].innerHTML = targetQuestion.subsection;
               $(".question_text")[0].innerHTML = targetQuestion.qry;
               $(".question_count")[0].innerHTML = totalIndexOfCurrent + 1;
 
@@ -256,6 +260,7 @@
                       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
                         <div class="right">
                           <div class="stripe col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <h2 class="question_subsection"></h2>
                             <h3 class="question_text"></h3>
                           </div>
                           <div class="answer_wrap col-xs-12 col-sm-12 col-md-12 col-lg-12" data-section="" data-qid="">

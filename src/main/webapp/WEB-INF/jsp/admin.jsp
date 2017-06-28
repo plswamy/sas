@@ -26,10 +26,11 @@
                 for(int i=0; i < list.size(); i++) {
                     q = list.get(i);
             %>
-
                     var obj = {
+                        qorder: '<%= q.getQorder() %>',
                         id: '<%= q.getId() %>',
                         text: "<%= q.getText() %>",
+                        subsection: "<%= q.getSubtype() %>",
                         description: "<%= q.getDesc() %>",
                         imagePath: "support/img/resourceFiles/<%= q.getImageName() %>",
                         type: 'plan'
@@ -47,8 +48,10 @@
             %>
 
                     var obj = {
+                        qorder: '<%= q.getQorder() %>',
                         id: '<%= q.getId() %>',
                         text: "<%= q.getText() %>",
+                        subsection: "<%= q.getSubtype() %>",
                         description: "<%= q.getDesc() %>",
                         imagePath: "support/img/resourceFiles/<%= q.getImageName() %>",
                         type: 'do'
@@ -66,8 +69,10 @@
             %>
 
                     var obj = {
+                        qorder: '<%= q.getQorder() %>',
                         id: '<%= q.getId() %>',
                         text: "<%= q.getText() %>",
+                        subsection: "<%= q.getSubtype() %>",
                         description: "<%= q.getDesc() %>",
                         imagePath: "support/img/resourceFiles/<%= q.getImageName() %>",
                         type: 'check'
@@ -94,7 +99,7 @@
                 });
                 sectionFields.each(function(cur) {
                     var objId = $(this).data('id');
-                    allSections +=  objId + ":" + $(this).data('section') + ":" + $(this).val() +":" + $(".sos-input-desc-" + objId).val() + ":";
+                    allSections +=  objId + ":" + $(this).data('section') + ":" + $(this).val() +":" + $(".sos-subsection-" + objId).val() +":"+ $(".sos-input-desc-" + objId).val() + ":";
                     var imgName = "";
                     var currImg = $("#file" + objId).val();
                     if(!!currImg) {
@@ -104,7 +109,7 @@
                         imgName = currImg.substring(currImg.lastIndexOf("/") + 1, currImg.length);
                     }
                     console.log("imgName : " + imgName);
-                    allSections += imgName + "|";
+                    allSections += imgName + ":" + $(".sos-qorder-" + objId).val() + "|";
                 });
                 
                 $("#sos-labels").val(allGenerals);
@@ -190,9 +195,11 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Text</th>
+                                <th>Subsection</th>
                                 <th>Description</th>
                                 <th>Image</th>
                                 <th>Actions</th>
+                                <th>Order</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
