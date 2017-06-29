@@ -256,9 +256,9 @@
                         <img class="question_image" src="support/img/resourceFiles/plan-2.png"/>
                       </div>
                       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-7">
+                        <div class="right sos-subsection-header"><h2 class="question_subsection">Assess risks</h2></div>
                         <div class="right">
                           <div class="stripe col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <h2 class="question_subsection"></h2>
                             <h3 class="question_text"></h3>
                           </div>
                           <div class="answer_wrap col-xs-12 col-sm-12 col-md-12 col-lg-12" data-section="" data-qid="">

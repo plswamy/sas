@@ -160,7 +160,7 @@ body {
 
 .section_plan .content {
   position: relative;
-  margin-top: -17px;
+  /*margin-top: -17px;*/
   padding-top: 17px;
 }
 
@@ -220,6 +220,18 @@ body {
 
 .section_plan h3 {
   color: #2f4696;
+}
+
+.sos-subsection-header {
+  color: #8a8b92;
+  background-color: #e2e2e2;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+#assessment .right.sos-subsection-header {
+  margin: 26px 0 0 0;
+  padding-left: 30px;
 }
 
 .section_plan .question_count_wrap {
