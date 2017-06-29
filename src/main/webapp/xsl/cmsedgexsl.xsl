@@ -139,45 +139,26 @@
 		<xsl:apply-templates select="data"/>
             <fo:block text-align="start" line-height="1em + 2pt">
 				<fo:table  table-layout="fixed" space-before="0.8cm" width="300%" height="4cm" border-top-style="solid" border-top-width="2pt" border-bottom-style="solid" border-bottom-width="2pt"  padding="9mm" >
-					<fo:table-column column-width="20cm"/>
-					<fo:table-column column-width="26cm"/>
-					<fo:table-column column-width="26cm"/> 
-					<fo:table-column column-width="29cm"/>
+					<fo:table-column column-width="43cm"/>
+					<fo:table-column column-width="43cm"/>
+					<fo:table-column column-width="43cm"/> 
+					<fo:table-column column-width="43cm"/>
 						<fo:table-body>
 				  			<fo:table-row>
 				     			 <fo:table-cell >
-				         			<fo:block start-indent="1cm" >
-										<fo:external-graphic padding-right="10cm">
+				         			<fo:block start-indent="0cm" >
+										<fo:external-graphic padding-right="1cm">
 											<xsl:attribute name="src">
 												<xsl:text>'</xsl:text><xsl:value-of select="data/main/imgPath"/><xsl:text>/</xsl:text>
 												<xsl:value-of select="data/main/range"/><xsl:text>'</xsl:text>
 											</xsl:attribute>
-											<xsl:attribute name="height">60cm</xsl:attribute>
-											<xsl:attribute name="width">125cm</xsl:attribute>
+											<xsl:attribute name="height">70cm</xsl:attribute>
+											<xsl:attribute name="width">300cm</xsl:attribute>
 											<xsl:attribute name="align">right</xsl:attribute>
 										</fo:external-graphic>
 				         			</fo:block>
 	      			   			 </fo:table-cell>
 	      			    	
-
-
-	      			    	<fo:table-cell>
-                                <fo:block font-family="arial" font-size="9pt" >
-				                </fo:block> 
-				        	</fo:table-cell>
-				       	
-				    		<fo:table-cell text-align="left" display-align="left" padding-right="0cm" padding="1cm">
-				      			<fo:block font-family="arial" color="green" font-size="28pt" wrap-option="wrap" start-indent="-25cm" padding="2mm">
-				      				<xsl:value-of select="data/main/desc11"/><xsl:text> </xsl:text> </fo:block>
-				      			<fo:block font-family="arial" color="green" font-size="28pt" wrap-option="wrap" start-indent="-25cm" padding="2mm">
-				      				<xsl:value-of select="data/main/desc12"/><xsl:text> </xsl:text></fo:block>
-				      			<fo:block font-family="arial" color="green" font-size="28pt" wrap-option="wrap" start-indent="-25cm" padding="2mm">
-									<xsl:value-of select="data/main/desc13"/><xsl:text> </xsl:text></fo:block>
-				      			<fo:block font-family="arial" color="green" font-size="28pt" wrap-option="wrap" start-indent="-25cm" >
-				      				<xsl:value-of select="data/main/desc14"/><xsl:text> </xsl:text>
-				        		</fo:block>
-
-				     		</fo:table-cell>	
 
 						</fo:table-row>
 					   </fo:table-body>
