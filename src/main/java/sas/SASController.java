@@ -98,10 +98,10 @@ public class SASController {
   }
   @RequestMapping(value="/survey", method = RequestMethod.GET)
   public String surveyGet(ModelMap model) {
-		
-		System.out.println("survey get called....");		
-		req.setAttribute("questions", getQuestions(null));
-  	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", null));
+		String lang = req.getParameter("language");		
+		System.out.println("survey get called....:"+lang);		
+		req.setAttribute("questions", getQuestions(lang));
+  	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		//req.setAttribute("answertypes", getData("answers", "answertype", "answertypevalue"));
 		return "survey";
   }
@@ -122,7 +122,7 @@ public class SASController {
   @RequestMapping(value="/report", method = RequestMethod.POST)
   public String postReport(ModelMap model) {
 	  	System.out.println("report post called....");
-	  	System.out.println("email ....:"+req.getParameter("email"));
+	  	System.out.println("email ....:"+req.getParameter("email"));	  	
 		saveUser();
 		saveUserResponse();
 		return "report";
@@ -186,7 +186,18 @@ public class SASController {
   private void generatePDF() {
 	  try{
 	  	System.out.println("begin");
-	  	System.out.println("scoreinfo"+req.getParameter("scoreinfo"));
+	  	String temp = req.getParameter("scoreinfo");
+	  	StringTokenizer st = new StringTokenizer(temp, "|");
+	  	String score = st.nextToken();
+	  	String img = st.nextToken();
+	  	String user = st.nextToken();
+	  	if(st.hasMoreElements()) {
+	  		user = user + " " + st.nextToken();
+	  	}
+	  	System.out.println("score..."+score);
+	  	System.out.println("img..."+img);
+	  	img = img.replace("png", "jpg");
+	  	System.out.println("user..."+user);
 	  	long l = System.currentTimeMillis();	
 	  	String realPath = req.getRealPath("/");
 	  	System.out.println("realPath:"+realPath);
@@ -195,13 +206,15 @@ public class SASController {
 		String xslFileName = realPath+"/xsl/cmsedgexsl.xsl";		
 		String xmlFileName = realPath+"/xsl/travel.xml";		
 		SAXBuilder builder = new SAXBuilder();
-		Document document = builder.build(xmlFileName);
-		String score = req.getParameter("score1");
-		String user = req.getParameter("username1");
-		document.getRootElement().getChild("data").getChild("main").getChild("score").setText(score);
+		Document document = builder.build(xmlFileName);		
+		document.getRootElement().getChild("data").getChild("main").getChild("score").setText(score+"%");
+		document.getRootElement().getChild("data").getChild("main").getChild("range").setText(img);
 		document.getRootElement().getChild("data").getChild("main").getChild("user").setText(user);
 		System.out.println("root element"+document.getRootElement().getChild("data").getChild("main").getChildText("score"));
 		Doc2Pdf.start(document, xslFileName, pdfFileName);
+		System.out.println("score..."+score);
+	  	System.out.println("img..."+img);
+	  	System.out.println("user..."+user);
 		System.out.println("end");
 	  } catch(Exception exp) {
 		  exp.printStackTrace();
@@ -232,12 +245,8 @@ public class SASController {
       return model;
     }
     
-    public Hashtable<String, List<Question>> getQuestions(String lang1) {
-    	String lang = req.getParameter("lang");
-    	System.out.println("lang from parameter...:"+lang);
-		if(lang == null || lang.length() ==0) {
-			lang = lang1;
-		}
+    public Hashtable<String, List<Question>> getQuestions(String lang) {
+    	System.out.println("getQuestions method called with lang: "+lang);
     	Hashtable<String, List<Question>> hs = new Hashtable<String, List<Question>>();
     	List<Question> list = null;
     	Question q = null;
@@ -305,9 +314,10 @@ public class SASController {
     }*/
     
     private void loadData() {
-  	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", null));
-	  	req.setAttribute("businessindustry", getData("businessindustry", "boption", "boptionvalue", null));
-	  	req.setAttribute("country", getData("country", "coption", "coptionvalue", null));
+    	String lang = req.getParameter("language");
+  	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
+	  	req.setAttribute("businessindustry", getData("businessindustry", "boption", "boptionvalue", lang));
+	  	req.setAttribute("country", getData("country", "coption", "coptionvalue", lang));
 	  	//req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));	  	
   	  	
   	  	// load country list
@@ -315,12 +325,8 @@ public class SASController {
   	  	// load state
     }
     
-    public Hashtable<String, String> getData(String table, String cKey, String cValue, String lang1) {
-    	String lang = req.getParameter("lang");
-    	System.out.println("lang from parameter...:"+lang);
-		if(lang == null || lang.length() == 0) {
-			lang = lang1;
-		}
+    public Hashtable<String, String> getData(String table, String cKey, String cValue, String lang) {
+    	System.out.println("getData called with lang:"+lang);
     	Hashtable<String, String> hs = new Hashtable<String, String>();
     	try {
     		con = dataSource.getConnection();
@@ -501,12 +507,16 @@ public class SASController {
     	String labels = req.getParameter("labels");
     	String questions = req.getParameter("questions");
     	String lang = req.getParameter("lang");
+    	if(nullCheck(lang).length() == 0 || lang.equals("en")) {
+			lang = "english";
+		}
     	String deletedquestions = req.getParameter("deletedquestions");
     	System.out.println("lang:"+lang);
     	System.out.println("labels:"+labels);	    	
     	System.out.println("questions:"+questions);
     	System.out.println("deletedquestions:"+deletedquestions);
     	PreparedStatement pstmt = null;
+    	PreparedStatement ustmt = null;
     	try {
     		String temp1 = null;
     		String temp2 = null;
@@ -536,8 +546,10 @@ public class SASController {
 	    	
 	    	String questionInsert = "update questions set qtext = ?, qdesc = ?, imagename = ?, qsubtype = ?, qorder = ? where id = ?";	
 	    	String questionEnglishInsert = "insert into questions (qtype, qtext, qdesc, imagename, lang, pqid, qsubtype, qorder) value (?,?,?,?,?,?,?,?)";
+	    	String questionUpdate = "update questions set qorder = ? where pqid= ?";
 	    	stmt = con.prepareStatement(questionInsert);
 	    	pstmt = con.prepareStatement(questionEnglishInsert);
+	    	ustmt = con.prepareStatement(questionUpdate);
 	    	StringTokenizer qToken = new StringTokenizer(questions, "|");
 	    	String eqid = null;
 	    	while(qToken.hasMoreElements()) {
@@ -563,6 +575,9 @@ public class SASController {
 		    		stmt.setString(5, temp7);
 		    		stmt.setString(6, temp1);
 		    		stmt.executeUpdate();
+		    		ustmt.setString(1, temp7);
+		    		ustmt.setString(2, temp1);
+		    		ustmt.executeUpdate();
 	    		} else {
 	    			pstmt.setString(1, temp2);
 	    			pstmt.setString(2, temp3);
@@ -597,6 +612,7 @@ public class SASController {
     		close();
     		try { 
     			if(pstmt != null) pstmt.close();
+    			if(ustmt != null) ustmt.close();
     		} catch(Exception exp) { }
     	}
     }
