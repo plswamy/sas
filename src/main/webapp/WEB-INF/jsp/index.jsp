@@ -7,7 +7,7 @@
         <title>International SOS Self Assessment Tool</title>
         <script type="text/javascript" async="" src="support/js/ga.js"></script>
         <script src="support/lib/jquery-3.2.0.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="support/lib/bootstrap.min.js"></script>
         <script src="support/js/countries2.js"></script>
         <script>
             function fnOnUpdateValidators() {
@@ -44,7 +44,7 @@
             }
         </script>
         <link href="support/css/site.css" rel="stylesheet">
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <link href="support/lib/bootstrap.min.css" rel="stylesheet">
         <script src="support/lib/bootstrap-dialog.min.js"></script>
         <link href="support/lib/bootstrap-dialog.min.css" rel="stylesheet">
     </head>

@@ -25,12 +25,10 @@
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>Survey Page</title>
       <link href="<%=webContext%>support/css/site.css" rel="stylesheet">
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-      <%--<link href="<%=webContext%>support/lib/bootstrap.css" rel="stylesheet">--%>
+      <link href="<%=webContext%>/support/lib/bootstrap.min.css" rel="stylesheet">
       <script type="text/javascript" async="" src="<%=webContext%>support/js/ga.js"></script>
       <script src="<%=webContext%>/support/lib/jquery-3.2.0.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-      <%--<script src="<%=webContext%>/support/lib/bootstrap.js"></script>--%>
+      <script src="<%=webContext%>/support/lib/bootstrap.min.js"></script>
       <script type="text/javascript" async="" src="<%=webContext%>support/js/assessment.js"></script>
     </head>
 
