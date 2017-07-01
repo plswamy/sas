@@ -75,8 +75,16 @@
                               totalYes = 0,
                               totalNo = 0,
                               totalNotsure = 0,
+                                    subSec = {}
                               generateForm = function (sectionName){
                                 var qNum = 0;
+
+                                $.each(surveyProgress[sectionName], function(qid) {
+                                    if(subSec[this.subsection] === undefined) {
+                                        subSec[this.subsection] = [];
+                                    }
+                                    subSec[this.subsection].push(this.val);
+                                });
                                 $.each(surveyProgress[sectionName], function(qid) {
                                   qNum++;
                                   var showQuestion = this.val;
@@ -111,6 +119,15 @@
                           generateForm('plan');
                           generateForm('do');
                           generateForm('check');
+                          $.each(subSec, function(ss) {
+                                var totalCount = this.length,
+                                    totalYesCount = this.filter(function(value){
+                                        return value === 'yes';
+                                    }).length;
+                                    calValue = (totalYesCount * 100) / totalCount;
+                                calValue /= 100;
+                                //console.log("subaction name : " + ss + ", totalCount : " + totalCount + ", totalYesCount : " + totalYesCount + ", calValue : " + calValue);
+                          });
                           var scoreVal = Math.round((totalYes / totalQuestions) * 100);
                           $("#score").html(scoreVal);
                           var imgSrc = './support/img/notsure.png';
