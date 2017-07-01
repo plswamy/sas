@@ -1,44 +1,31 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
-<head>
-<link href="<c:url value="css/app.css" />" rel="stylesheet"
-	type="text/css">
-<title>Self Assessment Tool</title>
-</head>
-<body class="security-app">
-	<div class="details">
-		<h2>Self Assessment Tool</h2>
-	</div>
-
-	<form action="/login" method="post">
-
-		<div class="lc-block">
-			<div>
-				<input type="text" class="style-4" name="username"
-					placeholder="User Name" />
-			</div>
-			<div>
-				<input type="password" class="style-4" name="password"
-					placeholder="Password" />
-			</div>
-			<div>
-				<input type="submit" value="Sign In" class="button red small" />
-			</div>
-			<c:if test="${param.error ne null}">
-				<div class="alert-danger">Invalid username and password.</div>
-			</c:if>
-			<c:if test="${param.logout ne null}">
-				<div class="alert-normal">You have been logged out.</div>
-			</c:if>
-		</div>
-		<input type="hidden" name="${_csrf.parameterName}"
-			value="${_csrf.token}" />
-	</form>
-
-</body>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="support/lib/bootstrap.min.js"></script>
+        <link href="support/lib/bootstrap.min.css" rel="stylesheet">
+        <link href="support/css/app.css" rel="stylesheet">
+        <title>Self Assessment Tool</title>
+    </head>
+    <body>
+        <div class="login">
+            <h1>Login</h1>
+            <form action="/login" method="post">
+                <input type="text" name="username" placeholder="Username" required="required" />
+                <input type="password" name="password" placeholder="Password" required="required" />
+                <c:if test="${param.error ne null}">
+                    <div class="sos-alert-danger">Invalid username and password.</div>
+                </c:if>
+                <c:if test="${param.logout ne null}">
+                    <div class="sos-alert-normal">You have been logged out.</div>
+                </c:if>
+                <button type="submit" class="btn btn-primary btn-block btn-large">Let me in</button>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            </form>
+        </div>
+    </body>
 </html>
