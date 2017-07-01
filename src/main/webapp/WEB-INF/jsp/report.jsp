@@ -66,7 +66,9 @@
 
                       <script>
 						function updateA() {
-							$("#btnPrintPDF").attr("href", $("#btnPrintPDF").attr("href")+"?scoreinfo=" + $("#scoreinfo").val());
+                            if($("#btnPrintPDF").attr("href").indexOf("?scoreinfo") === -1) {
+							    $("#btnPrintPDF").attr("href", $("#btnPrintPDF").attr("href")+"?scoreinfo=" + $("#scoreinfo").val());
+                            }
 						}
                         $(document).ready(function () {
                           var totalQuestions = 0,
