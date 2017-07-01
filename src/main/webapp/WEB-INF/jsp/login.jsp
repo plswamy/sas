@@ -6,6 +6,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="support/lib/jquery-3.2.0.js"></script>
         <script src="support/lib/bootstrap.min.js"></script>
         <link href="support/lib/bootstrap.min.css" rel="stylesheet">
         <link href="support/css/app.css" rel="stylesheet">
