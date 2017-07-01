@@ -247,7 +247,7 @@
                  </div>
              </div>
              <div class="admin-locale-submit">
-                <button class="btn btn-primary admin-lang-btn" onclick="">Submit</button>
+                <button class="btn btn-primary admin-lang-btn" onclick="">Save</button>
             </div>
          </form>
     </body>
