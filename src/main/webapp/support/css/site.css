@@ -379,6 +379,46 @@ body {
   margin: 7px 0px;
 }
 
+.sos-subsection-graph-grand-wrapper {
+    /*border: 2px solid #5f5fbb; */
+    margin: 20px 10% 20px 10%;
+    /* padding: 1%; */
+    /* background: black; */
+    -webkit-box-shadow: -1px 9px 18px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: -1px 9px 18px 0px rgba(0,0,0,0.75);
+    box-shadow: -1px 9px 18px 0px rgba(0,0,0,0.75);
+}
+.sos-progress-bar-outer { 
+	
+}
+.sos-subsection-graph-wrapper {
+}
+
+.sos-graph-subsection-header {
+	position: absolute;
+	color: #fff;
+	font-size: 12px;
+	font-weight: bold;
+	margin-left: 5px;
+}
+
+.sos-graph-subsection-header-right {
+	float: right;
+}
+.sos-subsection-graph .stripe_progress{
+	background-color: #d3b3a4;
+}
+.sos-subsection-graph .progress-bar {
+	background-color: rgba(99, 20, 20, 0.72);
+}
+.sos-subsection-graph .progress {
+	height: 20px;
+	transition: width .6s ease;
+    line-height: 20px;
+	margin-bottom: 0;
+    border-radius: 0; 
+}
+
 .plan-header-text-section {
   padding-left: 30px;
   padding-bottom: 10px;

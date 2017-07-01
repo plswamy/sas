@@ -83,7 +83,12 @@
                                     if(subSec[this.subsection] === undefined) {
                                         subSec[this.subsection] = [];
                                     }
-                                    subSec[this.subsection].push(this.val);
+
+                                    var showQuestion = this.val;
+                                    if(showQuestion === undefined) {
+                                      showQuestion = answers[this.currentSection][this.qid].val;
+                                    }
+                                    subSec[this.subsection].push(showQuestion);
                                 });
                                 $.each(surveyProgress[sectionName], function(qid) {
                                   qNum++;
@@ -123,10 +128,17 @@
                                 var totalCount = this.length,
                                     totalYesCount = this.filter(function(value){
                                         return value === 'yes';
-                                    }).length;
-                                    calValue = (totalYesCount * 100) / totalCount;
-                                calValue /= 100;
-                                //console.log("subaction name : " + ss + ", totalCount : " + totalCount + ", totalYesCount : " + totalYesCount + ", calValue : " + calValue);
+                                    }).length,
+                                    perCalValue = (totalYesCount * 100) / totalCount,
+                                    calValue = perCalValue / 100,
+                                    calValue2 = ((calValue.toFixed(2)) + '').replace('.00', '') + '%',
+                                    titleVal = ss + ' (' + calValue + ')',
+                                    templateContent = document.querySelector('template').content,
+                                    calValEle = templateContent.querySelector('.sos-subsection-graph'),
+                                    template = '<div class="sos-progress-bar-outer stripe_progress progress" title="' + titleVal + '"><span class="sos-graph-subsection-header">' + ss + ' (' + calValue2 + ')</span><div id="progressBarInner" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" width="0%" style="width: ' + perCalValue + '%;" title="' + titleVal + '"><span class="sr-only">' + perCalValue + '</span><span class="sos-calculated-value"></span></div></div>';
+                                    console.log(templateContent);
+                                calValEle.innerHTML = template;
+                                document.querySelector('#sos-subsection-graph-wrapper').appendChild(document.importNode(templateContent, true));
                           });
                           var scoreVal = Math.round((totalYes / totalQuestions) * 100);
                           $("#score").html(scoreVal);
@@ -162,6 +174,15 @@
                           </div>
                         </div>
                       </div>
+                      <div id="sos-subsection-graph-grand-wrapper" class="sos-subsection-graph-grand-wrapper">
+                          <div id="sos-subsection-graph-wrapper" class="sos-subsection-graph-wrapper">
+                          </div>
+                      </div>
+
+                      <template>
+                        <div class="sos-subsection-graph"></div>
+                      </template>
+
 
                       <div id="plan" style="display: none;">
                         <%--<div class="section_header"></div>--%>
