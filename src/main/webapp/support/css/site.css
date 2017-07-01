@@ -653,4 +653,8 @@ em {
   width: 100% !important;
   height: 100% !important;
 }
+
+.sos-admin-subsection {
+	margin-top: 2px;
+}
 /*** ADMIN CSS: END ***/

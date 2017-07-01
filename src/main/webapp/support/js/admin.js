@@ -92,13 +92,65 @@
     var enableFieldFields = function enableFieldFields(id, type) {
       $('.row-editable').find('.form-control').each(function() {
         $(this).attr('disabled', true);
+        if($(this).hasClass('sos-admin-subsection')) {
+			$(this).addClass('hidden');
+		}
       });
       $('.row-editable').removeClass('row-editable').addClass('row-readonly');
 
+
+
+
+
+
+
+
+	
+	var newSelectedFieldValues = [];
+	$("input[id^='subsection_']").each(function(){
+		var val = $(this).val().trim();
+		if(val.length > 0) {
+			newSelectedFieldValues.push(val);
+		}
+	});
+	
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
       var currentTarget = $(event.target).closest("tr");
       currentTarget.addClass('row-editable').removeClass('row-readonly');
+
+	  var newSelectedFieldValues1 = $.unique(newSelectedFieldValues),
+		ddEle = $('.row-editable #sos-subsection-dropdown-' + id);
+
+	ddEle.children().remove();
+	$.each(newSelectedFieldValues1, function( index, value ) {
+		ddEle.append($('<option>', {
+			value: value,
+			text: value
+		}));
+	});
+	var defVal = $("#subsection_" + id).val().trim();
+	if(defVal.length > 0) {
+		$('#sos-subsection-dropdown-' + id).val(defVal);
+	}
+
       currentTarget.find('.form-control').each(function() {
         $(this).attr('disabled', false);
+        if($(this).hasClass('sos-admin-subsection')) {
+			$(this).removeClass('hidden');
+		}
       });
     };
 
@@ -163,6 +215,8 @@
         </td>\
         <td>\
            <input type="text" class="form-control sos-input sos-subsection-%id%" data-section="%type%" data-id="subsection%id%" value="%subsection%" title="%text%" name="subsection%id%" id="subsection_%id%" %disabled% placeholder="Enter subsection">\
+			<select class="form-control %hidden% sos-admin-subsection" name="sos-subsection-dropdown" id="sos-subsection-dropdown-%id%" onchange="FieldView.changeSubsectionValue(%id%)" value="%subsection%">\
+			</select>\
         </td>\
         <td>\
           <textarea placeholder="Enter description" class="form-control admin-textarea sos-input-desc-%id%"  %disabled% name="desc%id%" id="desc_%id%">%desc%</textarea>\
@@ -171,7 +225,7 @@
         <input type="file" id="file%id%" class="file-input sos-input-file-%id%" name="file_%type%_%id%">\
         </td>\
         <td>\
-          <i title="Edit" class="sos-edit-icon fa fa-pencil fa-lg" id="editItem-%id%" data-type="%type%" onclick="FieldView.enableFieldFields(%id%)"></i>\
+          <i title="Edit" class="sos-edit-icon fa fa-pencil fa-lg editItem-%id%" id="editItem-%id%" data-type="%type%" onclick="FieldView.enableFieldFields(%id%)"></i>\
           <i title="Delete" class="sos-delete-icon fa fa-trash-o fa-lg" id="deleteItem-%id%" data-type="%type%" onclick="FieldView.deleteField(%id%)"></i>\
         </td>\
         <td>\
@@ -191,7 +245,8 @@
                   .replace(/%desc%/g, Field.desc)
                   .replace(/%img%/g, Field.image)
                   .replace(/%type%/g, Field.type)
-                  .replace(/%disabled%/g, Field.enabled ? '': 'disabled');
+                  .replace(/%disabled%/g, Field.enabled ? '': 'disabled')
+                  .replace(/%hidden%/g, Field.enabled ? '': 'hidden');
     };
 
     var render = function render(emp) {
@@ -202,6 +257,10 @@
         innerHTML = generateHTML(Field);
         $($tbody).append(innerHTML);
       });
+	  var idx = $(".editItem--1").length - 1;
+	  if(idx >= 0) {		
+		$(".editItem--1")[idx].click();
+	  }
     };
 
 	var upField = function upField(id) {
@@ -216,6 +275,11 @@
 		prevRow.find(".sos-qorder-label").html(curOrder);
 		currRow.insertBefore(prevRow);
 	  }
+    };
+
+	var changeSubsectionValue = function upField(id) {
+      var selectedValue = $('#sos-subsection-dropdown-' + id).val();
+	  $("#subsection_" + id).val(selectedValue)
     };
 
 	var downField = function upField(id) {
@@ -251,6 +315,7 @@
       enableFieldFields: enableFieldFields,
       upField: upField,
       downField: downField,
+      changeSubsectionValue: changeSubsectionValue,
       addField: addField
     };
   })();
