@@ -533,5 +533,6 @@ function load_states(state_id, state_index) {
 
   for (var j = 0; j < state_arr.length; j = j + 2) {
     option_str.options[i++] = new Option(state_arr[j + 1], state_arr[j]);
-  }
+  }  
+  $(".sos-index-select").selectpicker('refresh');
 }

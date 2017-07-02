@@ -8,6 +8,7 @@
         <script type="text/javascript" async="" src="support/js/ga.js"></script>
         <script src="support/lib/jquery-3.2.0.js"></script>
         <script src="support/lib/bootstrap.min.js"></script>
+        <script src="support/lib/bootstrap-select.min.js"></script>
         <script src="support/js/countries2.js"></script>
         <script>
             function fnOnUpdateValidators() {
@@ -33,6 +34,10 @@
                         } else {
                             if (!val.isvalid) {
                                 ctrl.style.border = '1px solid #ba2222';
+                                var bsDD = $(ctrl).data("ddl");
+                                if(!!bsDD) {
+                                    $("." + bsDD).find('.btn').addClass('sos-btn-danger');
+                                }
                                 showMsg = true;
                             } else {
                                 ctrl.style.border = '';
@@ -47,6 +52,7 @@
         <link href="support/lib/bootstrap.min.css" rel="stylesheet">
         <script src="support/lib/bootstrap-dialog.min.js"></script>
         <link href="support/lib/bootstrap-dialog.min.css" rel="stylesheet">
+        <link href="support/lib/bootstrap-select.min.css" rel="stylesheet">
     </head>
     <body>
         <form name="gsatForm" method="post" action="survey" onsubmit="javascript:return WebForm_OnSubmit();" id="gsatForm">
@@ -210,7 +216,7 @@
 										<%
 											String pleaseSelect = hs.get("pleaseselect");
 										%>
-                                            <select class="form-control" name="ctl00$ContentPlaceHolder1$ddlBusinessIndustry"
+                                            <select class="form-control sos-index-select ddlBusinessIndustry" data-ddl="ddlBusinessIndustry" name="ctl00$ContentPlaceHolder1$ddlBusinessIndustry"
                                                 id="ctl00_ContentPlaceHolder1_ddlBusinessIndustry"
                                                 value="Aviation: BGA">
                                                 <option value=""><%=pleaseSelect%>...chvsr</option>
@@ -287,7 +293,7 @@
 										%>
                                             <label for="ctl00_ContentPlaceHolder1_ddlCountry"
                                                 id="ctl00_ContentPlaceHolder1_lblCountry" class="required"><%=country%></label>
-                                            <select class="form-control" name="ctl00$ContentPlaceHolder1$ddlCountry" value="India"
+                                            <select class="form-control sos-index-select ddlCountry" data-ddl="ddlCountry" name="ctl00$ContentPlaceHolder1$ddlCountry" value="India"
                                                 id="ctl00_ContentPlaceHolder1_ddlCountry"
                                                 onchange="load_states(&#39;ctl00_ContentPlaceHolder1_ddlState&#39;,this.selectedIndex);">
                                                 <option value=""><%=pleaseSelect %></option>
@@ -567,7 +573,7 @@
 										%>
                                             <label for="ctl00_ContentPlaceHolder1_ddlState"
                                                 id="ctl00_ContentPlaceHolder1_lblState" class="required"><%=state%></label>
-                                            <select class="form-control" name="ctl00$ContentPlaceHolder1$ddlState"
+                                            <select class="form-control sos-index-select ddlState" data-ddl="ddlState" name="ctl00$ContentPlaceHolder1$ddlState"
                                                 id="ctl00_ContentPlaceHolder1_ddlState">
                                                 <option value="">Choose country first...</option>
                                             </select>
@@ -607,21 +613,28 @@
     <script language="javascript">
         $(document).ready(function () {
         
-        $('#ctl00_ContentPlaceHolder1_btnRegister').html(
-        "Start <span class='arrow'></span>");
-        load_countries('ctl00_ContentPlaceHolder1_ddlCountry');
-        
-        $('#ctl00_ContentPlaceHolder1_ddlCountry').change(function () {
-        $('#ctl00_ContentPlaceHolder1_hidCountryCode').val($(this).val());
-        $('#ctl00_ContentPlaceHolder1_hidStateCode').val(
-        $('#ctl00_ContentPlaceHolder1_ddlState').val());
-        
-        });
-        
-        $('#ctl00_ContentPlaceHolder1_ddlState').change(function () {
-        $('#ctl00_ContentPlaceHolder1_hidStateCode').val(
-        $('#ctl00_ContentPlaceHolder1_ddlState').val());
-        });
+            $('#ctl00_ContentPlaceHolder1_btnRegister').html(
+            "Start <span class='arrow'></span>");
+            load_countries('ctl00_ContentPlaceHolder1_ddlCountry');
+            
+            $('#ctl00_ContentPlaceHolder1_ddlCountry').change(function () {
+                $('#ctl00_ContentPlaceHolder1_hidCountryCode').val($(this).val());
+                $('#ctl00_ContentPlaceHolder1_hidStateCode').val(
+                $('#ctl00_ContentPlaceHolder1_ddlState').val());            
+                $(".ddlCountry").find(".sos-btn-danger").removeClass("sos-btn-danger");
+            });
+            
+            $('#ctl00_ContentPlaceHolder1_ddlState').change(function () {
+                $('#ctl00_ContentPlaceHolder1_hidStateCode').val(
+                $('#ctl00_ContentPlaceHolder1_ddlState').val());
+                $(".ddlState").find(".sos-btn-danger").removeClass("sos-btn-danger");
+            });
+
+            $('#ctl00_ContentPlaceHolder1_ddlBusinessIndustry').change(function () {
+                $(".ddlBusinessIndustry").find(".sos-btn-danger").removeClass("sos-btn-danger");
+            });
+
+            $(".sos-index-select").selectpicker();
         });
     </script>
     <script type="text/javascript">

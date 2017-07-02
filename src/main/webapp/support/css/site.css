@@ -53,6 +53,15 @@ h2.index-header-2.right-bar{
 	margin-top: 25px;
 }
 
+.sos-right-bar .form-control {
+	font-size: 14px !important;
+	padding: 12px !important;
+}
+
+.sos-btn-danger {
+	border: 1px solid rgb(186, 34, 34) !important;
+}
+
 blockquote, q {
   quotes: none;
 }
@@ -564,6 +573,17 @@ em {
   background: #edebea;
 }
 
+.sos-index-select.bootstrap-select {
+	padding: 0 !important;
+}
+
+.sos-index-select.bootstrap-select .btn {
+	line-height: 14px;
+}
+
+.sos-index-select.bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
+	margin-bottom: 0 !important;
+}
 
 /*** ADMIN CSS: START ***/
 
