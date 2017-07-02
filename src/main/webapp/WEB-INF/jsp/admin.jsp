@@ -164,7 +164,7 @@
             <div class="admin-locale-wrapper">
                 <div style="float: right; width: 40%;">
                     <input class="admin-lang form-control" name="language" id="language" type="text" value="<%=lang%>" />
-                    <select name="sos-lang-select" id="sos-lang-select" class="selectpicker sos-admin-select" onchange="javascript: updateLocaleData();">
+                    <select id="sos-lang-select" class="selectpicker sos-admin-select" onchange="javascript: updateLocaleData();">
                         <option value="en">en</option>
                         <option value="ru">ru</option>
                         <option value="zh">zh</option>
