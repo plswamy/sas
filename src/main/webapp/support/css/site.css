@@ -593,12 +593,31 @@ em {
 
 	.admin-locale-wrapper {
 		padding: 20px;
+		margin-bottom: 29px;
 	}
 	.admin-lang {
 		height: 29px;
+		display: inline-block;
+		width: 40%;
+		float: left;
 	}
 	.admin-lang-btn {
-		margin-left: 10px;
+		/*margin-left: 10px;*/
+		height: 27px;
+		line-height: 0px;
+	}
+	.sos-admin-select {
+		height: 29px;
+		line-height: 14px;
+		width: 40% !important;
+	}
+	.sos-admin-select .btn {
+		height: 29px;
+		line-height: 14px;
+	}
+	.sos-admin-lang-dd-btn {
+		display: inline-block;
+		margin-bottom: 10px;
 	}
 	.admin-locale-submit {
 		float: right;

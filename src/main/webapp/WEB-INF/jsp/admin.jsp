@@ -8,8 +8,10 @@
         <title>International SOS Self Assessment Tool - Admin</title>
         <script src="support/lib/jquery-3.2.0.js"></script>
         <script src="support/lib/jquery-ui.min.js"></script>
-        <script src="support/lib/bootstrap.js"></script>
-        <link href="support/lib/bootstrap.css" rel="stylesheet">
+        <script src="support/lib/bootstrap.min.js"></script>
+        <script src="support/lib/bootstrap-select.min.js"></script>
+        <link href="support/lib/bootstrap.min.css" rel="stylesheet">
+        <link href="support/lib/bootstrap-select.min.css" rel="stylesheet">
         <link href="support/lib/font-awesome.min.css" rel="stylesheet">
         <link href="support/lib/jquery-ui.min.css" rel="stylesheet">
         <link href="support/css/site.css" rel="stylesheet">
@@ -83,10 +85,13 @@
             %>
             
             function getLocaleData() {
-                console.log("admin?locale=" + $("#language").val());
+                //console.log("admin?locale=" + $("#language").val());
                 $("#localeForm").attr("action","admin?locale=" + $("#language").val());
                 $("#localeForm").attr("method","get");
                 
+            }
+            function updateLocaleData() {
+                $(".admin-lang").val($("#sos-lang-select").val());                
             }
 
             function gatherInfo() {
@@ -108,7 +113,7 @@
                         currImg = $("#sos-img-" + objId).attr("src");
                         imgName = currImg.substring(currImg.lastIndexOf("/") + 1, currImg.length);
                     }
-                    console.log("imgName : " + imgName);
+                    //console.log("imgName : " + imgName);
                     allSections += imgName + ":" + $(".sos-qorder-" + objId).val() + "|";
                 });
                 
@@ -148,17 +153,31 @@
     <body>
 		<%
                 String lang = (String) request.getAttribute("language");
-				System.out.println("\n\n\n\n\n lang: "+lang);
+				//System.out.println("\n\n\n\n\n lang: "+lang);
                 if(lang == null) {
                     lang = "en";
                 }
 
-				System.out.println("\n\n\n\n\n lang: "+lang);
+				//System.out.println("\n\n\n\n\n lang: "+lang);
             %>
         <form name="localeForm" id="localeForm" method="get" action="admin" onsubmit="" >
             <div class="admin-locale-wrapper">
-                Locale: <input class="admin-lang" name="language" id="language" type="text" value="<%=lang%>" />
-                <button class="btn btn-primary admin-lang-btn" onclick="javascript: return getLocaleData();">Go!</button>
+                <div style="float: right; width: 40%;">
+                    <input class="admin-lang form-control" name="language" id="language" type="text" value="<%=lang%>" />
+                    <select name="sos-lang-select" id="sos-lang-select" class="selectpicker sos-admin-select" onchange="javascript: updateLocaleData();">
+                        <option value="en">en</option>
+                        <option value="ru">ru</option>
+                        <option value="zh">zh</option>
+                        <option value="in">in</option>
+                        <option value="ar">ar</option>
+                    </select>  
+                    <button style="display: inline-block; width: 17%; float: right;" class="btn btn-primary admin-lang-btn col-lg-4 col-md-6 col-sm-12 col-xs-12" onclick="javascript: return getLocaleData();">Go!</button>
+                    <script>
+                    $(".selectpicker").ready(function() {
+                       $(".selectpicker").selectpicker();
+                        });
+                    </script>
+                </div>
             </div>
         </form>
         <form name="localeForm1" id="localeForm1" method="post" enctype="multipart/form-data" action="admin" class="sos-admin-primary-wrapper<%=lang%>" onsubmit="javascript: gatherInfo();" >
@@ -177,7 +196,7 @@
                     Hashtable<String, String> hm = (Hashtable<String, String>) request.getAttribute("labels");
                     Set<String> hmKeys = hm.keySet();
                     for(String key: hmKeys){
-                        System.out.println("Value of "+key+" is: "+hm.get(key));
+                        //System.out.println("Value of "+key+" is: "+hm.get(key));
                 %>
                     <div class="labels-wrapper">
                         <span class="sos-admin-label-key"><%=key%>:</span>
