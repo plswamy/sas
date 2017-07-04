@@ -159,17 +159,22 @@
                 }
 
 				//System.out.println("\n\n\n\n\n lang: "+lang);
+				List<String> langList = (List<String>) request.getAttribute("langList");
             %>
         <form name="localeForm" id="localeForm" method="get" action="admin" onsubmit="" >
             <div class="admin-locale-wrapper">
                 <div style="float: right; width: 40%;">
                     <input class="admin-lang form-control" name="language" id="language" type="text" value="<%=lang%>" />
                     <select id="sos-lang-select" class="selectpicker sos-admin-select" onchange="javascript: updateLocaleData();">
-                        <option value="en">en</option>
-                        <option value="ru">ru</option>
-                        <option value="zh">zh</option>
-                        <option value="in">in</option>
-                        <option value="ar">ar</option>
+						<option value="english">english</option>
+					<%
+						String tempLang = null;
+						for(int i = 0; i < langList.size(); i++) {
+							tempLang = (String) langList.get(i);
+							System.out.println("tempLang....:"+tempLang);
+					%>
+                        <option value="<%=tempLang%>"><%=tempLang%></option>
+					<% } %>
                     </select>  
                     <button style="display: inline-block; width: 17%; float: right;" class="btn btn-primary admin-lang-btn col-lg-4 col-md-6 col-sm-12 col-xs-12" onclick="javascript: return getLocaleData();">Go!</button>
                     <script>
