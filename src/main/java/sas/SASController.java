@@ -69,6 +69,7 @@ public class SASController {
 	  String loggedInUserName=principal.getName();
 	  req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
 	  req.setAttribute("questions", getQuestions(requestedLang));
+	  req.setAttribute("langList", getLangs());
 	  if(nullCheck(requestedLang).length() > 0) {
 		  req.setAttribute("language", requestedLang);
 	  }
