@@ -598,7 +598,14 @@ em {
     display: inline-block;
     visibility: visible;
 }
+.sos-field-required.form-control {
+    -webkit-box-shadow: none;
+     box-shadow: none;
+}
 
+.form-control.admin-textarea-field {
+	height: 100% !important;
+}
 
 /*accordion panels*/
 #item_panels .ui-accordion-header{
@@ -659,6 +666,9 @@ em {
 			*/
 	#item_panels h3.ui-accordion-header.general_section{
 		background: #4b7e7a;
+	}
+	#item_panels h3.ui-accordion-header.fields_section{
+		background: #9b6463;
 	}
 	#item_panels h3.ui-accordion-header.plan_header{
 		background: #2f4696;

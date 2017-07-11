@@ -58,6 +58,16 @@
     this.type = type;
   }
 
+  var FrmField = function(fid, forder, fdisplayname, ftype, frequired, foptions, fchecked) {
+    this.fid = fid;
+    this.forder = forder;
+    this.fdisplayname = fdisplayname;
+    this.ftype = ftype;
+    this.frequired = frequired;
+    this.foptions = foptions;
+    this.fchecked = fchecked;
+  }
+
   Field.prototype.edit = function(qorder, text, subsection, desc, image) {
     this.qorder = newField.qorder;
     this.text = newField.text;
@@ -91,20 +101,14 @@
 
     var enableFieldFields = function enableFieldFields(id, type) {
       $('.row-editable').find('.form-control').each(function() {
-        $(this).attr('disabled', true);
-        if($(this).hasClass('sos-admin-subsection')) {
-			$(this).addClass('hidden');
-		}
+			if($(this).closest("#sos-table-fields").length === 0) {
+				$(this).attr('disabled', true);
+				if($(this).hasClass('sos-admin-subsection')) {
+					$(this).addClass('hidden');
+				}
+			}
       });
       $('.row-editable').removeClass('row-editable').addClass('row-readonly');
-
-
-
-
-
-
-
-
 	
 	var newSelectedFieldValues = [];
 	$("input[id^='subsection_']").each(function(){
@@ -113,20 +117,6 @@
 			newSelectedFieldValues.push(val);
 		}
 	});
-	
-
-	
-
-
-
-
-
-
-
-
-
-
-
 
       var currentTarget = $(event.target).closest("tr");
       currentTarget.addClass('row-editable').removeClass('row-readonly');
@@ -277,17 +267,23 @@
 	  }
     };
 
-	var changeSubsectionValue = function upField(id) {
-      var selectedValue = $('#sos-subsection-dropdown-' + id).val();
-	  $("#subsection_" + id).val(selectedValue)
-    };
-
 	var downField = function upField(id) {
       var currRow = $(event.target).closest("tr"),
 		  nextRow = currRow.next();
 	  if(nextRow.length > 0) {
+		var nextOrder = nextRow.find(".sos-qorder").val(),
+		curOrder = currRow.find(".sos-qorder").val();
+		currRow.find(".sos-qorder").val(nextOrder);
+		currRow.find(".sos-qorder-label").html(nextOrder);
+		nextRow.find(".sos-qorder").val(curOrder);
+		nextRow.find(".sos-qorder-label").html(curOrder);
 		currRow.insertAfter(nextRow);
 	  }
+    };
+
+	var changeSubsectionValue = function upField(id) {
+      var selectedValue = $('#sos-subsection-dropdown-' + id).val();
+	  $("#subsection_" + id).val(selectedValue)
     };
 
     var deleteField = function deleteField(id) {
@@ -310,6 +306,7 @@
     }
 
     return {
+      count: 1,
       render: render,
       deleteField: deleteField,
       enableFieldFields: enableFieldFields,
@@ -319,11 +316,178 @@
       addField: addField
     };
   })();
+
+  ///////////////////////////////////////////////////////////// form fields - begin
+  var FrmFieldController = (function(){
+    var _FieldData = [];
+
+    var initFieldData = function initFieldData(data) {
+      for (var i=0; i < data.length; i++) {		  
+        _FieldData.push(new FrmField(data[i].fid, data[i].forder, data[i].flabel, data[i].ftype, data[i].frequired, data[i].foptions, data[i].fchecked));
+      }
+    };  
+
+    var addField = function addField(type) {
+      var newField = new FrmField("", "", "", "text", "0", "", "");
+      _FieldData.push(newField);
+      return newField;
+    };
+
+    var deleteField = function deleteField(id, type) {
+      $(event.target).closest("tr").remove();
+    }
+
+    var getFields = function getFields() {
+      return _FieldData;
+    }
+
+    return {
+      count: 1,
+      initFieldData: initFieldData,
+      addField: addField,
+      deleteField: deleteField,
+      getFields: getFields
+    }
+  })();
+
+
+  var FrmFieldView = (function() {
+
+    var FieldTemplate = '<tr class="row-editable sos-field-row-editable" data-fid="%fid%">\
+        <td class="hidden">\
+           <input type="text" class="form-control sos-input sos-form-field-input" value="%fid%" name="text%fid%" id="text_%fid%" >\
+        </td>\
+        <td>\
+			<span class="sos-forder-label">%forder%</span>\
+			<input class="sos-forder-%fid%" type="hidden" value="%forder%"></td>\
+        </td>\
+        <td>\
+           <input type="text" class="form-control sos-input sos-form-field-input sos-fdisplayname-%fid%" value="%fdisplayname%" title="%fdisplayname%" name="text%fdisplayname%" placeholder="Enter field display name">\
+        </td>\
+        <td>\
+			<select class="form-control sos-form-field-input sos-ftype-%fid%" onchange="FrmFieldView.updateFoptions();">\
+				<option class="form-control sos-form-field-input" value="text">Text Field</option>\
+				<option class="form-control sos-form-field-input hidden" value="radio">Radio Button</option>\
+				<option class="form-control sos-form-field-input hidden" value="checkbox">Check Box</option>\
+				<option class="form-control sos-form-field-input" value="select">Select Field</option>\
+			</select>\
+        </td>\
+        <td>\
+           <input type="checkbox" class="sos-field-required form-control sos-frequired-%fid%" %fchecked%>\
+        </td>\
+        <td>\
+          <textarea placeholder="Enter options with | as seperator" %fdisabled% class="form-control admin-textarea-field sos-foptions-%fid%" >%foptions%</textarea>\
+        </td>\
+        <td>\
+          <i title="Delete" class="sos-delete-icon fa fa-trash-o fa-lg" onclick="FrmFieldView.deleteField();"></i>\
+        </td>\
+        <td>\
+		  <input type="hidden" value="%order%" id="order_%fid%">\
+          <i title="Up" class="sos-order-direction sos-up-icon fa fa-arrow-up fa-lg" id="up-%fid%" data-type="%type%" onclick="FrmFieldView.upField()"></i>\
+          <i title="Down" class="sos-order-direction sos-down-icon fa fa-arrow-down fa-lg" id="down-%fid%" data-type="%type%" onclick="FrmFieldView.downField()"></i>\
+        </td>\
+      </tr>';
+
+    var generateHTML = function generateHTML(Field) {
+      return FieldTemplate.replace(/%fid%/g, Field.fid)
+		          .replace(/%forder%/g, Field.forder)
+		          .replace(/%fdisplayname%/g, Field.fdisplayname)
+                  .replace(/%fdisabled%/g, (Field.ftype === "text" ? "disabled" : ""))
+                  .replace(/%foptions%/g, Field.foptions)
+                  .replace(/%fchecked%/g, Field.fchecked);
+    };
+
+    var render = function render(emp) {
+      var Fields = emp ? emp : FrmFieldController.getFields(),
+          innerHTML = '';
+      Fields.forEach(function(Field) {
+		  //console.log('#'+Field.type+' tbody');
+        var $tbody = document.querySelector('#sos-table-fields tbody');
+        innerHTML = generateHTML(Field);
+        $($tbody).append(innerHTML);
+		$($tbody).find("select:last").val(Field.ftype ? Field.ftype : "text");
+      });
+    };
+
+    var deleteField = function deleteField(id) {
+	  var deletedQuestions = $('#sos-deleted-questions').val(),
+          _type = $('#deleteItem-'+id).attr('data-type');
+	  $('#sos-deleted-questions').val(deletedQuestions + "," + id);
+      FieldController.deleteField(id, _type);
+      //render();
+    };
+
+    var addField = function addField(type) {
+      render([FrmFieldController.addField(type)]);
+	  return false;
+    };
+
+	var upField = function upField() {
+      var currRow = $(event.target).closest("tr"),
+		  prevRow = currRow.prev();
+      if(prevRow.length > 0) {
+		var preOrder = prevRow.find(".sos-forder").val(),
+			curOrder = currRow.find(".sos-forder").val();
+		currRow.find(".sos-forder").val(preOrder);
+		currRow.find(".sos-forder-label").html(preOrder);
+		prevRow.find(".sos-forder").val(curOrder);
+		prevRow.find(".sos-forder-label").html(curOrder);
+		currRow.insertBefore(prevRow);
+	  }
+    };
+
+	var downField = function upField() {
+      var currRow = $(event.target).closest("tr"),
+		  nextRow = currRow.next();
+	  if(nextRow.length > 0) {
+		var nextOrder = nextRow.find(".sos-forder").val(),
+		curOrder = currRow.find(".sos-forder").val();
+		currRow.find(".sos-forder").val(nextOrder);
+		currRow.find(".sos-forder-label").html(nextOrder);
+		nextRow.find(".sos-forder").val(curOrder);
+		nextRow.find(".sos-forder-label").html(curOrder);
+		currRow.insertAfter(nextRow);
+	  }
+    };
+	var updateFoptions = function updateFoptions() {
+      var selField = $(event.target),
+		  currRow = selField.closest("tr"),
+		  optionsField = currRow.find("textarea");
+	  if(selField.val() === "text") {
+		$(optionsField).attr("disabled", "disabled");
+	  } else {
+		$(optionsField).removeAttr("disabled");
+	  }
+    };
+
+    return {
+      count: 1,
+      render: render,
+      deleteField: deleteField,
+      upField: upField,
+      downField: downField,
+      updateFoptions: updateFoptions,
+      addField: addField
+    };
+  })();
+  ///////////////////////////////////////////////////////////// form fields - end
+
   var _doData = allData;
+  var _doFieldsData = allFieldsData;
   
   function init() {
     FieldController.initFieldData(_doData);
     FieldView.render();
+
+
+	function sortFrmFields(a,b) {
+	  return parseInt(a.forder, 10) - parseInt(b.forder, 10);
+	}
+	_doFieldsData = _doFieldsData.sort(sortFrmFields);
+
+
+	FrmFieldController.initFieldData(_doFieldsData);
+    FrmFieldView.render();
   }
 
   init();

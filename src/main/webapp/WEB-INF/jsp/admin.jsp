@@ -17,7 +17,7 @@
         <link href="support/css/site.css" rel="stylesheet">
 
         <script type="text/javascript">
-            var allData=[];
+            var allData=[], allFieldsData=[];
             <%
                 Hashtable<String, List<Question>> hs = (Hashtable<String, List<Question>>) request.getAttribute("questions");  
                 List<Question> list = hs.get("plan");
@@ -82,7 +82,50 @@
                     allData.push(obj);
             <%
                 }
+            
+                //    fieldid:   order:type:displayname:required:<<options>>     <<options>> exists only for select types.                        
+                //Hashtable<String, String> hmf = (Hashtable<String, String>) request.getAttribute("labels");
+                Hashtable<String, String> hmf = new Hashtable<String,String>();
+                                                hmf.put("1",   "3:text:About Me:false");
+                                                hmf.put("2",   "2:select:Gender:true:Male|Female");
+                                                hmf.put("3",   "1:select:Qualifications:false:SSC|Intermediate|Degree|PG|Phd");
+                                                hmf.put("4",   "4:select:Expertise:false:Account|Sales|IT|Hardware");
+                Set<String> hmfKeys = hmf.keySet();
+                for(String key: hmfKeys){
+                    //System.out.println("Value of "+key+" is: "+hmf.get(key));
+
+                    StringTokenizer st = new StringTokenizer(hmf.get(key), ":");
+                    String fid, forder, ftype, flabel, frequired, foptions = "", fchecked;
+                    fid = key;
+                    forder = st.nextToken();
+                    ftype = st.nextToken();
+                    flabel = st.nextToken();
+                    frequired = st.nextToken();                      
+                    fchecked = frequired.equals("true") ? "checked" : "";
+                    if(!ftype.equals("text")) {
+                        foptions = st.nextToken();
+                    }
             %>
+                
+                    var fieldValues = {
+                        fid: '<%= fid%>',
+                        forder: '<%=forder%>',
+                        ftype: '<%=ftype%>',
+                        flabel: '<%=flabel%>',
+                        frequired: '<%=frequired%>',
+                        checked: '<%=fchecked%>',
+                        foptions: '<%=foptions%>',
+                        fchecked: '<%=fchecked%>'
+                    };
+                    allFieldsData.push(fieldValues);
+                    //generateNewField(fieldValues);
+               
+                
+            <%
+                }
+            %>
+
+
             
             function getLocaleData() {
                 //console.log("admin?locale=" + $("#language").val());
@@ -98,7 +141,9 @@
                 var generalFields = $(".sos-input-general"),
                     sectionFields = $(".sos-input-question"),
                     allGenerals = "",
-                    allSections = "";
+                    allSections = "",
+                    allFields = "",
+                    allFieldsInfo = $(".sos-field-row-editable");
                 generalFields.each(function(cur) {
                     allGenerals += $(this).attr("id") + ":" + $(this).val() + "|";
                 });
@@ -116,12 +161,20 @@
                     //console.log("imgName : " + imgName);
                     allSections += imgName + ":" + $(".sos-qorder-" + objId).val() + "|";
                 });
+                //    fieldid:   order:type:displayname:required:<<options>>     <<options>> exists only for select types
+                allFieldsInfo.each(function(cur) {
+                    var fid = $(this).data('fid');
+                    allFields +=  fid + ":" + $('.sos-forder-' + fid).val() + ":" + $('.sos-ftype-' + fid).val() + ":" + $('.sos-fdisplayname-' + fid).val() + ":" + ($('.sos-frequired-' + fid).attr("checked") === "checked" ? "true" : "false") + ":" + $('.sos-foptions-' + fid).val() + ":" ;
+                    allFields += "#";
+                });
                 
                 $("#sos-labels").val(allGenerals);
                 $("#sos-questions").val(allSections);
+                $("#sos-form-fields").val(allFields);
                 //console.log("allGenerals : " + allGenerals);
                 //console.log("allSections : " + allSections);
                 //console.log("allSections : " + allSections);
+                //console.log("allFields : " + allFields);
                 submitCompleteForm();
             }
 
@@ -191,6 +244,7 @@
             <input type="hidden" id="sos-labels"  name="labels" value="" />
             <input type="hidden" id="sos-questions"  name="questions" value="" />
             <input type="hidden" id="sos-deleted-questions"  name="deletedquestions" value="" />
+            <input type="hidden" id="sos-form-fields"  name="homepagefields" value="" />
 
             <div id="item_panels">
                 <h3 class="general_section">General Labels</h3>        
@@ -212,6 +266,7 @@
                 %>
                 </div>
                 </div>
+
                 <h3 class="plan_header">Plan</h3>        
                 <div class="store_addr">
                     <table id="plan" class="table table-striped table-bordered table-hover">
@@ -231,7 +286,8 @@
                     <div class="btn-section sos-btn-section">
                         <button class="btn btn-primary pull-right" id="addFieldBtn" onclick="FieldView.addField('plan'); return false;">Add Item</button>
                     </div>
-                </div>              
+                </div>
+                
                 <h3 id="2" class="do_header">Do</h3>        
                 <div class="item_container">
                     <table id="do" class="table table-striped table-bordered table-hover">
@@ -239,9 +295,11 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Text</th>
+                                <th>Subsection</th>
                                 <th>Description</th>
                                 <th>Image</th>
                                 <th>Actions</th>
+                                <th>Order</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -250,25 +308,51 @@
                         <button class="btn btn-primary pull-right" id="addFieldBtn" onclick="FieldView.addField('do'); return false;">Add Item</button>
                     </div>
                 </div>
+
                 <h3 id="3" class="check_header">Check</h3>        
                 <div class="store_addr">
                     <table id="check" class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                            <th>ID</th>
-                            <th>Text</th>
-                            <th>Description</th>
-                            <th>Image</th>
-                            <th>Actions</th>
+                                <th>ID</th>
+                                <th>Text</th>
+                                <th>Subsection</th>
+                                <th>Description</th>
+                                <th>Image</th>
+                                <th>Actions</th>
+                                <th>Order</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
-
                     <div class="btn-section sos-btn-section">
                         <button class="btn btn-primary pull-right" id="addFieldBtn" onclick="FieldView.addField('check'); return false;">Add Item</button>
                     </div>
-                 </div>
+                </div>
+
+                <h3 class="fields_section">Fields</h3>        
+                <div class="store_addr">
+                    <table id="sos-table-fields" class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Display Name</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Options (Separate with | symbol)</th>
+                                <th>Actions</th>
+                                <th>Order</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="btn-section sos-btn-section">
+                        <button class="btn btn-primary pull-right" id="addFieldBtn" onclick="FrmFieldView.addField({}); return false;">Add Field</button>
+                    </div>
+                </div>
+
+
+
              </div>
              <div class="admin-locale-submit">
                 <button class="btn btn-primary admin-lang-btn" onclick="">Save</button>
