@@ -320,6 +320,8 @@ public class SASController {
   	  	req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 	  	req.setAttribute("businessindustry", getData("businessindustry", "boption", "boptionvalue", lang));
 	  	req.setAttribute("country", getData("country", "coption", "coptionvalue", lang));
+	  	req.setAttribute("userformfields", getFormFields(lang));
+	  	//loadUserSelectionData(lang);
 	  	//req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));	  	
   	  	
   	  	// load country list
@@ -357,16 +359,24 @@ public class SASController {
     	System.out.println("save user called");
     	try {
     		con = dataSource.getConnection();
-    		stmt = con.prepareStatement("insert into registrationinfo (firstname, lastname, jobtitle, email, company, businesstype, country, state, lang) values (?,?,?,?,?,?,?,?,?)");
-    		stmt.setString(1, nullCheck(req.getParameter("firstname")));
-    		stmt.setString(2, nullCheck(req.getParameter("lastname")));
-    		stmt.setString(3, nullCheck(req.getParameter("jobtitle")));
-    		stmt.setString(4, nullCheck(req.getParameter("email")));
-    		stmt.setString(5, nullCheck(req.getParameter("company")));
-    		stmt.setString(6, nullCheck(req.getParameter("businessindustry")));
-    		stmt.setString(7, nullCheck(req.getParameter("country")));
-    		stmt.setString(8, nullCheck(req.getParameter("state")));
-    		stmt.setString(9, "english");
+    		stmt = con.prepareStatement("insert into registrationinfo (f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, lang) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+    		stmt.setString(1, nullCheck(req.getParameter("f1")));
+    		stmt.setString(2, nullCheck(req.getParameter("f2")));
+    		stmt.setString(3, nullCheck(req.getParameter("f3")));
+    		stmt.setString(4, nullCheck(req.getParameter("f4")));
+    		stmt.setString(5, nullCheck(req.getParameter("f5")));
+    		stmt.setString(6, nullCheck(req.getParameter("f6")));
+    		stmt.setString(7, nullCheck(req.getParameter("f7")));
+    		stmt.setString(8, nullCheck(req.getParameter("f8")));
+    		stmt.setString(1, nullCheck(req.getParameter("f9")));
+    		stmt.setString(2, nullCheck(req.getParameter("f10")));
+    		stmt.setString(3, nullCheck(req.getParameter("f11")));
+    		stmt.setString(4, nullCheck(req.getParameter("f12")));
+    		stmt.setString(5, nullCheck(req.getParameter("f13")));
+    		stmt.setString(6, nullCheck(req.getParameter("f14")));
+    		stmt.setString(7, nullCheck(req.getParameter("f15")));
+    		stmt.setString(8, nullCheck(req.getParameter("f16")));
+    		stmt.setString(17, "english");
     		stmt.executeUpdate();
     	} catch(Exception exp) {
     		exp.printStackTrace();
@@ -857,12 +867,12 @@ public class SASController {
     	try {
     		con = dataSource.getConnection();
     		stmt = con.prepareStatement("insert into registrationfields (fieldname, forder, fieldtype, fielddispname, showflag, options, lang) values (?,?,?,?,?,?,?)");
-    		StringTokenizer st = new StringTokenizer(data, "|cmdedge|");
+    		StringTokenizer st = new StringTokenizer(data, "\\|cmsedge\\|");
     		StringTokenizer st1 = null;
     		String temp1 = null;
     		while(st.hasMoreElements()) {
     			temp1 = st.nextToken();
-    			st1 = new StringTokenizer(temp1, ":cmsedge:");
+    			st1 = new StringTokenizer(temp1, "\\:cmsedge\\:");
             	//fieldname:id:order:type:displayname:required:<<options>>    			
     			stmt.setString(1, st1.nextToken());
     			st1.nextToken(); //id skip
@@ -890,26 +900,26 @@ public class SASController {
 
     	try {
     		con = dataSource.getConnection();
-    		stmt = con.prepareStatement("update registrationfields set forder=?, fieldtype=?, fielddispname=?, showflag=?, options=?,  where id=?");
-    		StringTokenizer st = new StringTokenizer(data, "|cmdedge|");
+    		stmt = con.prepareStatement("update registrationfields set forder=?, fieldtype=?, fielddispname=?, showflag=?, options=?  where id=?");
+    		String st[] = data.split("\\|cmsedge\\|");
     		StringTokenizer st1 = null;
-    		String temp1 = null;
-    		while(st.hasMoreElements()) {
-    			temp1 = st.nextToken();
-    			st1 = new StringTokenizer(temp1, ":cmsedge:");
+    		String temp1[] = null;
+    		String temp = null;
+    		for(int i = 0; i < st.length; i++) {
+    			temp1 = st[i].split("\\:cmsedge\\:");    			
             	//fieldname:id:order:type:displayname:required:<<options>>
-    			st1.nextElement();
-    			temp1 = st1.nextToken(); //id
-    			stmt.setString(1, st1.nextToken());
-    			stmt.setString(2, st1.nextToken());
-    			stmt.setString(3, st1.nextToken());
-    			stmt.setString(4, st1.nextToken());
-    			if(st1.hasMoreElements()) {
+    			
+    			temp = temp1[1]; //id
+    			stmt.setString(1, temp1[2]);
+    			stmt.setString(2, temp1[3]);
+    			stmt.setString(3, temp1[4]);
+    			stmt.setString(4, temp1[5]);
+    			if(temp1.length > 5) {
     				stmt.setString(5, st1.nextToken());
     			} else {
     				stmt.setString(5, null);
     			}
-    			stmt.setString(6, temp1);
+    			stmt.setString(6, temp);
     			stmt.executeUpdate();
     		}    				    			
     	} catch(Exception exp) {
@@ -918,6 +928,32 @@ public class SASController {
     		close();
     	}
     }
+    
+    /*private void loadUserSelectionData(String lang) {
+    	System.out.println("loadUserSelectionData called with lang:"+lang);
+    	Hashtable<String, String> hs = new Hashtable<String, String>();
+    	try {
+    		con = dataSource.getConnection();
+    		stmt = con.prepareStatement("select fieldname, options from registrationfields where fieldtype = ? and lang = ?");
+    		stmt.setString(1, "select");
+    		if(nullCheck(lang).length() == 0 || lang.equals("en")) {
+    			lang = "english";
+    		}
+    		stmt.setString(2,  lang);
+    		ResultSet rs = stmt.executeQuery();
+    		while(rs.next()) 
+    		{
+    			hs.put(rs.getString(cKey), rs.getString(cValue));
+    		}
+    		if(hs.size() == 0) {
+    			hs = getData(table, cKey, cValue, "english");
+    		}
+    	} catch(Exception exp) {
+    		exp.printStackTrace();
+    	} finally {
+    		close();
+    	}
+    }*/
     
 }
 
