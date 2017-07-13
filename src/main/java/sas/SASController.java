@@ -824,7 +824,7 @@ public class SASController {
     			value = rs.getString("forder");
     			value = value + ":" + rs.getString("fieldtype");
     			value = value + ":" + rs.getString("fielddispname");
-    			value = value + ":" + rs.getString("showvflag");
+    			value = value + ":" + rs.getString("showflag");
     			key = rs.getString("options");
     			if(key != null && key.length() > 0) {
     				value = value + ":" + rs.getString("");
