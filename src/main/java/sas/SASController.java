@@ -508,6 +508,7 @@ public class SASController {
     private void updateEnglishData() {
     	String labels = req.getParameter("labels");
     	String questions = req.getParameter("questions");
+    	String userformsfields = req.getParameter("userformsfields");
     	String lang = req.getParameter("lang");
     	if(nullCheck(lang).length() == 0 || lang.equals("en")) {
 			lang = "english";
@@ -517,6 +518,8 @@ public class SASController {
     	System.out.println("labels:"+labels);	    	
     	System.out.println("questions:"+questions);
     	System.out.println("deletedquestions:"+deletedquestions);
+    	System.out.println("userformsfields:"+userformsfields);
+    	updateFormFields(userformsfields);
     	PreparedStatement pstmt = null;
     	PreparedStatement ustmt = null;
     	try {
@@ -820,14 +823,15 @@ public class SASController {
     		String value = null;
     		while(rs.next()) 
     		{    			
-    			//order:type:displayname:required:<<options>>
-    			value = rs.getString("forder");
+    			//id:order:type:displayname:required:<<options>>
+    			value = rs.getString("id");
+    			value = value + ":" + rs.getString("forder");
     			value = value + ":" + rs.getString("fieldtype");
     			value = value + ":" + rs.getString("fielddispname");
     			value = value + ":" + rs.getString("showflag");
     			key = rs.getString("options");
     			if(key != null && key.length() > 0) {
-    				value = value + ":" + rs.getString("");
+    				value = value + ":" + key;
     			}
     			key = rs.getString("fieldname");
     			hs.put(key, value);
@@ -839,6 +843,42 @@ public class SASController {
     	}
     	
     	return hs;
+    }
+    
+    private void updateFormFields(String data) {
+    	System.out.println("data in updateformfields....:"+data);
+    	//id:order:type:displayname:required:<<options>>
+    	//Create table registrationfields(id integer PRIMARY KEY AUTO_INCREMENT, fieldname varchar(100), fielddispname varchar(100), 
+    	// fieldtype varchar(100),showflag varchar(10),options varchar(300), forder integer, lang varchar(10));
+
+    	try {
+    		con = dataSource.getConnection();
+    		stmt = con.prepareStatement("update registrationfields set forder=?, fieldtype=?, fielddispname=?, showflag=?, options=?,  where id=?");
+    		StringTokenizer st = new StringTokenizer(data, "|cmdedge|");
+    		StringTokenizer st1 = null;
+    		String temp1 = null;
+    		while(st.hasMoreElements()) {
+    			temp1 = st.nextToken();
+    			st1 = new StringTokenizer(temp1, ":cmsedge:");
+            	//id:order:type:displayname:required:<<options>>
+    			temp1 = st1.nextToken(); //id
+    			stmt.setString(1, st1.nextToken());
+    			stmt.setString(2, st1.nextToken());
+    			stmt.setString(3, st1.nextToken());
+    			stmt.setString(4, st1.nextToken());
+    			if(st1.hasMoreElements()) {
+    				stmt.setString(5, st1.nextToken());
+    			} else {
+    				stmt.setString(5, null);
+    			}
+    			stmt.setString(6, temp1);
+    			stmt.executeUpdate();
+    		}    				    			
+    	} catch(Exception exp) {
+    		exp.printStackTrace();
+    	} finally {
+    		close();
+    	}
     }
 }
 
