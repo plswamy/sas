@@ -682,6 +682,9 @@ public class SASController {
     	System.out.println("lang:"+lang);
     	System.out.println("labels:"+labels);	    	
     	System.out.println("questions:"+questions);
+    	String userformsfields = req.getParameter("userformsfields");
+    	System.out.println("userformsfields:"+userformsfields);
+    	updateFormFields(userformsfields);
     	try {
     		String temp1 = null;
     		String temp2 = null;
@@ -743,6 +746,9 @@ public class SASController {
     	System.out.println("lang:"+lang);
     	System.out.println("labels:"+labels);	    	
     	System.out.println("questions:"+questions);
+    	String userformsfields = req.getParameter("userformsfields");
+    	System.out.println("userformsfields:"+userformsfields);
+    	insertFormFields(userformsfields, lang);
     	try {
     		con = dataSource.getConnection();
     		StringTokenizer st = null;
@@ -845,11 +851,42 @@ public class SASController {
     	return hs;
     }
     
+    private void insertFormFields(String data, String lang) {
+    	System.out.println("data in insertFormFields....:"+data);    	
+
+    	try {
+    		con = dataSource.getConnection();
+    		stmt = con.prepareStatement("insert into registrationfields (fieldname, forder, fieldtype, fielddispname, showflag, options, lang) values (?,?,?,?,?,?,?)");
+    		StringTokenizer st = new StringTokenizer(data, "|cmdedge|");
+    		StringTokenizer st1 = null;
+    		String temp1 = null;
+    		while(st.hasMoreElements()) {
+    			temp1 = st.nextToken();
+    			st1 = new StringTokenizer(temp1, ":cmsedge:");
+            	//fieldname:id:order:type:displayname:required:<<options>>    			
+    			stmt.setString(1, st1.nextToken());
+    			st1.nextToken(); //id skip
+    			stmt.setString(2, st1.nextToken());
+    			stmt.setString(3, st1.nextToken());
+    			stmt.setString(4, st1.nextToken());
+    			stmt.setString(5, st1.nextToken());
+    			if(st1.hasMoreElements()) {
+    				stmt.setString(6, st1.nextToken());
+    			} else {
+    				stmt.setString(6, null);
+    			}
+    			stmt.setString(7, lang);
+    			stmt.executeUpdate();
+    		}    				    			
+    	} catch(Exception exp) {
+    		exp.printStackTrace();
+    	} finally {
+    		close();
+    	}
+    }
+    
     private void updateFormFields(String data) {
-    	System.out.println("data in updateformfields....:"+data);
-    	//id:order:type:displayname:required:<<options>>
-    	//Create table registrationfields(id integer PRIMARY KEY AUTO_INCREMENT, fieldname varchar(100), fielddispname varchar(100), 
-    	// fieldtype varchar(100),showflag varchar(10),options varchar(300), forder integer, lang varchar(10));
+    	System.out.println("data in updateformfields....:"+data);    	
 
     	try {
     		con = dataSource.getConnection();
@@ -860,7 +897,8 @@ public class SASController {
     		while(st.hasMoreElements()) {
     			temp1 = st.nextToken();
     			st1 = new StringTokenizer(temp1, ":cmsedge:");
-            	//id:order:type:displayname:required:<<options>>
+            	//fieldname:id:order:type:displayname:required:<<options>>
+    			st1.nextElement();
     			temp1 = st1.nextToken(); //id
     			stmt.setString(1, st1.nextToken());
     			stmt.setString(2, st1.nextToken());
@@ -880,5 +918,8 @@ public class SASController {
     		close();
     	}
     }
+    
 }
+
+
 
