@@ -914,8 +914,8 @@ public class SASController {
     			stmt.setString(2, temp1[3]);
     			stmt.setString(3, temp1[4]);
     			stmt.setString(4, temp1[5]);
-    			if(temp1.length > 5) {
-    				stmt.setString(5, st1.nextToken());
+    			if(temp1.length > 6) {
+    				stmt.setString(5, temp1[6]);
     			} else {
     				stmt.setString(5, null);
     			}

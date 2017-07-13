@@ -84,19 +84,30 @@
                 }
             
                 //    fieldid:   order:type:displayname:required:<<options>>     <<options>> exists only for select types.                        
-                //Hashtable<String, String> hmf = (Hashtable<String, String>) request.getAttribute("labels");
-                Hashtable<String, String> hmf = new Hashtable<String,String>();
-                                                hmf.put("1",   "3:text:About Me:false");
-                                                hmf.put("2",   "2:select:Gender:true:Male|Female");
-                                                hmf.put("3",   "1:select:Qualifications:false:SSC|Intermediate|Degree|PG|Phd");
-                                                hmf.put("4",   "4:select:Expertise:false:Account|Sales|IT|Hardware");
+                Hashtable<String, String> hmf = (Hashtable<String, String>) request.getAttribute("userformsfields");
+
+                System.out.println(hmf);
+                /*Hashtable<String, String> hmf = new Hashtable<String,String>();
+                                                hmf.put("f1",   "1:text:First Name:true");
+                                                hmf.put("lastname",   "2:text:Last Name:true");
+                                                hmf.put("jobtitle",   "3:text:Job Title:true");
+                                                hmf.put("email",   "4:text:Email:true");
+                                                hmf.put("company",   "5:text:Company:true");
+                                                hmf.put("businessindustry",   "6:select:Business Industry:true:select * from businessindustry;");
+                                                hmf.put("country",   "7:select:Country:true:select * from country;");
+                                                hmf.put("state",   "8:select:State:true:select * from state;");
+                                                hmf.put("aboutme",   "10:text:About Me:true");
+                                                hmf.put("gender",   "9:select:Gender:true:select * from gender;");
+                                                hmf.put("qualification",   "12:select:Qualifications:true:select * from qualifications;");
+                                                hmf.put("expertise",   "11:select:Expertise:true:select * from expertise;");*/
                 Set<String> hmfKeys = hmf.keySet();
                 for(String key: hmfKeys){
-                    //System.out.println("Value of "+key+" is: "+hmf.get(key));
+                    System.out.println("Value of "+key+" is: "+hmf.get(key));
 
                     StringTokenizer st = new StringTokenizer(hmf.get(key), ":");
-                    String fid, forder, ftype, flabel, frequired, foptions = "", fchecked;
+                    String fid, forder, ftype, flabel, frequired, foptions = "", fchecked,fincrementid;
                     fid = key;
+                    fincrementid = st.nextToken();
                     forder = st.nextToken();
                     ftype = st.nextToken();
                     flabel = st.nextToken();
@@ -109,6 +120,7 @@
                 
                     var fieldValues = {
                         fid: '<%= fid%>',
+                        fincrementid: '<%=fincrementid%>',
                         forder: '<%=forder%>',
                         ftype: '<%=ftype%>',
                         flabel: '<%=flabel%>',
@@ -163,14 +175,16 @@
                 });
                 //    fieldid:   order:type:displayname:required:<<options>>     <<options>> exists only for select types
                 allFieldsInfo.each(function(cur) {
-                    var fid = $(this).data('fid');
-                    allFields +=  fid + ":" + $('.sos-forder-' + fid).val() + ":" + $('.sos-ftype-' + fid).val() + ":" + $('.sos-fdisplayname-' + fid).val() + ":" + ($('.sos-frequired-' + fid).attr("checked") === "checked" ? "true" : "false") + ":" + $('.sos-foptions-' + fid).val() + ":" ;
-                    allFields += "#";
+                    var fid = $(this).data('fid'),
+                        fincrementid = $(this).data('fincrementid');
+                    allFields +=  fid + ":cmsedge:" + fincrementid + ":cmsedge:" + $('.sos-forder-' + fid).val() + ":cmsedge:" + $('.sos-ftype-' + fid).val() + ":cmsedge:" + $('.sos-fdisplayname-' + fid).val() + ":cmsedge:" + ($('.sos-frequired-' + fid).attr("checked") === "checked" ? "true" : "false") + ":cmsedge:" + $('.sos-foptions-' + fid).val() + ":cmsedge:" ;
+                    allFields += "|cmsedge|";
                 });
                 
                 $("#sos-labels").val(allGenerals);
                 $("#sos-questions").val(allSections);
                 $("#sos-form-fields").val(allFields);
+               // return false;
                 //console.log("allGenerals : " + allGenerals);
                 //console.log("allSections : " + allSections);
                 //console.log("allSections : " + allSections);
@@ -244,7 +258,7 @@
             <input type="hidden" id="sos-labels"  name="labels" value="" />
             <input type="hidden" id="sos-questions"  name="questions" value="" />
             <input type="hidden" id="sos-deleted-questions"  name="deletedquestions" value="" />
-            <input type="hidden" id="sos-form-fields"  name="homepagefields" value="" />
+            <input type="hidden" id="sos-form-fields"  name="userformsfields" value="" />
 
             <div id="item_panels">
                 <h3 class="general_section">General Labels</h3>        
@@ -335,18 +349,17 @@
                     <table id="sos-table-fields" class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Order</th>
+                                <th>Show</th>
                                 <th>Display Name</th>
                                 <th>Type</th>
-                                <th>Required</th>
                                 <th>Options (Separate with | symbol)</th>
-                                <th>Actions</th>
                                 <th>Order</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
-                    <div class="btn-section sos-btn-section">
+                    <div class="btn-section sos-btn-section hidden">
                         <button class="btn btn-primary pull-right" id="addFieldBtn" onclick="FrmFieldView.addField({}); return false;">Add Field</button>
                     </div>
                 </div>

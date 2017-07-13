@@ -58,8 +58,9 @@
     this.type = type;
   }
 
-  var FrmField = function(fid, forder, fdisplayname, ftype, frequired, foptions, fchecked) {
+  var FrmField = function(fid, fincrementid, forder, fdisplayname, ftype, frequired, foptions, fchecked) {
     this.fid = fid;
+    this.fincrementid = fincrementid;
     this.forder = forder;
     this.fdisplayname = fdisplayname;
     this.ftype = ftype;
@@ -323,12 +324,12 @@
 
     var initFieldData = function initFieldData(data) {
       for (var i=0; i < data.length; i++) {		  
-        _FieldData.push(new FrmField(data[i].fid, data[i].forder, data[i].flabel, data[i].ftype, data[i].frequired, data[i].foptions, data[i].fchecked));
+        _FieldData.push(new FrmField(data[i].fid, data[i].fincrementid, data[i].forder, data[i].flabel, data[i].ftype, data[i].frequired, data[i].foptions, data[i].fchecked));
       }
     };  
 
     var addField = function addField(type) {
-      var newField = new FrmField("", "", "", "text", "0", "", "");
+      var newField = new FrmField("", "", "", "", "text", "0", "", "");
       _FieldData.push(newField);
       return newField;
     };
@@ -353,13 +354,16 @@
 
   var FrmFieldView = (function() {
 
-    var FieldTemplate = '<tr class="row-editable sos-field-row-editable" data-fid="%fid%">\
+    var FieldTemplate = '<tr class="row-editable sos-field-row-editable" data-fincrementid="%fincrementid%" data-fid="%fid%">\
         <td class="hidden">\
            <input type="text" class="form-control sos-input sos-form-field-input" value="%fid%" name="text%fid%" id="text_%fid%" >\
         </td>\
         <td>\
 			<span class="sos-forder-label">%forder%</span>\
-			<input class="sos-forder-%fid%" type="hidden" value="%forder%"></td>\
+			<input class="sos-forder-input sos-forder-%fid%" type="hidden" value="%forder%"></td>\
+        </td>\
+        <td>\
+           <input type="checkbox" class="sos-field-required form-control sos-frequired-%fid%" onclick="FrmFieldView.updateFrequired();" %fchecked%>\
         </td>\
         <td>\
            <input type="text" class="form-control sos-input sos-form-field-input sos-fdisplayname-%fid%" value="%fdisplayname%" title="%fdisplayname%" name="text%fdisplayname%" placeholder="Enter field display name">\
@@ -373,13 +377,7 @@
 			</select>\
         </td>\
         <td>\
-           <input type="checkbox" class="sos-field-required form-control sos-frequired-%fid%" %fchecked%>\
-        </td>\
-        <td>\
           <textarea placeholder="Enter options with | as seperator" %fdisabled% class="form-control admin-textarea-field sos-foptions-%fid%" >%foptions%</textarea>\
-        </td>\
-        <td>\
-          <i title="Delete" class="sos-delete-icon fa fa-trash-o fa-lg" onclick="FrmFieldView.deleteField();"></i>\
         </td>\
         <td>\
 		  <input type="hidden" value="%order%" id="order_%fid%">\
@@ -391,6 +389,7 @@
     var generateHTML = function generateHTML(Field) {
       return FieldTemplate.replace(/%fid%/g, Field.fid)
 		          .replace(/%forder%/g, Field.forder)
+		          .replace(/%fincrementid%/g, Field.fincrementid)
 		          .replace(/%fdisplayname%/g, Field.fdisplayname)
                   .replace(/%fdisabled%/g, (Field.ftype === "text" ? "disabled" : ""))
                   .replace(/%foptions%/g, Field.foptions)
@@ -422,33 +421,37 @@
 	  return false;
     };
 
-	var upField = function upField() {
+	var upField = function upField(id) {
       var currRow = $(event.target).closest("tr"),
 		  prevRow = currRow.prev();
       if(prevRow.length > 0) {
-		var preOrder = prevRow.find(".sos-forder").val(),
-			curOrder = currRow.find(".sos-forder").val();
-		currRow.find(".sos-forder").val(preOrder);
+		var preOrder = prevRow.find(".sos-forder-input").val(),
+			curOrder = currRow.find(".sos-forder-input").val();
+		currRow.find(".sos-forder-input").val(preOrder);
 		currRow.find(".sos-forder-label").html(preOrder);
-		prevRow.find(".sos-forder").val(curOrder);
+		prevRow.find(".sos-forder-input").val(curOrder);
 		prevRow.find(".sos-forder-label").html(curOrder);
 		currRow.insertBefore(prevRow);
 	  }
     };
 
-	var downField = function upField() {
+	var downField = function upField(id) {
       var currRow = $(event.target).closest("tr"),
 		  nextRow = currRow.next();
 	  if(nextRow.length > 0) {
-		var nextOrder = nextRow.find(".sos-forder").val(),
-		curOrder = currRow.find(".sos-forder").val();
-		currRow.find(".sos-forder").val(nextOrder);
+		var nextOrder = nextRow.find(".sos-forder-input").val(),
+		curOrder = currRow.find(".sos-forder-input").val();
+		currRow.find(".sos-forder-input").val(nextOrder);
 		currRow.find(".sos-forder-label").html(nextOrder);
-		nextRow.find(".sos-forder").val(curOrder);
+		nextRow.find(".sos-forder-input").val(curOrder);
 		nextRow.find(".sos-forder-label").html(curOrder);
 		currRow.insertAfter(nextRow);
 	  }
     };
+
+
+
+
 	var updateFoptions = function updateFoptions() {
       var selField = $(event.target),
 		  currRow = selField.closest("tr"),
@@ -459,6 +462,15 @@
 		$(optionsField).removeAttr("disabled");
 	  }
     };
+	
+	var updateFrequired = function updateFrequired() {
+		var ele = event.target;
+		if ($(ele).is(':checked')) {
+			$(ele).attr('checked', true);
+		} else {
+			$(ele).attr('checked', false);
+		}
+    };
 
     return {
       count: 1,
@@ -467,6 +479,7 @@
       upField: upField,
       downField: downField,
       updateFoptions: updateFoptions,
+      updateFrequired: updateFrequired,
       addField: addField
     };
   })();
