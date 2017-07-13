@@ -70,6 +70,7 @@ public class SASController {
 	  req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
 	  req.setAttribute("questions", getQuestions(requestedLang));
 	  req.setAttribute("langList", getLangs());
+	  req.setAttribute("userformsfields", getFormFields(requestedLang));
 	  if(nullCheck(requestedLang).length() > 0) {
 		  req.setAttribute("language", requestedLang);
 	  }
@@ -802,6 +803,42 @@ public class SASController {
     		close();
     	}
     	return value;
+    }
+    
+    public Hashtable<String, String> getFormFields(String lang) {
+    	Hashtable<String, String> hs = new Hashtable<String, String>();
+    	System.out.println("getFormFields method called with lang: "+lang);    	
+    	try {
+    		con = dataSource.getConnection();
+    		stmt = con.prepareStatement("select * from registrationfields where lang = ?");
+    		if(nullCheck(lang).length() == 0 || lang.equals("en")) {
+    			lang = "english";
+    		}
+    		stmt.setString(1, lang);
+    		ResultSet rs = stmt.executeQuery();
+    		String key = null;
+    		String value = null;
+    		while(rs.next()) 
+    		{    			
+    			//order:type:displayname:required:<<options>>
+    			value = rs.getString("forder");
+    			value = value + ":" + rs.getString("fieldtype");
+    			value = value + ":" + rs.getString("fielddispname");
+    			value = value + ":" + rs.getString("showvflag");
+    			key = rs.getString("options");
+    			if(key != null && key.length() > 0) {
+    				value = value + ":" + rs.getString("");
+    			}
+    			key = rs.getString("fieldname");
+    			hs.put(key, value);
+    		}
+    	} catch(Exception exp) {
+    		exp.printStackTrace();
+    	} finally {
+    		close();
+    	}
+    	
+    	return hs;
     }
 }
 
