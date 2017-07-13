@@ -1,8 +1,9 @@
+drop table registrationfields;
+Create table registrationfields(id integer PRIMARY KEY AUTO_INCREMENT, fieldname varchar(100), fielddispname varchar(100), fieldtype varchar(100),showvflag varchar(10),options varchar(300), forder integer, lang varchar(10));
 
 
 drop table registrationinfo;
-Create table registrationinfo(id integer PRIMARY KEY AUTO_INCREMENT, firstname varchar(20),lastname varchar(40),jobtitle varchar(10),email varchar(30) NOT NULL,company varchar(40), businesstype varchar(50), country varchar(50), state varchar(50), lang varchar(10));
-
+Create table registrationinfo(id integer PRIMARY KEY AUTO_INCREMENT, f1 varchar(256), f2 varchar(256), f3 varchar(256), f4 varchar(256), f5 varchar(256), f6 varchar(256), f7 varchar(256), f8 varchar(256), f9 varchar(256), f10 varchar(256), f11 varchar(256), f12 varchar(256), f13 varchar(256), f14 varchar(256), f15 varchar(256), f16 varchar(256), lang varchar(10));
 
 
 drop table questions;
