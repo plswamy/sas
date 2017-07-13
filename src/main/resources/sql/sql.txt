@@ -1,5 +1,22 @@
 drop table registrationfields;
-Create table registrationfields(id integer PRIMARY KEY AUTO_INCREMENT, fieldname varchar(100), fielddispname varchar(100), fieldtype varchar(100),showvflag varchar(10),options varchar(300), forder integer, lang varchar(10));
+Create table registrationfields(id integer PRIMARY KEY AUTO_INCREMENT, fieldname varchar(100), fielddispname varchar(100), fieldtype varchar(100),showflag varchar(10),options varchar(300), forder integer, lang varchar(10));
+
+insert into registrationfields values(1, 'f1', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(2, 'f2', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(3, 'f3', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(4, 'f4', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(5, 'f5', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(6, 'f6', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(7, 'f7', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(8, 'f8', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(9, 'f9', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(10, 'f10', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(11, 'f11', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(12, 'f12', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(13, 'f13', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(14, 'f14', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(15, 'f15', 'firstname', 'text', 'true', null, 1, 'english');
+insert into registrationfields values(16, 'f16', 'firstname', 'text', 'true', null, 1, 'english');
 
 
 drop table registrationinfo;
