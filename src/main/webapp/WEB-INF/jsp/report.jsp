@@ -153,7 +153,7 @@
                           }
 
                           $("#sos-graph").prop("src", imgSrc);
-                          $("#scoreinfo").val(scoreVal + '|' + timgSrc + '|' + userSession.firstname + '|' + userSession.lastname);
+                          $("#scoreinfo").val(scoreVal + '|' + timgSrc + '|' + userSession.f1 + '|' + userSession.f2);
 
                         });
                       </script>

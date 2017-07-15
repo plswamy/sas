@@ -166,7 +166,12 @@
             userInfo.fullData = currentValues;
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
             //document.location.href = "report";
-            $("#surveyForm").submit();
+            $(document).ready(function () {
+              $.each(userSession, function(fid) {
+                $('#surveyForm').append('<input type="hidden" name="' + fid + '" value="' + userSession[fid] + '" />');
+              });
+              $("#surveyForm").submit();
+            });
           } else {
             $(".question_text").ready(function() {
                 $.each(userSession, function(fid) {

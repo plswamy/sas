@@ -124,7 +124,7 @@ public class SASController {
   @RequestMapping(value="/report", method = RequestMethod.POST)
   public String postReport(ModelMap model) {
 	  	System.out.println("report post called....");
-	  	System.out.println("email ....:"+req.getParameter("email"));	  	
+	  	System.out.println("email ....:"+req.getParameter("f4"));	  	
 		saveUser();
 		saveUserResponse();
 		return "report";
@@ -360,6 +360,7 @@ public class SASController {
     	try {
     		con = dataSource.getConnection();
     		stmt = con.prepareStatement("insert into registrationinfo (f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, lang) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			//System.out.println("email ============================================== : " + req.getParameter("f4"));
     		stmt.setString(1, nullCheck(req.getParameter("f1")));
     		stmt.setString(2, nullCheck(req.getParameter("f2")));
     		stmt.setString(3, nullCheck(req.getParameter("f3")));
@@ -368,14 +369,14 @@ public class SASController {
     		stmt.setString(6, nullCheck(req.getParameter("f6")));
     		stmt.setString(7, nullCheck(req.getParameter("f7")));
     		stmt.setString(8, nullCheck(req.getParameter("f8")));
-    		stmt.setString(1, nullCheck(req.getParameter("f9")));
-    		stmt.setString(2, nullCheck(req.getParameter("f10")));
-    		stmt.setString(3, nullCheck(req.getParameter("f11")));
-    		stmt.setString(4, nullCheck(req.getParameter("f12")));
-    		stmt.setString(5, nullCheck(req.getParameter("f13")));
-    		stmt.setString(6, nullCheck(req.getParameter("f14")));
-    		stmt.setString(7, nullCheck(req.getParameter("f15")));
-    		stmt.setString(8, nullCheck(req.getParameter("f16")));
+    		stmt.setString(9, nullCheck(req.getParameter("f9")));
+    		stmt.setString(10, nullCheck(req.getParameter("f10")));
+    		stmt.setString(11, nullCheck(req.getParameter("f11")));
+    		stmt.setString(12, nullCheck(req.getParameter("f12")));
+    		stmt.setString(13, nullCheck(req.getParameter("f13")));
+    		stmt.setString(14, nullCheck(req.getParameter("f14")));
+    		stmt.setString(15, nullCheck(req.getParameter("f15")));
+    		stmt.setString(16, nullCheck(req.getParameter("f16")));
     		stmt.setString(17, "english");
     		stmt.executeUpdate();
     	} catch(Exception exp) {
@@ -395,7 +396,7 @@ public class SASController {
     }
     private void saveUserResponse() {
     	System.out.println("save user response called");
-    	String userid = getUserId(nullCheck(req.getParameter("email")));
+    	String userid = getUserId(nullCheck(req.getParameter("f4")));
     	/*List<Question> list = getQuestionsAsList();*/
     	String userRes = nullCheck(req.getParameter("userResponse"));
     	if(userRes.length() > 0) {
@@ -426,7 +427,7 @@ public class SASController {
     	String id = null;
     	try {
     		con = dataSource.getConnection();
-    		stmt = con.prepareStatement("select id from registrationinfo where email='"+key+"'");
+    		stmt = con.prepareStatement("select id from registrationinfo where f4='"+key+"'");
     		ResultSet rs = stmt.executeQuery();
     		if(rs.next()) {
     			id = rs.getString(1);
