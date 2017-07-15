@@ -968,11 +968,15 @@ public class SASController {
 	    		data = new Hashtable();
 	    		String sql = hs.get(key);
 	    		stmt = con.prepareStatement(sql);
-	    		rs = stmt.executeQuery();
-	    		while(rs.next()) {
-	    			data.put(rs.getString(1), rs.getString(2));
-	    		}
-	    		req.setAttribute(key, data);
+				try {
+		    		rs = stmt.executeQuery();
+		    		while(rs.next()) {
+						data.put(rs.getString(1), rs.getString(2));
+	    			}
+	    			req.setAttribute(key, data);
+				} catch(Exception exp) {
+    				exp.printStackTrace();
+    			}
 	    	}
     	} catch(Exception exp) {
     		exp.printStackTrace();

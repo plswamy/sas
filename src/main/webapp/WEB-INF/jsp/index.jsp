@@ -54,7 +54,7 @@
         <link href="support/lib/bootstrap-dialog.min.css" rel="stylesheet">
         <link href="support/lib/bootstrap-select.min.css" rel="stylesheet">
     </head>
-    <body>
+    <body class="sos-dark-theme1">
         <form name="gsatForm" method="post" action="survey" onsubmit="javascript:return WebForm_OnSubmit();" id="gsatForm">
             <div>
                 <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="">
@@ -86,23 +86,20 @@
                     if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) {
                         return false;
                     }
-                    console.log("======================== success : " + $("#ctl00_ContentPlaceHolder1_tbxEmail").val());
-                    var userInfo = {
-                        "email": $("#ctl00_ContentPlaceHolder1_tbxEmail").val(),
-                        "firstname": $("#ctl00_ContentPlaceHolder1_tbxFirstName").val(),
-                        "lastname": $("#ctl00_ContentPlaceHolder1_tbxLastName").val(),
-                        "jobtitle": $("#ctl00_ContentPlaceHolder1_tbxJobTitle").val(),
-                        "company": $("#ctl00_ContentPlaceHolder1_tbxCompany").val(),
-                        "businessindustry": $("#ctl00_ContentPlaceHolder1_ddlBusinessIndustry").val(),
-                        "country": $("#ctl00_ContentPlaceHolder1_ddlCountry").val(),
-                        "state": $("#ctl00_ContentPlaceHolder1_ddlState").val()
-                    };                        
+                    var userInfo = {};
+
+                    $.each(userFormFields, function(fid) {
+                        userInfo[this.fkey] = $(".user-form-field-" + this.fkey).val();
+                    });
+
                     localStorage.setItem("userInfo", JSON.stringify(userInfo));
                     //JSON.parse(localStorage.getItem('userInfo'))
                     return true;
                 }
                 //]]>
-            </script>
+
+                var userFormFields = {};
+            
             <%
                 Hashtable<String, String> hs = (Hashtable<String, String>) request.getAttribute("labels");  
                 System.out.println("labels length.....:"+hs.size());
@@ -111,13 +108,68 @@
                 String[] welcomePoints = {"A broad indication of your organisations current maturity with regard to travel risk mitigation systems, processes and tools", "The level of remedial action required to minimise the risks facing your organisation and employees", "Recommended steps to improve your systems", "Outline of the Duty of Care Plan-Do-Check approach"};
                 String welcomeFooter = hs.get("welcomeFooter");
                 String regFormHeaderMsg = hs.get("regFormHeaderMsg");
-                /*String welcomeHeader = "Welcome to the travel risk mitigation self-assessment tool.";
-                String welcomeDesc = "This best practice travel risk mitigation tool is based on our Duty of Care Plan-Do-Check approach. At the end of this assessment you will receive a report outlining:";
-                String[] welcomePoints = {"A broad indication of your organisations current maturity with regard to travel risk mitigation systems, processes and tools", "The level of remedial action required to minimise the risks facing your organisation and employees", "Recommended steps to improve your systems", "Outline of the Duty of Care Plan-Do-Check approach"};
-                String welcomeFooter = "It should take you approximately 5 minutes to complete the review.";
-                String regFormHeaderMsg = "Fill out the form below to begin your risk mitigation evaluation";*/
-                String regFormHeaderErrorMsg = hs.get("regFormHeaderErrorMsg");;
+                String regFormHeaderErrorMsg = hs.get("regFormHeaderErrorMsg");
+                String countryLabel = "Country";
+                String businessIndustryLabel = "Business Industry";
+                String stateLabel = "State";
+
+
+
+
+                Hashtable<String, String> hmf1 = (Hashtable<String, String>) request.getAttribute("userformfields");
+
+                System.out.println(hmf1);
+                Set<String> hmf1Keys = hmf1.keySet();
+                for(String key1: hmf1Keys){
+
+
+                    String fieldInfo = hmf1.get(key1);
+                    StringTokenizer stok = new StringTokenizer(fieldInfo, ":");
+                    String fid, fdbid, forder, ftype, fdisplayname, frequired, foptions = "", fchecked, req;
+                    fid = key1;
+                    fdbid = stok.nextToken();
+                    forder = stok.nextToken();
+                    ftype = stok.nextToken();
+                    fdisplayname = stok.nextToken();
+                    if(fieldInfo.equals("f7")) {
+                        countryLabel = fdisplayname;
+                    } else if(fieldInfo.equals("f8")) {
+                        stateLabel = fdisplayname;
+                    } if(fieldInfo.equals("f6")) {
+                        businessIndustryLabel = fdisplayname;
+                    }
+                    frequired = stok.nextToken();                      
+                    fchecked = frequired.equals("true") ? "checked" : "";
+                    if(!ftype.equals("text")) {
+                        foptions = stok.nextToken();
+                        Hashtable<String, String> opts = (Hashtable<String, String>) request.getAttribute(fid);
+
+                    }
+                    req = frequired.equals("true") ? "required" : "";
+
+                    %>
+                        userFormFields['<%=forder%>'] = {
+                            'fkey': '<%= fid %>',
+                            'fdbid': '<%= fdbid %>',
+                            'ftype': '<%= ftype %>',
+                            'fdisplayname': '<%= fdisplayname %>',
+                            'frequired': '<%= frequired %>',
+                            'foptions': '<%= foptions %>',
+                            'req': '<%= req %>',
+                            'fchecked': '<%= fchecked %>',
+                        };
+
+                            userFormFields['<%=forder%>']['frequired'] = userFormFields['<%=forder%>']['frequired'] === 'true';
+
+                    <%
+
+
+
+
+                }
                 %>
+                
+                </script>
             <div class="container">
                 <div id="outer" class="row">
                     <div id="header" class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -125,19 +177,7 @@
                     </div>
                     <div id="content_wrap" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <!--<div id="sections_home col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>-->
                             <img class="cover-width" src="support/img/sections.jpg" alt="Sections">
-                            <!--<picture> -> USE THIS BLOCK IF CLIENT PROVIDES MULTIPLE IMAGES TO BE SHOWN BASED ON VIEWPORT...
-                                <source
-                                media="(min-width: 650px)"
-                                srcset="./support/img/sections_large.jpg">
-                                <source
-                                media="(min-width: 465px)"
-                                srcset="./support/img/sections_medium.jpg">
-                                <img
-                                src="./support/img/sections_small.jpg"
-                                alt="section image">
-                                </picture>-->
                             <div class="content col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="sos-left-bar left col-xs-12 col-sm-12 col-md-6 col-lg-5">
                                     <h2 class="index-header-2"><%= welcomeHeader %></h2>
@@ -155,69 +195,20 @@
                                     <div id="reg_form" class="stripe">
                                         <h2 class="index-header-2 right-bar"><%= regFormHeaderMsg %></h2>
                                         <p id="validateMsg" style="display: none; margin: 1.4em 0; color: #ba2222;"><%= regFormHeaderErrorMsg %></p>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-										<%
-											String firstName = hs.get("firstName");
-										%>
-                                            <label for="ctl00_ContentPlaceHolder1_tbxFirstName" id="ctl00_ContentPlaceHolder1_lblFirstName" class="required"><%=firstName%></label>
-                                            <input class="form-control" name="ctl00$ContentPlaceHolder1$tbxFirstName" type="text" maxlength="40" id="ctl00_ContentPlaceHolder1_tbxFirstName" value="Rahul">
-                                            <div id="ctl00_ContentPlaceHolder1_reqFirstName" style="color:Red;display:none;"></div>
+                                        <div class="sos-form-fields-wrapper">
                                         </div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-										<%
-											String lastName = hs.get("lastName");
-										%>
-                                            <label for="ctl00_ContentPlaceHolder1_tbxLastName" id="ctl00_ContentPlaceHolder1_lblLastName" class="required"><%=lastName%></label>
-                                            <input name="ctl00$ContentPlaceHolder1$tbxLastName" type="text" maxlength="40"
-                                                id="ctl00_ContentPlaceHolder1_tbxLastName" value="Dravid" class="form-control">
-                                            <div id="ctl00_ContentPlaceHolder1_Requiredfieldvalidator1"
-                                                style="color:Red;display:none;"></div>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                          <%
-											String jobTitle = hs.get("jobTitle");
-										%>
-                                            <label for="ctl00_ContentPlaceHolder1_tbxJobTitle"
-                                                id="ctl00_ContentPlaceHolder1_lblJobTitle" class="required"><%=jobTitle%></label>
-                                            <input class="form-control" name="ctl00$ContentPlaceHolder1$tbxJobTitle" type="text" maxlength="100"
-                                                id="ctl00_ContentPlaceHolder1_tbxJobTitle" value="Coach">
-                                            <div id="ctl00_ContentPlaceHolder1_Requiredfieldvalidator2"
-                                                style="color:Red;display:none;"></div>
-                                        </div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-										<% String email=hs.get("email");
-										%>
-                                            <label for="ctl00_ContentPlaceHolder1_tbxEmail"
-                                                id="ctl00_ContentPlaceHolder1_lblEmail" class="required"><%= email%></label>
-                                            <input class="form-control" name="ctl00$ContentPlaceHolder1$tbxEmail" type="text" maxlength="100"
-                                                id="ctl00_ContentPlaceHolder1_tbxEmail" value="rahul.dravid@india.com">
-                                            <div id="ctl00_ContentPlaceHolder1_Requiredfieldvalidator3"
-                                                style="color:Red;display:none;"></div>
-                                            <div id="ctl00_ContentPlaceHolder1_RegularExpressionValidator1"
-                                                style="color:Red;display:none;"></div>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-										<% String company=hs.get("company");
-										%>
-                                            <label for="ctl00_ContentPlaceHolder1_tbxCompany"
-                                                id="ctl00_ContentPlaceHolder1_lblCompany" class="required"><%=company%></label>
-                                            <input class="form-control" name="ctl00$ContentPlaceHolder1$tbxCompany" type="text" maxlength="100"
-                                                id="ctl00_ContentPlaceHolder1_tbxCompany" value="BCCI">
-                                            <div id="ctl00_ContentPlaceHolder1_Requiredfieldvalidator4"
-                                                style="color:Red;display:none;"></div>
-                                        </div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                        <% String businessIndustry=hs.get("businessIndustry");
-										%>
+                                        <div class="sos-form-fields-hidden-wrapper hidden">
+
+                                        
+                                        
+                                        <div class="form-group form-field-f6 col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                             <label for="ctl00_ContentPlaceHolder1_ddlBusinessIndustry" class="required"
-                                                id="ctl00_ContentPlaceHolder1_lblBusinessIndustry"><%=businessIndustry%></label>
+                                                id="ctl00_ContentPlaceHolder1_lblBusinessIndustry"><%=businessIndustryLabel%></label>
 										<%
 											String pleaseSelect = hs.get("pleaseselect");
 										%>
-                                            <select class="form-control sos-index-select ddlBusinessIndustry" data-ddl="ddlBusinessIndustry" name="ctl00$ContentPlaceHolder1$ddlBusinessIndustry"
-                                                id="ctl00_ContentPlaceHolder1_ddlBusinessIndustry"
+                                            <select class="form-control sos-index-select ddlBusinessIndustry user-form-field-f6" data-ddl="ddlBusinessIndustry" name="ctl00$ContentPlaceHolder1$ddlBusinessIndustry"
+                                                id="ctl00_ContentPlaceHolder1_ddlf6"
                                                 value="Aviation: BGA">
                                                 <option value=""><%=pleaseSelect%>...chvsr</option>
                                                 <option value="Agent">Agent</option>
@@ -283,19 +274,16 @@
                                                     Hospitality
                                                 </option>
                                             </select>
-                                            <div id="ctl00_ContentPlaceHolder1_Requiredfieldvalidator5"
+                                            <div id="ctl00_ContentPlaceHolder1_req_f6"
                                                 style="color:Red;display:none;"></div>
                                         </div>
-                                        <div class="clearfix"></div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-										<% 
-											String country=hs.get("country");
-										%>
+                                        
+                                        <div class="form-group form-field-f7 col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                             <label for="ctl00_ContentPlaceHolder1_ddlCountry"
-                                                id="ctl00_ContentPlaceHolder1_lblCountry" class="required"><%=country%></label>
-                                            <select class="form-control sos-index-select ddlCountry" data-ddl="ddlCountry" name="ctl00$ContentPlaceHolder1$ddlCountry" value="India"
-                                                id="ctl00_ContentPlaceHolder1_ddlCountry"
-                                                onchange="load_states(&#39;ctl00_ContentPlaceHolder1_ddlState&#39;,this.selectedIndex);">
+                                                id="ctl00_ContentPlaceHolder1_lblCountry" class="required"><%=countryLabel%></label>
+                                            <select class="form-control sos-index-select ddlCountry user-form-field-f7" data-ddl="ddlCountry" name="ctl00$ContentPlaceHolder1$ddlCountry" value="India"
+                                                id="ctl00_ContentPlaceHolder1_ddlf7"
+                                                onchange="load_states(&#39;ctl00_ContentPlaceHolder1_ddlf8&#39;,this.selectedIndex);">
                                                 <option value=""><%=pleaseSelect %></option>
                                                 <option value="Afghanistan">Afghanistan</option>
                                                 <option value="Aland Islands">Aland Islands</option>
@@ -565,28 +553,105 @@
                                                 <option value="Zambia">Zambia</option>
                                                 <option value="Zimbabwe">Zimbabwe</option>
                                             </select>
-                                            <div id="ctl00_ContentPlaceHolder1_Requiredfieldvalidator6"
+                                            <div id="ctl00_ContentPlaceHolder1_req_f7"
                                                 style="color:Red;display:none;"></div>
                                         </div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-6">
-										<% String state=hs.get("state");
-										%>
+                                        <div class="form-group form-field-f8 col-xs-12 col-sm-6 col-md-6 col-lg-6">
                                             <label for="ctl00_ContentPlaceHolder1_ddlState"
-                                                id="ctl00_ContentPlaceHolder1_lblState" class="required"><%=state%></label>
-                                            <select class="form-control sos-index-select ddlState" data-ddl="ddlState" name="ctl00$ContentPlaceHolder1$ddlState"
-                                                id="ctl00_ContentPlaceHolder1_ddlState">
+                                                id="ctl00_ContentPlaceHolder1_lblState" class="required"><%=stateLabel%></label>
+                                            <select class="form-control sos-index-select ddlState user-form-field-f8" data-ddl="ddlState" name="ctl00$ContentPlaceHolder1$ddlState"
+                                                id="ctl00_ContentPlaceHolder1_ddlf8">
                                                 <option value="">Choose country first...</option>
                                             </select>
-                                            <div id="ctl00_ContentPlaceHolder1_Requiredfieldvalidator7"
+                                            <div id="ctl00_ContentPlaceHolder1_req_f8"
                                                 style="color:Red;display:none;"></div>
                                         </div>
-                                        <div>
-                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$hidCountryCode"
-                                                id="ctl00_ContentPlaceHolder1_hidCountryCode">
-                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$hidStateCode"
-                                                id="ctl00_ContentPlaceHolder1_hidStateCode">
-                                        </div>
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+
+
+                                         
+                                        
+
+                                        <%
+int idx = 0;
+
+                                        for(String key1: hmf1Keys){
+                                            if(key1.equals("f6") || key1.equals("f7") || key1.equals("f8")) {
+                                                    continue;
+                                                }
+                                            idx++;
+                                            /*String fieldId = key1;
+                                            String fieldInfo = hmf1.get(key1);
+                                            System.out.println("Value of "+key1+" is: "+hmf1.get(key1));*/
+
+                                            /*    f1: 1:1:type:displayname:show/hide:options   */
+
+
+                                            String fieldInfo = hmf1.get(key1);
+                                            StringTokenizer stok = new StringTokenizer(fieldInfo, ":");
+                                            String fid, fdbid, forder, ftype, fdisplayname, frequired, foptions = "", fchecked, req;
+                                            fid = key1;
+                                            fdbid = stok.nextToken();
+                                            forder = stok.nextToken();
+                                            ftype = stok.nextToken();
+                                            fdisplayname = stok.nextToken();
+                                            frequired = stok.nextToken();                      
+                                            fchecked = frequired.equals("true") ? "checked" : "";
+                                            Hashtable<String, String> opts = null;
+                                            if(!ftype.equals("text")) {
+                                                foptions = stok.nextToken();
+                                                opts = (Hashtable<String, String>) request.getAttribute(fid);
+                                            }
+                                            req = frequired.equals("true") ? "required" : "";
+
+                                            
+                                        %>
+                                            
+                                                <div class="form-group form-field-<%=fid%> col-xs-12 col-sm-6 col-md-6 col-lg-6" data-forder="<%=forder%>" >
+                                                    <label for="ctl00_ContentPlaceHolder1_<%=fid%>" class="required" id="ctl00_ContentPlaceHolder1_<%=fid%>"><%= fdisplayname %></label>
+                                                    <% if(ftype.equals("text")) { %>
+                                                        <input class="form-control user-form-field-<%=fid%>" name="ctl00$ContentPlaceHolder1$tbx<%=fid%>" type="text" maxlength="40" id="ctl00_ContentPlaceHolder1_tbx<%=fid%>" value="">
+                                                    <% } else { %>
+                                                        <select class="form-control sos-index-select ddl<%=fid%> user-form-field-<%=fid%>" data-ddl="ddl<%=fid%>" name="ctl00$ContentPlaceHolder1$ddl<%=fid%>"
+                                                            id="ctl00_ContentPlaceHolder1_ddl<%=fid%>">
+
+                                                            <%
+                                                                if(opts != null && opts.size() > 0) {
+                                                                Enumeration<String> okeys = opts.keys();
+                                                                while (okeys.hasMoreElements()) {
+                                                                    String tokenVal = okeys.nextElement();
+                                                                    String tokenVal1 = opts.get(tokenVal);                                                                    
+                                                            %>
+                                                                    <option value="<%=tokenVal%>"><%=tokenVal1%></option>
+                                                            <%
+                                                                }
+                                                                }
+                                                            %>
+                                                        </select>
+                                                    
+                                                        
+                                                    <%
+                                                    }
+                                                    %>
+                                                    <div id="ctl00_ContentPlaceHolder1_req_<%=fid%>" style="color:Red;display:none;"></div>
+                                                    <% if (fid.equals("f4")) { %>
+                                                    <div id="ctl00_ContentPlaceHolder1_RegularExpressionValidator1" style="color:Red;display:none;"></div>
+                                                    <%
+                                                    }
+                                                    if(idx%2 == 0) { %>
+                                                        <div class="clearfix"></div>
+                                                    <%
+                                                    }
+                                                    %></div><%
+                                                }
+                                                %>
+                                                
+
+<div class="clearfix"></div>
+</div>
+                                                        
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                  <% String requiredFields=hs.get("requiredFields");
 										%>
                                             <span class="required-text pull-left">* <%=requiredFields%></span>
@@ -597,7 +662,15 @@
                                             <span class="arrow"></span></a>
                                             </span>
                                         </div>
-                                        <div class="clearfix"></div>
+
+                                        <div>
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$hidCountryCode"
+                                                id="ctl00_ContentPlaceHolder1_hidCountryCode">
+                                            <input type="hidden" name="ctl00$ContentPlaceHolder1$hidStateCode"
+                                                id="ctl00_ContentPlaceHolder1_hidStateCode">
+                                        </div>
+
+
                                         <div class="spacer"></div>
                                     </div>
                                 </div>
@@ -615,144 +688,182 @@
         
             $('#ctl00_ContentPlaceHolder1_btnRegister').html(
             "Start <span class='arrow'></span>");
-            load_countries('ctl00_ContentPlaceHolder1_ddlCountry');
+            load_countries('ctl00_ContentPlaceHolder1_ddlf7');
             
-            $('#ctl00_ContentPlaceHolder1_ddlCountry').change(function () {
+            $('#ctl00_ContentPlaceHolder1_ddlf7').change(function () {
                 $('#ctl00_ContentPlaceHolder1_hidCountryCode').val($(this).val());
                 $('#ctl00_ContentPlaceHolder1_hidStateCode').val(
-                $('#ctl00_ContentPlaceHolder1_ddlState').val());            
+                $('#ctl00_ContentPlaceHolder1_ddlf8').val());            
                 $(".ddlCountry").find(".sos-btn-danger").removeClass("sos-btn-danger");
             });
             
-            $('#ctl00_ContentPlaceHolder1_ddlState').change(function () {
+            $('#ctl00_ContentPlaceHolder1_ddlf8').change(function () {
                 $('#ctl00_ContentPlaceHolder1_hidStateCode').val(
-                $('#ctl00_ContentPlaceHolder1_ddlState').val());
+                $('#ctl00_ContentPlaceHolder1_ddlf8').val());
                 $(".ddlState").find(".sos-btn-danger").removeClass("sos-btn-danger");
             });
 
-            $('#ctl00_ContentPlaceHolder1_ddlBusinessIndustry').change(function () {
+            $('#ctl00_ContentPlaceHolder1_ddlf6').change(function () {
                 $(".ddlBusinessIndustry").find(".sos-btn-danger").removeClass("sos-btn-danger");
             });
 
             $(".sos-index-select").selectpicker();
+            
+            // re-order the form fields
+
+            $.each(userFormFields, function(fid) {
+                $(".form-field-" + this.fkey).appendTo($(".sos-form-fields-wrapper"))
+            });
         });
     </script>
     <script type="text/javascript">
         //<![CDATA[
-        var Page_Validators = new Array(document.getElementById(
-        "ctl00_ContentPlaceHolder1_reqFirstName"), document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator1"), document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator2"), document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator3"), document.getElementById(
-        "ctl00_ContentPlaceHolder1_RegularExpressionValidator1"), document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator4"), document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator5"), document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator6"), document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator7"));
+        var Page_Validators = new Array();
+        for(i=1;i<17;i++) {
+            Page_Validators.push(document.getElementById("ctl00_ContentPlaceHolder1_req_f" + i));
+        }
+        Page_Validators.push(document.getElementById("ctl00_ContentPlaceHolder1_RegularExpressionValidator1")); // email regualr matching.       
         //]]>
     </script>
+
     <script type="text/javascript">
         //<![CDATA[
-        var ctl00_ContentPlaceHolder1_reqFirstName = document.all ?
-        document.all["ctl00_ContentPlaceHolder1_reqFirstName"] :
-        document.getElementById(
-        "ctl00_ContentPlaceHolder1_reqFirstName");
-        ctl00_ContentPlaceHolder1_reqFirstName.controltovalidate =
-        "ctl00_ContentPlaceHolder1_tbxFirstName";
-        ctl00_ContentPlaceHolder1_reqFirstName.errormessage = "First Name";
-        ctl00_ContentPlaceHolder1_reqFirstName.display = "None";
-        ctl00_ContentPlaceHolder1_reqFirstName.evaluationfunction =
-        "RequiredFieldValidatorEvaluateIsValid";
-        ctl00_ContentPlaceHolder1_reqFirstName.initialvalue = "";
-        var ctl00_ContentPlaceHolder1_Requiredfieldvalidator1 = document.all ?
-        document.all["ctl00_ContentPlaceHolder1_Requiredfieldvalidator1"] :
-        document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator1");
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator1.controltovalidate =
-        "ctl00_ContentPlaceHolder1_tbxLastName";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator1.errormessage = "Last Name";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator1.display = "None";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator1.evaluationfunction =
-        "RequiredFieldValidatorEvaluateIsValid";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator1.initialvalue = "";
-        var ctl00_ContentPlaceHolder1_Requiredfieldvalidator2 = document.all ?
-        document.all["ctl00_ContentPlaceHolder1_Requiredfieldvalidator2"] :
-        document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator2");
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator2.controltovalidate =
-        "ctl00_ContentPlaceHolder1_tbxJobTitle";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator2.errormessage = "Job Title";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator2.display = "None";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator2.evaluationfunction =
-        "RequiredFieldValidatorEvaluateIsValid";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator2.initialvalue = "";
-        var ctl00_ContentPlaceHolder1_Requiredfieldvalidator3 = document.all ?
-        document.all["ctl00_ContentPlaceHolder1_Requiredfieldvalidator3"] :
-        document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator3");
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator3.controltovalidate =
-        "ctl00_ContentPlaceHolder1_tbxEmail";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator3.errormessage = "Email";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator3.display = "None";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator3.evaluationfunction =
-        "RequiredFieldValidatorEvaluateIsValid";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator3.initialvalue = "";
-        var ctl00_ContentPlaceHolder1_RegularExpressionValidator1 = document.all ?
-        document.all["ctl00_ContentPlaceHolder1_RegularExpressionValidator1"] :
-        document.getElementById(
-        "ctl00_ContentPlaceHolder1_RegularExpressionValidator1");
-        ctl00_ContentPlaceHolder1_RegularExpressionValidator1.controltovalidate =
-        "ctl00_ContentPlaceHolder1_tbxEmail";
-        ctl00_ContentPlaceHolder1_RegularExpressionValidator1.errormessage = "Email (must be valid)";
+
+        // f1: firstname
+        var ctl00_ContentPlaceHolder1_req_f1 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f1"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f1");
+        ctl00_ContentPlaceHolder1_req_f1.controltovalidate = "ctl00_ContentPlaceHolder1_tbxf1";
+        ctl00_ContentPlaceHolder1_req_f1.errormessage = $("#ctl00_ContentPlaceHolder1_f1").html();
+        ctl00_ContentPlaceHolder1_req_f1.display = "None";
+        ctl00_ContentPlaceHolder1_req_f1.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f1.initialvalue = "";
+
+        // f2: lastname
+        var ctl00_ContentPlaceHolder1_req_f2 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f2"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f2");
+        ctl00_ContentPlaceHolder1_req_f2.controltovalidate = "ctl00_ContentPlaceHolder1_tbxf2";
+        ctl00_ContentPlaceHolder1_req_f2.errormessage = $("#ctl00_ContentPlaceHolder1_f2").html();
+        ctl00_ContentPlaceHolder1_req_f2.display = "None";
+        ctl00_ContentPlaceHolder1_req_f2.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f2.initialvalue = "";
+
+        // f3: jobtitle
+        var ctl00_ContentPlaceHolder1_req_f3 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f3"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f3");
+        ctl00_ContentPlaceHolder1_req_f3.controltovalidate = "ctl00_ContentPlaceHolder1_tbxf3";
+        ctl00_ContentPlaceHolder1_req_f3.errormessage = $("#ctl00_ContentPlaceHolder1_f3").html();
+        ctl00_ContentPlaceHolder1_req_f3.display = "None";
+        ctl00_ContentPlaceHolder1_req_f3.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f3.initialvalue = "";
+
+        // f4: email
+        var ctl00_ContentPlaceHolder1_req_f4 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f4"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f4");
+        ctl00_ContentPlaceHolder1_req_f4.controltovalidate = "ctl00_ContentPlaceHolder1_tbxf4";
+        ctl00_ContentPlaceHolder1_req_f4.errormessage = $("#ctl00_ContentPlaceHolder1_f4").html();
+        ctl00_ContentPlaceHolder1_req_f4.display = "None";
+        ctl00_ContentPlaceHolder1_req_f4.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f4.initialvalue = "";
+
+        var ctl00_ContentPlaceHolder1_RegularExpressionValidator1 = document.all ? document.all["ctl00_ContentPlaceHolder1_RegularExpressionValidator1"] : document.getElementById("ctl00_ContentPlaceHolder1_RegularExpressionValidator1");
+        ctl00_ContentPlaceHolder1_RegularExpressionValidator1.controltovalidate ="ctl00_ContentPlaceHolder1_tbxf4";
+        ctl00_ContentPlaceHolder1_RegularExpressionValidator1.errormessage = $("#ctl00_ContentPlaceHolder1_f4").html() + " (must be valid)";
         ctl00_ContentPlaceHolder1_RegularExpressionValidator1.display = "None";
-        ctl00_ContentPlaceHolder1_RegularExpressionValidator1.evaluationfunction =
-        "RegularExpressionValidatorEvaluateIsValid";
-        ctl00_ContentPlaceHolder1_RegularExpressionValidator1.validationexpression =
-        "\\w+([-+.\']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
-        var ctl00_ContentPlaceHolder1_Requiredfieldvalidator4 = document.all ?
-        document.all["ctl00_ContentPlaceHolder1_Requiredfieldvalidator4"] :
-        document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator4");
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator4.controltovalidate =
-        "ctl00_ContentPlaceHolder1_tbxCompany";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator4.errormessage = "Company";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator4.display = "None";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator4.evaluationfunction =
-        "RequiredFieldValidatorEvaluateIsValid";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator4.initialvalue = "";
-        var ctl00_ContentPlaceHolder1_Requiredfieldvalidator5 = document.all ?
-        document.all["ctl00_ContentPlaceHolder1_Requiredfieldvalidator5"] :
-        document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator5");
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator5.controltovalidate =
-        "ctl00_ContentPlaceHolder1_ddlBusinessIndustry";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator5.errormessage = "Business Industry";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator5.display = "None";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator5.evaluationfunction =
-        "RequiredFieldValidatorEvaluateIsValid";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator5.initialvalue = "";
-        var ctl00_ContentPlaceHolder1_Requiredfieldvalidator6 = document.all ?
-        document.all["ctl00_ContentPlaceHolder1_Requiredfieldvalidator6"] :
-        document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator6");
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator6.controltovalidate =
-        "ctl00_ContentPlaceHolder1_ddlCountry";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator6.errormessage = "Country";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator6.display = "None";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator6.evaluationfunction =
-        "RequiredFieldValidatorEvaluateIsValid";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator6.initialvalue = "";
-        var ctl00_ContentPlaceHolder1_Requiredfieldvalidator7 = document.all ?
-        document.all["ctl00_ContentPlaceHolder1_Requiredfieldvalidator7"] :
-        document.getElementById(
-        "ctl00_ContentPlaceHolder1_Requiredfieldvalidator7");
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator7.controltovalidate =
-        "ctl00_ContentPlaceHolder1_ddlState";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator7.errormessage = "State";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator7.display = "None";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator7.evaluationfunction =
-        "RequiredFieldValidatorEvaluateIsValid";
-        ctl00_ContentPlaceHolder1_Requiredfieldvalidator7.initialvalue = "";
+        ctl00_ContentPlaceHolder1_RegularExpressionValidator1.evaluationfunction = "RegularExpressionValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_RegularExpressionValidator1.validationexpression = "\\w+([-+.\']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+
+        // f5: company
+        var ctl00_ContentPlaceHolder1_req_f5 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f5"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f5");
+        ctl00_ContentPlaceHolder1_req_f5.controltovalidate = "ctl00_ContentPlaceHolder1_tbxf5";
+        ctl00_ContentPlaceHolder1_req_f5.errormessage = $("#ctl00_ContentPlaceHolder1_f5").html();
+        ctl00_ContentPlaceHolder1_req_f5.display = "None";
+        ctl00_ContentPlaceHolder1_req_f5.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f5.initialvalue = "";
+
+        // f6: businessindustry
+        var ctl00_ContentPlaceHolder1_req_f6 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f6"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f6");
+        ctl00_ContentPlaceHolder1_req_f6.controltovalidate = "ctl00_ContentPlaceHolder1_ddlf6";
+        ctl00_ContentPlaceHolder1_req_f6.errormessage = $("#ctl00_ContentPlaceHolder1_f6").html();
+        ctl00_ContentPlaceHolder1_req_f6.display = "None";
+        ctl00_ContentPlaceHolder1_req_f6.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f6.initialvalue = "";
+
+        // f7: country
+        var ctl00_ContentPlaceHolder1_req_f7 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f7"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f7");
+        ctl00_ContentPlaceHolder1_req_f7.controltovalidate = "ctl00_ContentPlaceHolder1_ddlf7";
+        ctl00_ContentPlaceHolder1_req_f7.errormessage = $("#ctl00_ContentPlaceHolder1_f7").html();
+        ctl00_ContentPlaceHolder1_req_f7.display = "None";
+        ctl00_ContentPlaceHolder1_req_f7.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f7.initialvalue = "";
+
+        // f8: state
+        var ctl00_ContentPlaceHolder1_req_f8 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f8"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f8");
+        ctl00_ContentPlaceHolder1_req_f8.controltovalidate = "ctl00_ContentPlaceHolder1_ddlf8";
+        ctl00_ContentPlaceHolder1_req_f8.errormessage = $("#ctl00_ContentPlaceHolder1_f8").html();
+        ctl00_ContentPlaceHolder1_req_f8.display = "None";
+        ctl00_ContentPlaceHolder1_req_f8.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f8.initialvalue = "";
+
+        // f9: aboutme
+        var ctl00_ContentPlaceHolder1_req_f9 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f9"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f9");
+        ctl00_ContentPlaceHolder1_req_f9.controltovalidate = "ctl00_ContentPlaceHolder1_tbxf9";
+        ctl00_ContentPlaceHolder1_req_f9.errormessage = $("#ctl00_ContentPlaceHolder1_f9").html();
+        ctl00_ContentPlaceHolder1_req_f9.display = "None";
+        ctl00_ContentPlaceHolder1_req_f9.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f9.initialvalue = "";
+
+        // f10: gender
+        var ctl00_ContentPlaceHolder1_req_f10 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f10"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f10");
+        ctl00_ContentPlaceHolder1_req_f10.controltovalidate = "ctl00_ContentPlaceHolder1_ddlf10";
+        ctl00_ContentPlaceHolder1_req_f10.errormessage = $("#ctl00_ContentPlaceHolder1_f10").html();
+        ctl00_ContentPlaceHolder1_req_f10.display = "None";
+        ctl00_ContentPlaceHolder1_req_f10.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f10.initialvalue = "";
+
+        // f11: qualifications
+        var ctl00_ContentPlaceHolder1_req_f11 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f11"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f11");
+        ctl00_ContentPlaceHolder1_req_f11.controltovalidate = "ctl00_ContentPlaceHolder1_ddlf11";
+        ctl00_ContentPlaceHolder1_req_f11.errormessage = $("#ctl00_ContentPlaceHolder1_f11").html();
+        ctl00_ContentPlaceHolder1_req_f11.display = "None";
+        ctl00_ContentPlaceHolder1_req_f11.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f11.initialvalue = "";
+
+        // f12: expertise
+        var ctl00_ContentPlaceHolder1_req_f12 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f12"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f12");
+        ctl00_ContentPlaceHolder1_req_f12.controltovalidate = "ctl00_ContentPlaceHolder1_ddlf12";
+        ctl00_ContentPlaceHolder1_req_f12.errormessage = $("#ctl00_ContentPlaceHolder1_f12").html();
+        ctl00_ContentPlaceHolder1_req_f12.display = "None";
+        ctl00_ContentPlaceHolder1_req_f12.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f12.initialvalue = "";
+
+        // f13: certifications
+        var ctl00_ContentPlaceHolder1_req_f13 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f13"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f13");
+        ctl00_ContentPlaceHolder1_req_f13.controltovalidate = "ctl00_ContentPlaceHolder1_tbxf13";
+        ctl00_ContentPlaceHolder1_req_f13.errormessage = $("#ctl00_ContentPlaceHolder1_f13").html();
+        ctl00_ContentPlaceHolder1_req_f13.display = "None";
+        ctl00_ContentPlaceHolder1_req_f13.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f13.initialvalue = "";
+
+        // f14: hobbies
+        var ctl00_ContentPlaceHolder1_req_f14 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f14"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f14");
+        ctl00_ContentPlaceHolder1_req_f14.controltovalidate = "ctl00_ContentPlaceHolder1_tbxf14";
+        ctl00_ContentPlaceHolder1_req_f14.errormessage = $("#ctl00_ContentPlaceHolder1_f14").html();
+        ctl00_ContentPlaceHolder1_req_f14.display = "None";
+        ctl00_ContentPlaceHolder1_req_f14.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f14.initialvalue = "";
+
+        // f15: domain
+        var ctl00_ContentPlaceHolder1_req_f15 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f15"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f15");
+        ctl00_ContentPlaceHolder1_req_f15.controltovalidate = "ctl00_ContentPlaceHolder1_ddlf15";
+        ctl00_ContentPlaceHolder1_req_f15.errormessage = $("#ctl00_ContentPlaceHolder1_f15").html();
+        ctl00_ContentPlaceHolder1_req_f15.display = "None";
+        ctl00_ContentPlaceHolder1_req_f15.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f15.initialvalue = "";
+
+        // f16: contactnumber
+        var ctl00_ContentPlaceHolder1_req_f16 = document.all ? document.all["ctl00_ContentPlaceHolder1_req_f16"] : document.getElementById("ctl00_ContentPlaceHolder1_req_f16");
+        ctl00_ContentPlaceHolder1_req_f16.controltovalidate = "ctl00_ContentPlaceHolder1_tbxf16";
+        ctl00_ContentPlaceHolder1_req_f16.errormessage = $("#ctl00_ContentPlaceHolder1_f16").html();
+        ctl00_ContentPlaceHolder1_req_f16.display = "None";
+        ctl00_ContentPlaceHolder1_req_f16.evaluationfunction = "RequiredFieldValidatorEvaluateIsValid";
+        ctl00_ContentPlaceHolder1_req_f16.initialvalue = "";
+
         //]]>
     </script>
     <script type="text/javascript">
@@ -762,11 +873,11 @@
         if (typeof(ValidatorOnLoad) == "function") {
         var userInfo = localStorage.getItem('userInfo'),
         userSession = !!userInfo ? JSON.parse(userInfo) : {};
-        if(!!userSession && !!userSession.email) {
+        if(!!userSession && !!userSession.f4) {
 
              BootstrapDialog.confirm({
                 title: 'Session exists!',
-                message: 'Hi '+ userSession.firstname + ' ' + userSession.lastname+'! your session is still exists.',
+                message: 'Hi '+ userSession.f1 + ' ' + userSession.f2+'! your session is still exists.',
                 draggable: true, // <-- Default value is false
                 btnCancelLabel: 'Start over', // <-- Default value is 'Cancel',
                 btnOKLabel: 'Resume',

@@ -6,18 +6,18 @@ insert into registrationfields values(1, 'f1', 'First Name', 'text', 'true', nul
 insert into registrationfields values(2, 'f2', 'Last Name', 'text', 'true', null, 2, 'english');
 insert into registrationfields values(3, 'f3', 'Job Title', 'text', 'true', null, 3, 'english');
 insert into registrationfields values(4, 'f4', 'Email', 'text', 'true', null, 4, 'english');
-insert into registrationfields values(5, 'f5', 'Business Industry', 'select', 'true', 'select * from businessindustry;', 5, 'english');
-insert into registrationfields values(6, 'f6', 'Country', 'select', 'true', 'select * from country;', 6, 'english');
-insert into registrationfields values(7, 'f7', 'State', 'select', 'true', 'select * from state;', 7, 'english');
-insert into registrationfields values(8, 'f8', 'About Me', 'text', 'true', null, 8, 'english');
-insert into registrationfields values(9, 'f9', 'Gender', 'select', 'true', 'select * from gender;', 9, 'english');
-insert into registrationfields values(10, 'f10', 'Qualifications', 'select', 'true', 'select * from qualifications;', 10, 'english');
-insert into registrationfields values(11, 'f11', 'Expertise', 'select', 'true', 'select * from expertise;', 11, 'english');
-insert into registrationfields values(12, 'f12', 'Certifications', 'text', 'true', null, 12, 'english');
-insert into registrationfields values(13, 'f13', 'Hobbies', 'text', 'true', null, 13, 'english');
-insert into registrationfields values(14, 'f14', 'Domain', 'select', 'true', 'select * from domain;', 14, 'english');
-insert into registrationfields values(15, 'f15', 'Primary Contact Number', 'text', 'true', null, 15, 'english');
-insert into registrationfields values(16, 'f16', 'Secondary Contact Number', 'text', 'true', null, 16, 'english');
+insert into registrationfields values(5, 'f5', 'Company', 'text', 'true', null, 5, 'english');
+insert into registrationfields values(6, 'f6', 'Business Industry', 'select', 'true', 'select * from businessindustry;', 6, 'english');
+insert into registrationfields values(7, 'f7', 'Country', 'select', 'true', 'select * from country;', 7, 'english');
+insert into registrationfields values(8, 'f8', 'State', 'select', 'true', 'select * from state;', 8, 'english');
+insert into registrationfields values(9, 'f9', 'About Me', 'text', 'true', null, 9, 'english');
+insert into registrationfields values(10, 'f10', 'Gender', 'select', 'true', 'select * from gender;', 10, 'english');
+insert into registrationfields values(11, 'f11', 'Qualifications', 'select', 'true', 'select * from qualifications;', 11, 'english');
+insert into registrationfields values(12, 'f12', 'Expertise', 'select', 'true', 'select * from expertise;', 12, 'english');
+insert into registrationfields values(13, 'f13', 'Certifications', 'text', 'true', null, 13, 'english');
+insert into registrationfields values(14, 'f14', 'Hobbies', 'text', 'true', null, 14, 'english');
+insert into registrationfields values(15, 'f15', 'Domain', 'select', 'true', 'select * from domain;', 15, 'english');
+insert into registrationfields values(16, 'f16', 'Contact Number', 'text', 'true', null, 16, 'english');
 
 
 drop table registrationinfo;

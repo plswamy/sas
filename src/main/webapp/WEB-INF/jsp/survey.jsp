@@ -9,7 +9,7 @@
       <script>
         var userSession = JSON.parse(localStorage.getItem("userInfo")),
         surveyProgress = {};
-        if(!!userSession && !!userSession.email) {
+        if(!!userSession && !!userSession.f4) {
           //user session is still alive, let's move-on.
           //get survery progress done so far for the current user.
           surveyProgress = !!userSession.surveyProgress ? userSession.surveyProgress : {};
@@ -169,14 +169,9 @@
             $("#surveyForm").submit();
           } else {
             $(".question_text").ready(function() {
-                $('#email').val(userSession.email);
-                $('#firstname').val(userSession.firstname);
-                $('#lastname').val(userSession.lastname);
-                $('#jobtitle').val(userSession.jobtitle);
-                $('#company').val(userSession.company);
-                $('#businessindustry').val(userSession.businessindustry);
-                $('#country').val(userSession.country);
-                $('#state').val(userSession.state);
+                $.each(userSession, function(fid) {
+                    $('#surveyForm').append('<input type="hidden" id="' + fid + '" value="' + userSession[fid] + '" />');
+                });
 
               //targetQuestion.currentSection = "plan";
               $(".answer_wrap").attr('data-section', targetQuestion.currentSection);
@@ -203,7 +198,6 @@
         fillForm(currentValues);
 
         function beforeSubmit() {
-            console.log('before submit');
             var finalObj = "";
             var planObj = JSON.parse(localStorage.getItem("userInfo")).surveyProgress.plan;
             for(var propt in planObj){
@@ -224,14 +218,6 @@
       </script>
 
       <form name="surveyForm" method="post" action="report" id="surveyForm" onsubmit="javascript:return beforeSubmit();">
-        <input type="hidden" id="email" name="email"/>
-        <input type="hidden" id="firstname" name="firstname"/>
-        <input type="hidden" id="lastname" name="lastname"/>
-        <input type="hidden" id="jobtitle" name="jobtitle"/>
-        <input type="hidden" id="company" name="company"/>
-        <input type="hidden" id="businessindustry" name="businessindustry"/>
-        <input type="hidden" id="country" name="country"/>
-        <input type="hidden" id="state" name="state"/>
         <input type="hidden" id="userResponse" name="userResponse"/>
         <div class="container">
           <div id="outer" class="row">

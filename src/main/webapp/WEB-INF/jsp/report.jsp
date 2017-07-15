@@ -10,7 +10,7 @@
         surveyProgress = {},
         answers = {};
 
-        if(!!userSession && !!userSession.email) {
+        if(!!userSession && !!userSession.f4) {
           //user session is still alive, let's move-on.
 
           surveyProgress = !!userSession.fullData ? userSession.fullData : {};
