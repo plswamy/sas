@@ -217,7 +217,7 @@
 
 
     </head>
-    <body>
+    <body class="sos-dark-theme">
 		<%
                 String lang = (String) request.getAttribute("language");
 				//System.out.println("\n\n\n\n\n lang: "+lang);
@@ -230,7 +230,8 @@
             %>
         <form name="localeForm" id="localeForm" method="get" action="admin" onsubmit="" >
             <div class="admin-locale-wrapper">
-                <div style="float: right; width: 40%;">
+                <div id="logo" class="pull-right"></div>
+                <div style="float: left;width: 40%;display: inline-block;margin-top: 79px;">
                     <input class="admin-lang form-control" name="language" id="language" type="text" value="<%=lang%>" />
                     <select id="sos-lang-select" class="selectpicker sos-admin-select" onchange="javascript: updateLocaleData();">
 						<option value="english">english</option>

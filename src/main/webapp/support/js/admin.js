@@ -363,7 +363,7 @@
 			<input class="sos-forder-input sos-forder-%fid%" type="hidden" value="%forder%"></td>\
         </td>\
         <td>\
-           <input type="checkbox" class="sos-field-required form-control sos-frequired-%fid%" onclick="FrmFieldView.updateFrequired();" %fchecked%>\
+           <input type="checkbox" %fcheckdisabled% class="sos-field-required form-control sos-frequired-%fid%" onclick="FrmFieldView.updateFrequired();" %fchecked%>\
         </td>\
         <td>\
            <input type="text" class="form-control sos-input sos-form-field-input sos-fdisplayname-%fid%" value="%fdisplayname%" title="%fdisplayname%" name="text%fdisplayname%" placeholder="Enter field display name">\
@@ -377,7 +377,7 @@
 			</select>\
         </td>\
         <td>\
-          <textarea placeholder="Enter options with | as seperator" %fdisabled% class="form-control admin-textarea-field sos-foptions-%fid%" >%foptions%</textarea>\
+          <textarea placeholder="Enter DB query" %fdisabled% class="form-control admin-textarea-field sos-foptions-%fid%" >%foptions%</textarea>\
         </td>\
         <td>\
 		  <input type="hidden" value="%order%" id="order_%fid%">\
@@ -391,6 +391,7 @@
 		          .replace(/%forder%/g, Field.forder)
 		          .replace(/%fincrementid%/g, Field.fincrementid)
 		          .replace(/%fdisplayname%/g, Field.fdisplayname)
+                  .replace(/%fcheckdisabled%/g, (Field.fid === 'f4' ? "disabled" : ""))
                   .replace(/%fdisabled%/g, (Field.ftype === "text" ? "disabled" : ""))
                   .replace(/%foptions%/g, Field.foptions)
                   .replace(/%fchecked%/g, Field.fchecked);

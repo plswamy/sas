@@ -85,6 +85,10 @@ body {
   display: inline-block;
 }
 
+.admin-locale-wrapper #logo {
+	margin: 0;
+}
+
 .right {
   background: #f9f7f7;
 }
@@ -664,6 +668,7 @@ em {
 			display:table-cell;
 			}
 			*/
+
 	#item_panels h3.ui-accordion-header.general_section{
 		background: #4b7e7a;
 	}
@@ -678,6 +683,22 @@ em {
 	}
 	#item_panels h3.ui-accordion-header.check_header{
 		background: #EF820F;
+	}
+
+	body.sos-dark-theme #item_panels h3.ui-accordion-header.general_section{
+		background: #97afad;
+	}
+	body.sos-dark-theme #item_panels h3.ui-accordion-header.fields_section{
+		background: #213534;
+	}
+	body.sos-dark-theme #item_panels h3.ui-accordion-header.plan_header{
+		background: #75908e;
+	}
+	body.sos-dark-theme #item_panels h3.ui-accordion-header.do_header{
+		background: #4f6967;
+	}
+	body.sos-dark-theme #item_panels h3.ui-accordion-header.check_header{
+		background: #314644;
 	}
 	#item_panels .ui-accordion-header.ui-corner-all{
 		border-top: 0px solid #696B6E;
@@ -696,7 +717,12 @@ em {
   
   /*end accordion*/
 
-
+.sos-dark-theme .table-striped>tbody>tr:nth-of-type(odd) {
+	background-color: transparent !important;
+}
+.sos-dark-theme {
+	color: #fff !important;
+}
 
 .table > tbody > tr > td {
      vertical-align: middle;
@@ -745,5 +771,56 @@ em {
 
 .sos-admin-subsection {
 	margin-top: 2px;
+}
+
+#localeForm1 {
+	padding-top: 75px;
+}
+
+
+body.sos-dark-theme #logo {
+	background-color: #afafaf !important;
+	border-radius: 15px;
+}
+
+body.sos-dark-theme div,
+body.sos-dark-theme input,
+body.sos-dark-theme select,
+body.sos-dark-theme textarea,
+body.sos-dark-theme button {
+	background-color: transparent !important;
+	color: #fff !important;
+}
+
+body.sos-dark-theme .dropdown-menu,
+body.sos-dark-theme .dropdown-menu.open {
+	background-color: #b1abb3 !important;
+}
+
+body.sos-dark-theme .dropdown-menu>li>a:focus,
+body.sos-dark-theme .dropdown-menu>li>a:hover {
+	background-color: #888585 !important;
+	color: #fff !important;
+}
+
+body.sos-dark-theme .table-hover>tbody>tr:hover {
+    background-color: transparent !important;
+}
+
+
+body.sos-dark-theme {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #675c53;
+    width: 100%;
+    height: 100%;
+    font-family: 'Open Sans', sans-serif;
+    background: #092756 !important;
+    background: -moz-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%),-moz-linear-gradient(top, rgba(57,173,219,.25) 0%, rgba(42,60,87,.4) 100%), -moz-linear-gradient(-45deg, #670d10 0%, #092756 100%) !important;
+    background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -webkit-linear-gradient(top, rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -webkit-linear-gradient(-45deg, #670d10 0%,#092756 100%) !important;
+    background: -o-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -o-linear-gradient(top, rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -o-linear-gradient(-45deg, #670d10 0%,#092756 100%) !important;
+    background: -ms-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), -ms-linear-gradient(top, rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), -ms-linear-gradient(-45deg, #670d10 0%,#092756 100%) !important;
+    background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(104,128,138,.4) 10%,rgba(138,114,76,0) 40%), linear-gradient(to bottom, rgba(57,173,219,.25) 0%,rgba(42,60,87,.4) 100%), linear-gradient(135deg, #670d10 0%,#092756 100%) !important;
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3E1D6D', endColorstr='#092756',GradientType=1 );
 }
 /*** ADMIN CSS: END ***/
