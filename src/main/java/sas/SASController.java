@@ -321,7 +321,7 @@ public class SASController {
 	  	req.setAttribute("businessindustry", getData("businessindustry", "boption", "boptionvalue", lang));
 	  	req.setAttribute("country", getData("country", "coption", "coptionvalue", lang));
 	  	req.setAttribute("userformfields", getFormFields(lang));
-	  	//loadUserSelectionData(lang);
+	  	loadUserSelectionData(lang);
 	  	//req.setAttribute("labels", getData("labels", "labelkey", "labelvalue"));	  	
   	  	
   	  	// load country list
@@ -929,7 +929,7 @@ public class SASController {
     	}
     }
     
-    /*private void loadUserSelectionData(String lang) {
+    private void loadUserSelectionData(String lang) {
     	System.out.println("loadUserSelectionData called with lang:"+lang);
     	Hashtable<String, String> hs = new Hashtable<String, String>();
     	try {
@@ -943,17 +943,43 @@ public class SASController {
     		ResultSet rs = stmt.executeQuery();
     		while(rs.next()) 
     		{
-    			hs.put(rs.getString(cKey), rs.getString(cValue));
+    			hs.put(rs.getString(1), rs.getString(2));
     		}
-    		if(hs.size() == 0) {
-    			hs = getData(table, cKey, cValue, "english");
+    		if(hs.size() > 0) {
+    			getOptionsData(hs);
     		}
     	} catch(Exception exp) {
     		exp.printStackTrace();
     	} finally {
     		close();
     	}
-    }*/
+    }
+    
+    private void getOptionsData(Hashtable<String, String> hs) {
+    	try {
+	    	Enumeration<String> keys = hs.keys();
+	    	String key = null;
+	    	String temp1 = null, temp2 = null;
+	    	con = dataSource.getConnection();
+	    	ResultSet rs = null;
+	    	Hashtable data = null;
+	    	while(keys.hasMoreElements()) {
+	    		key = keys.nextElement();
+	    		data = new Hashtable();
+	    		String sql = hs.get(key);
+	    		stmt = con.prepareStatement(sql);
+	    		rs = stmt.executeQuery();
+	    		while(rs.next()) {
+	    			data.put(rs.getString(1), rs.getString(2));
+	    		}
+	    		req.setAttribute(key, data);
+	    	}
+    	} catch(Exception exp) {
+    		exp.printStackTrace();
+    	} finally {
+    		close();
+    	}	    	
+    }
     
 }
 
