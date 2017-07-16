@@ -7,16 +7,16 @@ insert into registrationfields values(2, 'f2', 'Last Name', 'text', 'true', null
 insert into registrationfields values(3, 'f3', 'Job Title', 'text', 'true', null, 3, 'english');
 insert into registrationfields values(4, 'f4', 'Email', 'text', 'true', null, 4, 'english');
 insert into registrationfields values(5, 'f5', 'Company', 'text', 'true', null, 5, 'english');
-insert into registrationfields values(6, 'f6', 'Business Industry', 'select', 'true', 'select * from businessindustry;', 6, 'english');
+insert into registrationfields values(6, 'f6', 'Business Industry', 'select', 'true', 'select optkey, optvalue from businessindustry;', 6, 'english');
 insert into registrationfields values(7, 'f7', 'Country', 'select', 'true', 'select * from country;', 7, 'english');
 insert into registrationfields values(8, 'f8', 'State', 'select', 'true', 'select * from state;', 8, 'english');
 insert into registrationfields values(9, 'f9', 'About Me', 'text', 'true', null, 9, 'english');
-insert into registrationfields values(10, 'f10', 'Gender', 'select', 'true', 'select * from gender;', 10, 'english');
-insert into registrationfields values(11, 'f11', 'Qualifications', 'select', 'true', 'select * from qualifications;', 11, 'english');
-insert into registrationfields values(12, 'f12', 'Expertise', 'select', 'true', 'select * from expertise;', 12, 'english');
+insert into registrationfields values(10, 'f10', 'Gender', 'select', 'true', 'select optkey, optvalue from gender;', 10, 'english');
+insert into registrationfields values(11, 'f11', 'Qualifications', 'select', 'true', 'select optkey, optvalue from qualifications;', 11, 'english');
+insert into registrationfields values(12, 'f12', 'Expertise', 'select', 'true', 'select optkey, optvalue from expertise;', 12, 'english');
 insert into registrationfields values(13, 'f13', 'Certifications', 'text', 'true', null, 13, 'english');
 insert into registrationfields values(14, 'f14', 'Hobbies', 'text', 'true', null, 14, 'english');
-insert into registrationfields values(15, 'f15', 'Domain', 'select', 'true', 'select * from domain;', 15, 'english');
+insert into registrationfields values(15, 'f15', 'Domain', 'select', 'true', 'select optkey, optvalue from domain;', 15, 'english');
 insert into registrationfields values(16, 'f16', 'Contact Number', 'text', 'true', null, 16, 'english');
 
 
@@ -66,12 +66,12 @@ Create table labels(id integer PRIMARY KEY AUTO_INCREMENT, lang varchar(10), lab
 Insert into labels values(1, 'english', 'welcomeHeader', 'Welcome to the travel risk mitigation self-assessment tool.');                                      
 Insert into labels values(2, 'english', 'welcomeDesc', 'This best practice travel risk mitigation tool is based on our Duty of Care Plan-Do-Check approach. At the end of this assessment you will receive a report outlining:');
 Insert into labels values(3, 'english', 'welcomeFooter', 'It should take you approximately 5 minutes to complete the review.');
-Insert into labels values(4, 'english', 'regFormHeaderMsg', 'Fill out the form below to begin your risk mitigation evaluation Ravi');
+Insert into labels values(4, 'english', 'regFormHeaderMsg', 'Fill out the form below to begin your risk mitigation evaluation');
 Insert into labels values(5, 'english', 'regFormHeaderErrorMsg', 'Please fill in the following fields correctly and click the Start button again test.');
-Insert into labels values(6, 'english', 'firstName', 'First Name Label From DB');
-Insert into labels values(7, 'english', 'lastName', 'Last Name Label From DB');
-Insert into labels values(8, 'english', 'jobTitle', 'Job Title Label From DB');
-Insert into labels values(9, 'english', 'email', 'Email Label From DB');
+Insert into labels values(6, 'english', 'enter', 'Enter ');
+Insert into labels values(7, 'english', 'select', 'Select');
+Insert into labels values(8, 'english', 'mustbevalid', 'must be valid');
+Insert into labels values(9, 'english', 'email', 'Email');
 Insert into labels values(10, 'english', 'company', 'Company Label From DB');
 Insert into labels values(11, 'english', 'businessIndustry', 'Business Industry Label From DB');
 Insert into labels values(13, 'english', 'state', 'State Label From DB');
@@ -87,7 +87,7 @@ Insert into labels values(19, 'english', 'notsure', 'Not Sure');
 
 
 drop table businessindustry;
-Create table businessindustry(id integer PRIMARY KEY, lang varchar(10), boption varchar(1000), boptionvalue varchar(1000));
+Create table businessindustry(id integer PRIMARY KEY, lang varchar(10), optkey varchar(1000), optvalue varchar(1000));
 insert into businessindustry value (1, 'english', 'Agent', 'Agent');
 insert into businessindustry value (2, 'english', 'Automobile,Aerospace and Defence Industry', 'Automobile,Aerospace and Defence Industry');
 insert into businessindustry value (3, 'english', 'Aviation Commercial', 'Aviation Commercial');
@@ -133,7 +133,7 @@ insert into businessindustry value (41, 'english', 'Travel, Tourism and Hospital
 
 
 drop table country;
-Create table country(id integer PRIMARY KEY ,lang varchar(10),coption varchar(1000), coptionvalue varchar(1000));
+Create table country(id integer PRIMARY KEY ,lang varchar(10),optkey varchar(1000), optvalue varchar(1000));
 insert into country value(1,'english','Afghanistan','Afghanistan');
 insert into country value(2,'english','Aland Islands','Aland Islands');
 insert into country value(3,'english','Albania','Albania');
@@ -396,3 +396,34 @@ Create table state(id integer PRIMARY KEY ,statetype varchar(20), lang varchar(1
 
 drop table userresponse;
 Create table userresponse(id integer PRIMARY KEY AUTO_INCREMENT, userid integer, qid integer, qresponse varchar(10));
+
+
+drop table gender;
+Create table gender(id integer PRIMARY KEY, lang varchar(10), optkey varchar(1000), optvalue varchar(1000));
+insert into gender value (1, 'english', 'male', 'Male');
+insert into gender value (2, 'english', 'female', 'Female');
+
+
+drop table qualifications;
+Create table qualifications(id integer PRIMARY KEY, lang varchar(10), optkey varchar(1000), optvalue varchar(1000));
+insert into qualifications value (1, 'english', 'phd', 'Phd');
+insert into qualifications value (2, 'english', 'pg', 'Post Graduation');
+insert into qualifications value (3, 'english', 'degree', 'Graduation');
+insert into qualifications value (4, 'english', 'inter', 'Intermediate');
+insert into qualifications value (5, 'english', 'ssc', 'SSC');
+
+
+drop table expertise;
+Create table expertise(id integer PRIMARY KEY, lang varchar(10), optkey varchar(1000), optvalue varchar(1000));
+insert into expertise value (1, 'english', 'accounts', 'Accounts');
+insert into expertise value (2, 'english', 'sales', 'Sales');
+insert into expertise value (3, 'english', 'it', 'IT');
+insert into expertise value (4, 'english', 'hardware', 'Hardware');
+
+
+drop table domain;
+Create table domain(id integer PRIMARY KEY, lang varchar(10), optkey varchar(1000), optvalue varchar(1000));
+insert into domain value (1, 'english', 'banking', 'Banking');
+insert into domain value (2, 'english', 'finance', 'Finance');
+insert into domain value (3, 'english', 'software', 'Software');
+insert into domain value (4, 'english', 'pharmaceutical', 'Pharmaceutical');
