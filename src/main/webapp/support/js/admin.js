@@ -38,6 +38,10 @@
                   } else {
                       currContent.slideDown();
                   }
+                  $("td").addClass("sos-temp-padding");
+                  setTimeout(function() {
+                      $("td").removeClass("sos-temp-padding");
+                  }, 500);
 
                   return false; // Cancel the default action
               }
