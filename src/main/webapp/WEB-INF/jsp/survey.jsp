@@ -160,7 +160,7 @@
           }
 
           if(targetQuestion === undefined) {
-            console.log("let's re-direct to report page.");
+            //console.log("let's re-direct to report page.");
             var userInfo = JSON.parse(localStorage.getItem("userInfo"));
             userInfo.finished = true;
             userInfo.fullData = currentValues;
@@ -216,7 +216,7 @@
             for(var propt in checkObj){
                 finalObj += propt + ":" + checkObj[propt].val + "|";
             }
-            console.log("finalObj : " + finalObj);
+            //console.log("finalObj : " + finalObj);
             $('#userResponse').val(finalObj);
             return true;
         }

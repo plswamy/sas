@@ -169,7 +169,7 @@
 				    currRowQorder = currRow.find(".sos-qorder"),
 				    currRowQorderLabel = currRow.find(".sos-qorder-label"),
 					currRowUpdateQorder = parseInt(currRow.find(".sos-qorder").val()) - 1;
-				console.log(currRowUpdateQorder);
+				//console.log(currRowUpdateQorder);
 				currRowQorder.val(currRowUpdateQorder);
 				currRowQorderLabel.html(currRowUpdateQorder);
 			});

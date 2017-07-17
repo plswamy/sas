@@ -15,7 +15,7 @@ $(document).ready(function () {
         sectionId = infoEle.attr('data-section'),
         questionId = infoEle.attr('data-qid'),
         val = $(this).attr('data-value');
-    console.log(val);
+    //console.log(val);
 
     if(!!localStorage.userInfo) {
       var userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -37,7 +37,7 @@ $(document).ready(function () {
     //deepObjectExtend(userInfo, allSections);
     var ding =deepObjectExtend(userInfo.surveyProgress, allSections);
     fillForm(ding);
-    console.log("saved current question information");
+    //console.log("saved current question information");
 
   });
 

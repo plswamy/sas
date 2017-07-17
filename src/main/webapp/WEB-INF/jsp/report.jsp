@@ -136,7 +136,7 @@
                                     templateContent = document.querySelector('template').content,
                                     calValEle = templateContent.querySelector('.sos-subsection-graph'),
                                     template = '<div class="sos-progress-bar-outer stripe_progress progress" title="' + titleVal + '"><span class="sos-graph-subsection-header">' + ss + ' (' + calValue2 + ')</span><div id="progressBarInner" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" width="0%" style="width: ' + perCalValue + '%;" title="' + titleVal + '"><span class="sr-only">' + perCalValue + '</span><span class="sos-calculated-value"></span></div></div>';
-                                    console.log(templateContent);
+                                    //console.log(templateContent);
                                 calValEle.innerHTML = template;
                                 document.querySelector('#sos-subsection-graph-wrapper').appendChild(document.importNode(templateContent, true));
                           });
