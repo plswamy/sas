@@ -828,3 +828,8 @@ body.sos-dark-theme {
     padding: 11px !important;
 }
 /*** ADMIN CSS: END ***/
+
+
+#body #chart svg:not(:root) {
+    overflow: visible !important;
+}
