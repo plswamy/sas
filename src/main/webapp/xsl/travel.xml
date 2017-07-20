@@ -25,6 +25,250 @@
 					<desc32>Contact International SOS - inquiries@internationalsos.com|</desc32>
 					<desc33>The recommendations, suggested actions and broad maturity measure are for guidance purposes only and do not 	constitute formal advice. Please</desc33>
 					<desc34>contact International SOS for customised analysis and recommendations specific to your organisation</desc34>
+				 <plan>
+				<title>Plan</title>
+				<question>
+					<title>Q1</title>
+					<value>Can you locate all your current travellers?
+					</value>
+					<answer>
+						this is description for this question: Can you locate all
+						your current
+						travellers?
+					</answer>
+				</question>
+				<question>
+					<title>Q2</title>
+					<value>Do you access the risks to your employees in those
+						locations?
+					</value>
+					<answer>
+						this is description for this question: Do you access the
+						risks to your employees in those locations?
+					</answer>
+				</question>
+				<question>
+					<title>Q3</title>
+					<value>Do you monitor the type and quantity of incidents your
+						employees have been involved in over the last 2-3 years?
+					</value>
+					<answer>
+						this is description for this question: Do you monitor the
+						type and quantity of incidents your employees have been involved
+						in over the last 2-3 years?
+					</answer>
+				</question>
+				<question>
+					<title>Q4</title>
+					<value>Does your company understand its Duty of Care obligations?
+					</value>
+					<answer>
+						this is description for this question: Does your company
+						understand its Duty of Care obligations?
+					</answer>
+				</question>
+				<question>
+					<title>Q5</title>
+					<value>Do your policies cover the health, safety and security of
+						employees abroad?
+					</value>
+					<answer>
+						this is description for this question: Do your policies
+						cover the health, safety and security of employees abroad?
+					</answer>
+				</question>
+				<question>
+					<title>Q6</title>
+					<value>Do you know who is responsible for Travel Risk Management in
+						your organisation?
+					</value>
+					<answer>
+						this is description for this question: Do you know who is
+						responsible for Travel Risk Management in your organisation?
+					</answer>
+				</question>
+				<question>
+					<title>Q7</title>
+					<value>Do you know how to integrate the components of Travel Risk
+						Management into your risk management system?
+					</value>
+					<answer>
+						this is description for this question: Do you know how to
+						integrate the components of Travel Risk Management into your risk
+						management system?
+					</answer>
+				</question>
+			</plan>
+			<plan>
+				<title>Do</title>
+				<question>
+					<title>Q1</title>
+					<value>Do you have a travel approval process that includes travel
+						risk assessments?
+					</value>
+					<answer>
+						this is description for this question: Do you have a travel
+						approval process that includes travel risk assessments?
+					</answer>
+				</question>
+				<question>
+					<title>Q2</title>
+					<value>Do your employees have access to relevant information &amp;
+						advice to support them when making these risk assessments?
+					</value>
+					<answer>
+						this is description for this question: Do your employees
+						have access to relevant information &amp; advice to support them
+						when
+						making these risk assessments?
+					</answer>
+				</question>
+				<question>
+					<title>Q3</title>
+					<value>Do you have plans in place if things go wrong?
+					</value>
+					<answer>
+						this is description for this question: Do you have plans in
+						place if things go wrong?
+					</answer>
+				</question>
+				<question>
+					<title>Q4</title>
+					<value>Do you check the safety and security of hotels and
+						accommodation?
+					</value>
+					<answer>
+						this is description for this question: Do you check the
+						safety and security of hotels and accommodation?
+					</answer>
+				</question>
+				<question>
+					<title>Q5</title>
+					<value>Do you know how many RTA's(Road Traffic Accidents) your
+						company has experienced in the last 3 years?
+					</value>
+					<answer>
+						this is description for this question: Do you know how many
+						RTA's(Road Traffic Accidents) your company has experienced in the
+						last 3 years?
+					</answer>
+				</question>
+				<question>
+					<title>Q6</title>
+					<value>Do you assess the fitness for travel for expatriate or
+						travelling staff?
+					</value>
+					<answer>
+						this is description for this question:Do you assess the
+						fitness for travel for expatriate or travelling staff?
+					</answer>
+				</question>
+				<question>
+					<title>Q7</title>
+					<value>Do you have a program to help employees understand and
+						manage their existing health issues whist away?
+					</value>
+					<answer>
+						this is description for this question: Do you have a
+						program to help employees understand and manage their existing
+						health issues whist away?
+					</answer>
+				</question>
+				<question>
+					<title>Q8</title>
+					<value>Are your employees aware of your Travel Risk Mitigation
+						plans and their responsibilities?
+					</value>
+					<answer>
+						this is description for this question: Are your employees
+						aware of your Travel Risk Mitigation plans and their
+						responsibilities?
+					</answer>
+				</question>
+				<question>
+					<title>Q9</title>
+					<value>Do your employees receive training about the risks at the
+						destinations they are travelling to?
+					</value>
+					<answer>
+						this is description for this question: Do your employees
+						receive training about the risks at the destinations they are
+						travelling to?
+					</answer>
+				</question>
+				<question>
+					<title>Q10</title>
+					<value>Do your managers understand their responsibilities when
+						approving travel?
+					</value>
+					<answer>
+						this is description for this question: Do your managers
+						understand their responsibilities when approving travel?
+					</answer>
+				</question>
+				<question>
+					<title>Q11</title>
+					<value>Do you have a system in place to inform your people of a
+						situation that may impact them?
+					</value>
+					<answer>
+						this is description for this question: Do you have a system
+						in place to inform your people of a situation that may impact
+						them?
+					</answer>
+				</question>
+				<question>
+					<title>Q12</title>
+					<value>Do you have a system in place to quickly account for
+						employees in an emergency?
+					</value>
+					<answer>
+						this is description for this question: Do you have a system
+						in place to quickly account for employees in an emergency?
+					</answer>
+				</question>
+				<question>
+					<title>Q13</title>
+					<value>Do your employees have access to advice and support 24/7?
+					</value>
+					<answer>
+						this is description for this question: Do your employees
+						have access to advice and support 24/7?
+					</answer>
+				</question>
+				<question>
+					<title>Q14</title>
+					<value>Do you have measures in place to check the health of
+						employees returning to work?
+					</value>
+					<answer>
+						this is description for this question: Do you have measures
+						in place to check the health of employees returning to work?
+					</answer>
+				</question>
+			</plan>
+			<plan>
+				<title>Check</title>
+				<question>
+					<title>Q1</title>
+					<value>Are your plans and procedures tested for effectiveness?
+					</value>
+					<answer>
+						this is description for this question: Are your plans and
+						procedures tested for effectiveness?
+					</answer>
+				</question>
+				<question>
+					<title>Q2</title>
+					<value>Do you have a system in place to ensure compliance with your
+						policies and procedures?
+					</value>
+					<answer>
+						this is description for this question: Do you have a system
+						in place to ensure compliance with your policies and procedures?
+					</answer>
+				</question>
+			</plan>
       		 </main>
  	    </data>
 	</root>
