@@ -164,7 +164,64 @@
 					   </fo:table-body>
 				</fo:table>
 			</fo:block>
-
+			<fo:block text-align="start">
+				<fo:table table-layout="fixed" padding="9mm" width="80%">
+					<fo:table-column column-width="2cm" />
+					<fo:table-column column-width="41cm" />
+					<fo:table-body>
+						<xsl:for-each select="data/main/plan">
+							<xsl:variable name="titleColor">
+								<xsl:choose>
+									<xsl:when test="title='Check'">
+										<xsl:value-of select="'darkorange'" />
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="'darkblue'" />
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:variable>
+							<fo:table-row>
+								<fo:table-cell number-columns-spanned="2">
+									<fo:block font-family="arial" color="{$titleColor}"
+										font-size="40pt" wrap-option="wrap" space-before="1cm">
+										<xsl:value-of select="title" />
+										<xsl:text> </xsl:text>	
+									</fo:block>
+								</fo:table-cell>
+							</fo:table-row>
+							<xsl:for-each select="question">
+								<fo:table-row background-color="#f2f2f2">
+									<fo:table-cell>
+										<fo:block font-family="arial" color="{$titleColor}"
+											font-size="25pt" wrap-option="wrap" font-weight="bold"
+											space-before="1cm" margin="1.5cm">
+											<xsl:value-of select="title" />
+											<xsl:text> </xsl:text>
+										</fo:block>
+									</fo:table-cell>
+									<fo:table-cell>
+										<fo:block font-family="arial" color="black"
+											font-size="25pt" wrap-option="wrap" font-weight="bold"
+											space-before="1cm" margin="1.5cm">
+											<xsl:value-of select="value" />
+											<xsl:text> </xsl:text>
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+								<fo:table-row background-color="#f2f2f2">
+									<fo:table-cell number-columns-spanned="2">
+										<fo:block font-family="arial" color="black"
+											font-size="25pt" wrap-option="wrap" space-before="1cm" margin="1.5cm">
+											<xsl:value-of select="answer" />
+											<xsl:text> </xsl:text>
+										</fo:block>
+									</fo:table-cell>
+								</fo:table-row>
+							</xsl:for-each>
+						</xsl:for-each>
+					</fo:table-body>
+				</fo:table>
+			</fo:block>
 		
 		    <fo:block text-align="start" line-height="1em + 2pt">
 			  <fo:table  table-layout="fixed" padding="9mm" >
