@@ -428,6 +428,8 @@ public class SASController {
 	private void saveUserResponse() {
 		System.out.println("save user response called");
 		String userid = getUserId(nullCheck(req.getParameter("f4")));
+		//System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ userid : " + userid);
+		req.setAttribute("userid", userid);
 		/* List<Question> list = getQuestionsAsList(); */
 		String userRes = nullCheck(req.getParameter("userResponse"));
 		if (userRes.length() > 0) {

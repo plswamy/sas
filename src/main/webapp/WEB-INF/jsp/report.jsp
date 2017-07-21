@@ -4,6 +4,7 @@
     <head>
       <%
         String webContext = "";
+        String userid = (String) request.getAttribute("userid");
       %>
       <script>
         var userSession = JSON.parse(localStorage.getItem("userInfo")),
@@ -226,7 +227,7 @@
                           }
 
                           $("#sos-graph").prop("src", imgSrc);
-                          $("#scoreinfo").val(scoreVal + '|' + timgSrc + '|' + userSession.f1 + '|' + userSession.f2);
+                          $("#scoreinfo").val(scoreVal + '|' + timgSrc + '|<%= userid %>|' + userSession.f1 + '|' + userSession.f2);
 
                         });
                       </script>
