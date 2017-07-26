@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import org.jdom.Element;
+
 import java.security.Principal;
 
 import org.jdom.Document;
@@ -30,7 +32,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.mail.Session;
@@ -38,9 +43,11 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -231,6 +238,7 @@ public class SASController {
 			StringTokenizer st = new StringTokenizer(temp, "|");
 			String score = st.nextToken();
 			String img = st.nextToken();
+			String userid = st.nextToken();
 			String user = st.nextToken();
 			if (st.hasMoreElements()) {
 				user = user + " " + st.nextToken();
@@ -252,6 +260,8 @@ public class SASController {
 			document.getRootElement().getChild("data").getChild("main").getChild("score").setText(score + "%");
 			document.getRootElement().getChild("data").getChild("main").getChild("range").setText(img);
 			document.getRootElement().getChild("data").getChild("main").getChild("user").setText(user);
+			Element main = document.getRootElement().getChild("data").getChild("main");
+			getQuestionElement(userid, main);
 			System.out.println(
 					"root element" + document.getRootElement().getChild("data").getChild("main").getChildText("score"));
 			Doc2Pdf.start(document, xslFileName, pdfFileName);
@@ -428,7 +438,6 @@ public class SASController {
 	private void saveUserResponse() {
 		System.out.println("save user response called");
 		String userid = getUserId(nullCheck(req.getParameter("f4")));
-		//System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ userid : " + userid);
 		req.setAttribute("userid", userid);
 		/* List<Question> list = getQuestionsAsList(); */
 		String userRes = nullCheck(req.getParameter("userResponse"));
@@ -460,7 +469,7 @@ public class SASController {
 		String id = null;
 		try {
 			con = dataSource.getConnection();
-			stmt = con.prepareStatement("select id from registrationinfo where f4='" + key + "'");
+			stmt = con.prepareStatement("select id from registrationinfo where f4='" + key + "' order by id desc");
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				id = rs.getString(1);
@@ -893,6 +902,9 @@ public class SASController {
 				key = rs.getString("fieldname");
 				hs.put(key, value);
 			}
+			if (hs.size() == 0) {
+				hs = getFormFields("english");
+			}
 		} catch (Exception exp) {
 			exp.printStackTrace();
 		} finally {
@@ -909,21 +921,20 @@ public class SASController {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
 					"insert into registrationfields (fieldname, forder, fieldtype, fielddispname, showflag, options, lang) values (?,?,?,?,?,?,?)");
-			StringTokenizer st = new StringTokenizer(data, "\\|cmsedge\\|");
-			StringTokenizer st1 = null;
+			String st[] = data.split("\\|cmsedge\\|");
+			String[] st1 = null;
 			String temp1 = null;
-			while (st.hasMoreElements()) {
-				temp1 = st.nextToken();
-				st1 = new StringTokenizer(temp1, "\\:cmsedge\\:");
+			for(int i = 0; i < st.length; i++) {
+				temp1 = st[i];
+				st1 = st[i].split("\\:cmsedge\\:");
 				// fieldname:id:order:type:displayname:required:<<options>>
-				stmt.setString(1, st1.nextToken());
-				st1.nextToken(); // id skip
-				stmt.setString(2, st1.nextToken());
-				stmt.setString(3, st1.nextToken());
-				stmt.setString(4, st1.nextToken());
-				stmt.setString(5, st1.nextToken());
-				if (st1.hasMoreElements()) {
-					stmt.setString(6, st1.nextToken());
+				stmt.setString(1, st1[0]);
+				stmt.setString(2, st1[2]);
+				stmt.setString(3, st1[3]);
+				stmt.setString(4, st1[4]);
+				stmt.setString(5, st1[5]);
+				if (st1.length > 6) {
+					stmt.setString(6, st1[6]);
 				} else {
 					stmt.setString(6, null);
 				}
@@ -1057,6 +1068,76 @@ public class SASController {
 		}
 		// Enable the multipart flag!
 
+	}
+	
+	private void getQuestionElement(String userid, Element main) {
+		LinkedHashMap<String, List<Question>> hs = new LinkedHashMap<String, List<Question>>();
+		try {
+			String sql = "select * from questions where id in (select qid from userresponse where qresponse != ? and userid=? order by qid)";
+			con = dataSource.getConnection(); 
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, "yes");
+			stmt.setString(2, userid);
+			ResultSet rs = stmt.executeQuery();
+			Question q = null;
+			List<Question> list = null;			
+			while(rs.next()) {
+				q = new Question();
+				q.setId(rs.getString("id"));
+				q.setType(rs.getString("qtype"));
+				q.setImageName(rs.getString("imagename"));
+				q.setText(rs.getString("qtext"));
+				q.setDesc(rs.getString("qdesc"));
+				q.setLang(rs.getString("lang"));
+				q.setQorder(rs.getString("qorder"));
+				q.setSubtype(rs.getString("qsubtype"));
+				list = hs.get(q.getType());
+				if (list == null) {
+					list = new ArrayList<Question>();
+				}
+				list.add(q);
+				hs.put(q.getType(), list);
+			}
+		} catch(Exception exp) {
+			exp.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		try {			
+			Iterator<String> keys = hs.keySet().iterator();
+			List<Question> list = null;
+			String key = null;
+			Question q = null;
+			Element qElem = null;
+			Element temp = null;
+			while(keys.hasNext()) {				
+				Element planElement = new Element("plan");
+				Element title = new Element("title");
+				key = keys.next();
+				title.setText(key);
+				System.out.println("key...."+key);
+				planElement.addContent(title);
+				list = hs.get(key);
+				for(int i=0; i < list.size(); i++) {
+					q = list.get(i);
+					qElem = new Element("question");
+					temp = new Element("title");
+					temp.setText("Q"+q.getId());
+					qElem.addContent(temp);
+					temp = new Element("value");
+					temp.setText(q.getText());
+					qElem.addContent(temp);
+					temp = new Element("answer");
+					temp.setText(q.getDesc());
+					qElem.addContent(temp);
+					planElement.addContent(qElem);
+				}
+				main.addContent(planElement);
+			}			
+		} catch(Exception exp) {
+			exp.printStackTrace();
+		}		
 	}
 
 }
