@@ -596,9 +596,9 @@ em {
     visibility: hidden;
 }
 
-.sos-admin-primary-wrapperen .sos-order-direction,
-.sos-admin-primary-wrapperen .sos-delete-icon,
-.sos-admin-primary-wrapperen .sos-btn-section {
+.sos-admin-primary-wrappermaster .sos-order-direction,
+.sos-admin-primary-wrappermaster .sos-delete-icon,
+.sos-admin-primary-wrappermaster .sos-btn-section {
     display: inline-block;
     visibility: visible;
 }

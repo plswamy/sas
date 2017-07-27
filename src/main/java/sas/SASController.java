@@ -486,7 +486,7 @@ public class SASController {
 		try {
 			uploadFiles();
 			String lang = req.getParameter("lang");
-			if (nullCheck(lang).length() == 0 || lang.equals("en")) {
+			if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
 				lang = "english";
 			}
 			if (lang.equals("english")) {

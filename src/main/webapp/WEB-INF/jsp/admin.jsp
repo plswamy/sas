@@ -87,19 +87,6 @@
                 Hashtable<String, String> hmf = (Hashtable<String, String>) request.getAttribute("userformsfields");
 
                 System.out.println(hmf);
-                /*Hashtable<String, String> hmf = new Hashtable<String,String>();
-                                                hmf.put("f1",   "1:text:First Name:true");
-                                                hmf.put("lastname",   "2:text:Last Name:true");
-                                                hmf.put("jobtitle",   "3:text:Job Title:true");
-                                                hmf.put("email",   "4:text:Email:true");
-                                                hmf.put("company",   "5:text:Company:true");
-                                                hmf.put("businessindustry",   "6:select:Business Industry:true:select * from businessindustry;");
-                                                hmf.put("country",   "7:select:Country:true:select * from country;");
-                                                hmf.put("state",   "8:select:State:true:select * from state;");
-                                                hmf.put("aboutme",   "10:text:About Me:true");
-                                                hmf.put("gender",   "9:select:Gender:true:select * from gender;");
-                                                hmf.put("qualification",   "12:select:Qualifications:true:select * from qualifications;");
-                                                hmf.put("expertise",   "11:select:Expertise:true:select * from expertise;");*/
                 Set<String> hmfKeys = hmf.keySet();
                 for(String key: hmfKeys){
                     System.out.println("Value of "+key+" is: "+hmf.get(key));
@@ -222,7 +209,7 @@
                 String lang = (String) request.getAttribute("language");
 				//System.out.println("\n\n\n\n\n lang: "+lang);
                 if(lang == null) {
-                    lang = "en";
+                    lang = "english";
                 }
 
 				//System.out.println("\n\n\n\n\n lang: "+lang);
@@ -232,16 +219,17 @@
             <div class="admin-locale-wrapper">
                 <div id="logo" class="pull-right"></div>
                 <div style="float: left;width: 40%;display: inline-block;margin-top: 79px;">
-                    <input class="admin-lang form-control" name="language" id="language" type="text" value="<%=lang%>" />
+                    <input class="admin-lang form-control" name="language" id="language" type="text" value="<%=(lang.equals("en") || lang.equals("english") ? "master" : lang)%>" />
                     <select id="sos-lang-select" class="selectpicker sos-admin-select" onchange="javascript: updateLocaleData();">
-						<option value="english">english</option>
+						<option value="master">master</option>
 					<%
 						String tempLang = null;
 						for(int i = 0; i < langList.size(); i++) {
 							tempLang = (String) langList.get(i);
+                            String tempLangDisplayName = tempLang.equals("en") || tempLang.equals("english") ? "master" : tempLang;
 							System.out.println("tempLang....:"+tempLang);
 					%>
-                        <option value="<%=tempLang%>"><%=tempLang%></option>
+                        <option value="<%=tempLang%>"><%= tempLangDisplayName %></option>
 					<% } %>
                     </select>  
                     <button style="display: inline-block; width: 17%; float: right;" class="btn btn-primary admin-lang-btn col-lg-4 col-md-6 col-sm-12 col-xs-12" onclick="javascript: return getLocaleData();">Go!</button>
@@ -253,7 +241,7 @@
                 </div>
             </div>
         </form>
-        <form name="localeForm1" id="localeForm1" method="post" enctype="multipart/form-data" action="admin" class="sos-admin-primary-wrapper<%=lang%>" onsubmit="javascript: gatherInfo();" >
+        <form name="localeForm1" id="localeForm1" method="post" enctype="multipart/form-data" action="admin" class='sos-admin-primary-wrapper<%=(lang.equals("en") || lang.equals("english") || lang.equals("master") ? "master" : "")%>' onsubmit="javascript: gatherInfo();" >
             
             <input type="hidden" id="sos-lang" name="lang" value="<%= lang %>" />
             <input type="hidden" id="sos-labels"  name="labels" value="" />
