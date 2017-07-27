@@ -82,6 +82,7 @@ Insert into labels values(16, 'english', 'progress', 'Question Progress');
 Insert into labels values(17, 'english', 'yes', 'Yes');
 Insert into labels values(18, 'english', 'no', 'No');
 Insert into labels values(19, 'english', 'notsure', 'Not Sure');
+Insert into labels values(20, 'english', 'adminEmails', '');
 
 
 
