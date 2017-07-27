@@ -227,7 +227,7 @@
                           }
 
                           $("#sos-graph").prop("src", imgSrc);
-                          $("#scoreinfo").val(scoreVal + '|' + timgSrc + '|<%= userid %>|' + userSession.f1 + '|' + userSession.f2);
+                          $("#scoreinfo").val(scoreVal + '|' + timgSrc + '|<%= userid %>|' + userSession.f4 + '|' + userSession.f1 + '|' + userSession.f2);
 
                         });
                       </script>
@@ -335,8 +335,8 @@
                         <a href="http://www.global.selfassessmenttool.com/img/diagram.png" target="_blank"><img class="cover-width diagram" src="./support/img/resourceFiles/do-12.png" alt="Sections"></a>
                         <a href="http://www.global.selfassessmenttool.com/img/diagram.png" class="marginleft" target="_blank">Click here to open larger image of Integrated Travel Risk Mitigation</a>
                       </div>
-                      <p>International SOS commissioned the first ever Duty of Care whitepaper. This reviews employers’ Duty of Care responsibilities and offers guidelines for the development of appropriate risk management strategies.</p>
-                      <p>Following this sector first, our clients requested more research, tools and advice. Resulting in the commission of our Duty of Care and Travel Risk Management Global Benchmarking Study – the first comprehensive and authoritative research publication on the topic.</p>
+                      <p>International SOS commissioned the first ever Duty of Care whitepaper. This reviews employersâ Duty of Care responsibilities and offers guidelines for the development of appropriate risk management strategies.</p>
+                      <p>Following this sector first, our clients requested more research, tools and advice. Resulting in the commission of our Duty of Care and Travel Risk Management Global Benchmarking Study â the first comprehensive and authoritative research publication on the topic.</p>
                       <p>The paper outlines a framework for organisations to ensure they are adequately meeting their Duty of Care obligations. The framework follows the 'plan-do-check' approach.</p>
                       <p>For more information <a href="http://internationalsos.com/duty-of-care" target="_blank">internationalsos.com/duty-of-care</a> </p>
                       <h3>Need assistance with any of your responses or recommendations?</h3>
