@@ -166,8 +166,16 @@ public class SASController {
 	@RequestMapping(value = "/admin", method = RequestMethod.POST)
 	public String postAdmin(ModelMap model) {
 		System.out.println("admin post called....");
-		saveLangData();
-		return "report";
+		saveLangData();		String requestedLang = req.getParameter("language");
+		System.out.println("requested Lang from page is :" + requestedLang);
+		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
+		req.setAttribute("questions", getQuestions(requestedLang));
+		req.setAttribute("langList", getLangs());
+		req.setAttribute("userformsfields", getFormFields(requestedLang));
+		if (nullCheck(requestedLang).length() > 0) {
+			req.setAttribute("language", requestedLang);
+		}
+		return "admin";
 	}
 
 	@RequestMapping(value = "/home", method = RequestMethod.POST)
