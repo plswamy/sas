@@ -239,7 +239,9 @@ public class SASController {
 			String score = st.nextToken();
 			String img = st.nextToken();
 			String userid = st.nextToken();
+			String email = st.nextToken();
 			String user = st.nextToken();
+			
 			if (st.hasMoreElements()) {
 				user = user + " " + st.nextToken();
 			}
@@ -1049,15 +1051,20 @@ public class SASController {
 			String score = st.nextToken();
 			String img = st.nextToken();
 			String user = st.nextToken();
+			String email = st.nextToken();
+			System.out.println("email =" + email);
 			if (st.hasMoreElements()) {
 				user = user + " " + st.nextToken();
 			}
 			String subject = "Travel Risk Management self-assessment: You scored " + score + "%";
-			String mailMessage = "Hi! " + user;
-			String pdfName = "SOS - PDF";
+			String mailMessage = "Hi! " + user+",\n";
+			mailMessage = "Please find your assessment report.\n ";
+			mailMessage += "Regards,\n ";
+			mailMessage += "Self Assessment team";
+			String pdfName = "SelfAssessmentReport.pdf";
 			File pdfFile = new File(pdfFilePath);
 
-			helper.setTo(toMailId);
+			helper.setTo(email);
 			helper.setText(mailMessage);
 			helper.setSubject(subject);
 			helper.addAttachment(pdfName, pdfFile);
