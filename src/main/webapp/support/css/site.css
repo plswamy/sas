@@ -827,6 +827,10 @@ body.sos-dark-theme {
 .sos-temp-padding {
     padding: 11px !important;
 }
+
+.form-control.sos-form-field-input-option {
+	background-color: transparent !important;
+}
 /*** ADMIN CSS: END ***/
 
 

@@ -141,6 +141,10 @@
 		$('#sos-subsection-dropdown-' + id).val(defVal);
 	}
 
+	$('#sos-subsection-dropdown-' + id).ready(function() {
+		$('#sos-subsection-dropdown-' + id).selectpicker();
+	});
+
       currentTarget.find('.form-control').each(function() {
         $(this).attr('disabled', false);
         if($(this).hasClass('sos-admin-subsection')) {
@@ -373,11 +377,9 @@
            <input type="text" class="form-control sos-input sos-form-field-input sos-fdisplayname-%fid%" value="%fdisplayname%" title="%fdisplayname%" name="text%fdisplayname%" placeholder="Enter field display name">\
         </td>\
         <td>\
-			<select class="form-control sos-form-field-input sos-ftype-%fid%" onchange="FrmFieldView.updateFoptions();">\
-				<option class="form-control sos-form-field-input" value="text">Text Field</option>\
-				<option class="form-control sos-form-field-input hidden" value="radio">Radio Button</option>\
-				<option class="form-control sos-form-field-input hidden" value="checkbox">Check Box</option>\
-				<option class="form-control sos-form-field-input" value="select">Select Field</option>\
+			<select class="form-control sos-form-field-input sos-form-field-input-select sos-ftype-%fid%" onchange="FrmFieldView.updateFoptions();">\
+				<option class="form-control sos-form-field-input sos-form-field-input-option" value="text">Text Field</option>\
+				<option class="form-control sos-form-field-input sos-form-field-input-option" value="select">Select Field</option>\
 			</select>\
         </td>\
         <td>\
@@ -412,6 +414,9 @@
 		$($tbody).find("select:last").val(Field.ftype ? Field.ftype : "text");
       });
     };
+	$(".sos-form-field-input-select").ready(function() { 
+		$(".sos-form-field-input-select").selectpicker();
+	});
 
     var deleteField = function deleteField(id) {
 	  var deletedQuestions = $('#sos-deleted-questions').val(),
