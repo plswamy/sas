@@ -169,7 +169,22 @@
                     </div>
                     <div id="content_wrap" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <img class="cover-width" src="support/img/sections.jpg" alt="Sections">
+
+                            <div class="banner-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="plan-container col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <span class="icon plan-icon"></span>
+                                    <span class="header-name">Plan</span>
+                                </div>
+                                <div class="do-container col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <span class="icon do-icon"></span>
+                                    <span class="header-name">Do</span>
+                                </div>
+                                <div class="check-container col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <span class="icon check-icon"></span>
+                                    <span class="header-name">Check</span>
+                                </div>
+                            </div>
+
                             <div class="content col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="sos-left-bar left col-xs-12 col-sm-12 col-md-6 col-lg-5">
                                     <h2 class="index-header-2"><%= welcomeHeader %></h2>

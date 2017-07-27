@@ -235,6 +235,50 @@ body {
   color: #2f4696;
 }
 
+.banner-container {
+  height: 40px;
+  padding: 0px !important;
+}
+
+.banner-container .plan-icon {
+  margin: 1px 0px;
+  background-size: cover;
+  height: 35px;
+  width: 30px;
+}
+.banner-container .do-icon,
+.banner-container .check-icon {
+  background-size: cover;
+  width: 29px;
+  height: 27px;
+}
+.plan-container, .do-container, .check-container {
+  height: 100%;
+  padding: 0 1% !important;
+  line-height: 40px;
+}
+.plan-container {
+  background-color: #2f4696;
+}
+.do-container {
+  background-color: #232762;
+}
+.check-container {
+  background-color: #EF820F;
+}
+.header-name {
+  font-size: 2em;
+  color: #fff;
+  margin-left: 35px;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 768px) {
+  .header-name {
+     font-size: 1em;
+  }
+}
+
 .sos-subsection-header {
   color: #8a8b92;
   background-color: #e2e2e2;
