@@ -881,3 +881,16 @@ body.sos-dark-theme {
 #body #chart svg:not(:root) {
     overflow: visible !important;
 }
+
+
+#chart {
+    background-color: #e7e7f6;
+}
+
+#body {
+    padding-bottom: 20px;
+}
+
+#chart > svg {
+    margin-left: 20%;
+}

@@ -141,22 +141,23 @@
                                     obj = {
                                         axis: ss,
                                         value: calValue
-                                    },
-                                    dummyObj = {
+                                    };
+                                    /*dummyObj = {
                                         axis: ss,
                                         value: (calValue + 0.15)
-                                        };
+                                        };*/
                                     scoreData.push(obj);
-                                    indusStandards.push(dummyObj);
+                                    //indusStandards.push(dummyObj);
                           });
 
                           chartData.push(scoreData);
-                          chartData.push(indusStandards);
+                          //chartData.push(indusStandards);
                           
                           /*****************************************************************************************/
                             var w = 400, h = 500, 
                                 colorscale = d3.scale.category10(),
-                                LegendOptions = ['YOUR SCORECARD','VERSUS INDUSTRY STANDARDS'],
+                                //LegendOptions = ['YOUR SCORECARD','VERSUS INDUSTRY STANDARDS'],
+                                LegendOptions = ['YOUR SCORECARD'],
                                 d = chartData,
                                 mycfg = {
                                     w: w,
@@ -188,7 +189,7 @@
                             .attr("class", "legend")
                             .attr("height", 100)
                             .attr("width", 100)
-                            .attr('transform', 'translate(90,20)') 
+                            .attr('transform', 'translate(-195, 15)') 
                             ;
                             //Create colour squares
                             legend.selectAll('rect')
