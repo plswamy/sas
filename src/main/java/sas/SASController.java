@@ -11,6 +11,8 @@ import java.security.Principal;
 
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -18,11 +20,21 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import sas.bean.Question;
 
@@ -32,24 +44,18 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 
 @Controller
@@ -65,11 +71,8 @@ public class SASController {
 	private HttpServletResponse res;
 	
 	@Autowired
-	private JavaMailSender sender;
-	
-	@Value("${mail.toMailId}")
-	private String toMailId;
-	
+	private NotificationService notificationService;
+
 	Connection con = null;
 	PreparedStatement stmt = null;
 
@@ -151,6 +154,7 @@ public class SASController {
 		System.out.println("email ....:" + req.getParameter("f4"));
 		saveUser();
 		saveUserResponse();
+		postEloqua();
 		return "report";
 	}
 
@@ -164,9 +168,14 @@ public class SASController {
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.POST)
-	public String postAdmin(ModelMap model) {
-		System.out.println("admin post called....");
-		saveLangData();		String requestedLang = req.getParameter("language");
+	public String postAdmin(@RequestParam("file_plan_-1") MultipartFile file,
+                                   RedirectAttributes redirectAttributes) {
+		System.out.println("=============admin post called=======================");
+		if (file.isEmpty()) {
+			System.out.println("=======================upload file is empty=======================");
+		}
+		saveLangData(file);
+		String requestedLang = req.getParameter("language");
 		System.out.println("requested Lang from page is :" + requestedLang);
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
 		req.setAttribute("questions", getQuestions(requestedLang));
@@ -227,7 +236,8 @@ public class SASController {
 		String pdfFilePath = generatePDF();
 		if (pdfFilePath != null) {
 			try {
-				sendEmail(pdfFilePath);
+				// sendEmail(pdfFilePath);
+				notificationService.sendNotificaitoin(pdfFilePath, req.getParameter("scoreinfo"));
 				System.out.println("mail sent");
 			} catch (Exception e) {
 				LOGGER.error("can not able to send mail.", e);
@@ -492,9 +502,9 @@ public class SASController {
 		return id;
 	}
 
-	private void saveLangData() {
+	private void saveLangData(MultipartFile file) {
 		try {
-			uploadFiles();
+			uploadFiles(file);
 			String lang = req.getParameter("lang");
 			if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
 				lang = "english";
@@ -518,10 +528,20 @@ public class SASController {
 		}
 	}
 
-	private void uploadFiles() {
+	private void uploadFiles(MultipartFile file) {
 		try {
-			// location to store file uploaded
-			String UPLOAD_DIRECTORY = "support\\img\\resourceFiles\\123\\";
+
+    	String UPLOAD_DIRECTORY = req.getRealPath("/");
+			if (file.isEmpty()) {
+            System.out.println("=======file.isEmpty ======== ");
+        }else{
+        		System.out.println("======= UPLOAD_DIRECTORY ======"+UPLOAD_DIRECTORY);
+        	  System.out.println("=======file.getOriginalFilename() ======== "+file.getOriginalFilename());
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(UPLOAD_DIRECTORY+ file.getOriginalFilename());
+            Files.write(path, bytes);
+        }
+
 
 			// checks if the request actually contains upload file
 			if (!ServletFileUpload.isMultipartContent(req)) {
@@ -531,7 +551,7 @@ public class SASController {
 				writer.flush();
 				return;
 			}
-
+			/* Commented this code as the upload part is handle above
 			// configures upload settings
 			DiskFileItemFactory factory = new DiskFileItemFactory();
 			factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
@@ -563,6 +583,7 @@ public class SASController {
 					}
 				}
 			}
+		*/
 		} catch (Exception ex) {
 			System.out.println("There was an error: " + ex.getMessage());
 		}
@@ -1049,42 +1070,6 @@ public class SASController {
 		}
 	}
 
-	private void sendEmail(String pdfFilePath) throws Exception {
-
-		try {
-			MimeMessage message = sender.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(message, true);
-			String temp = req.getParameter("scoreinfo");
-			StringTokenizer st = new StringTokenizer(temp, "|");
-			String score = st.nextToken();
-			String img = st.nextToken();
-			String user = st.nextToken();
-			String email = st.nextToken();
-			System.out.println("email =" + email);
-			if (st.hasMoreElements()) {
-				user = user + " " + st.nextToken();
-			}
-			String subject = "Travel Risk Management self-assessment: You scored " + score + "%";
-			String mailMessage = "Hi! " + user+",\n";
-			mailMessage = "Please find your assessment report.\n ";
-			mailMessage += "Regards,\n ";
-			mailMessage += "Self Assessment team";
-			String pdfName = "SelfAssessmentReport.pdf";
-			File pdfFile = new File(pdfFilePath);
-
-			helper.setTo(email);
-			helper.setText(mailMessage);
-			helper.setSubject(subject);
-			helper.addAttachment(pdfName, pdfFile);
-			sender.send(message);
-		} catch (Exception e) {
-			LOGGER.error("can not able to send mail.", e);
-			e.printStackTrace();
-		}
-		// Enable the multipart flag!
-
-	}
-	
 	private void getQuestionElement(String userid, Element main) {
 		LinkedHashMap<String, List<Question>> hs = new LinkedHashMap<String, List<Question>>();
 		try {
@@ -1138,7 +1123,7 @@ public class SASController {
 					q = list.get(i);
 					qElem = new Element("question");
 					temp = new Element("title");
-					temp.setText("Q"+q.getId());
+					temp.setText("Q"+q.getQorder());
 					qElem.addContent(temp);
 					temp = new Element("value");
 					temp.setText(q.getText());
@@ -1154,5 +1139,90 @@ public class SASController {
 			exp.printStackTrace();
 		}		
 	}
+	public void postEloqua() {
 
+		 try {
+		 String jsonStr = getData4Eloqua();
+		 System.out.println("eloqua json = " + jsonStr);
+		 com.mashape.unirest.http.HttpResponse<String> response =
+		 Unirest.post("https://secure.p06.eloqua.com/api/REST/2.0/data/customObject/34/instance")
+		 .header("authorization", "Basic SW50ZXJuYXRpb25hbFNPU1xTQVRvb2wuU0FUb29sOlNBVG9vbDEyMw==")
+		 .header("content-type", "application/json")
+		 .header("cache-control", "no-cache")
+		 .header("postman-token", "6c51d19d-2327-fc92-8218-c8dd22ac35ee")
+		 .body(jsonStr)
+		 .asString();
+		 System.out.println(response.getBody());
+		 } catch (UnirestException e) {
+		 e.printStackTrace();
+		 }
+	}
+
+	public String getData4Eloqua() {
+		String jsonStr = null;
+		String userId = (String) req.getAttribute("userid");
+		Map<String, String> map = new HashMap<String, String>();
+		try {
+			Resource resource = new ClassPathResource("/application.properties");
+			Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+			con = dataSource.getConnection();
+			stmt = con.prepareStatement(
+					"select info.f6, info.f5, info.f7, info.f4, info.f1, info.f2, info.id, info.lang, response.qid, response.qresponse from registrationinfo info, userresponse response where info.id=response.userid and info.id=? ");
+					//"select max(response.id), info.f6, info.f5, info.f7, info.f4, info.f1, info.f2, info.id, info.lang, response.qid, response.qresponse from registrationinfo info, userresponse response where info.id=response.userid and info.id=? group by info.f4, response.qid HAVING COUNT(*) > 1");
+			stmt.setString(1, userId);
+			ResultSet rs = stmt.executeQuery();
+			int index = 0;
+			while (rs.next()) {
+				if (index == 0) {
+					map.put(properties.getProperty(SASConstants.LANGUAGE),
+							rs.getString("lang") + " " + properties.getProperty(SASConstants.SELF_ASSESSMENT));
+					map.put(properties.getProperty(SASConstants.BUSSINESS_INDUSTRY), rs.getString("f6"));
+					map.put(properties.getProperty(SASConstants.COMPANY), rs.getString("f5"));
+					map.put(properties.getProperty(SASConstants.COUNTRY), rs.getString("f7"));
+					map.put(properties.getProperty(SASConstants.EMAIL), rs.getString("f4"));
+					map.put(properties.getProperty(SASConstants.FIRST_NAME), rs.getString("f1"));
+					map.put(properties.getProperty(SASConstants.LAST_NAME), rs.getString("f2"));
+					map.put(properties.getProperty(SASConstants.TITLE), "SME");
+					map.put(properties.getProperty(SASConstants.USER_ID), rs.getString("id"));
+					map.put(properties.getProperty(SASConstants.QUESTION_ID), rs.getString("qid"));
+					map.put(properties.getProperty(SASConstants.QUESTION_RESPONSE), rs.getString("qresponse"));
+				} else {
+					String qidKey = properties.getProperty(SASConstants.QUESTION_ID);
+					String qresponseKey = properties.getProperty(SASConstants.QUESTION_RESPONSE);
+					String qid = map.get(qidKey);
+					String qresponse = map.get(qresponseKey);
+					qid = qid + "," + rs.getString("qid");
+					qresponse = qresponse + "," + rs.getString("qresponse");
+					map.replace(qidKey, qid);
+					map.replace(qresponseKey, qresponse);
+				}
+				index++;
+			}
+			jsonStr = generateJson(properties, map);
+
+		} catch (Exception exp) {
+			exp.printStackTrace();
+		} finally {
+			close();
+		}
+		return jsonStr;
+	}
+
+	public String generateJson(Properties properties, Map<String, String> hs) {
+		JSONObject dataset = new JSONObject();
+		dataset.put("type", SASConstants.CUSTOM_OBJECT_DATA);
+		dataset.put("id", properties.getProperty(SASConstants.CUSTOM_OBJECT_ID));
+		JSONArray fieldset = new JSONArray();
+		for (String key : hs.keySet()) {
+			JSONObject field = new JSONObject();
+			field.put("id", key);
+			field.put("value", hs.get(key));
+			fieldset.put(field);
+		}
+		dataset.put("fieldValues", fieldset);
+
+		System.out.println(JSONObject.quote(dataset.toString()));
+
+		return dataset.toString();
+	}
 }
