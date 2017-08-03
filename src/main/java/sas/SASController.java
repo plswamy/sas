@@ -1,4 +1,3 @@
-
 package sas;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,8 +53,11 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import java.io.File;
 import java.io.PrintWriter;
 
 @Controller
@@ -168,13 +170,10 @@ public class SASController {
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.POST)
-	public String postAdmin(@RequestParam("file_plan_-1") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
-		System.out.println("=============admin post called=======================");
-		if (file.isEmpty()) {
-			System.out.println("=======================upload file is empty=======================");
-		}
-		saveLangData(file);
+	public String postAdmin(ModelMap model) {
+		System.out.println("admin post called....");
+		
+		saveLangData();
 		String requestedLang = req.getParameter("language");
 		System.out.println("requested Lang from page is :" + requestedLang);
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
@@ -502,9 +501,9 @@ public class SASController {
 		return id;
 	}
 
-	private void saveLangData(MultipartFile file) {
+	private void saveLangData() {
 		try {
-			uploadFiles(file);
+			uploadFiles();
 			String lang = req.getParameter("lang");
 			if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
 				lang = "english";
@@ -528,30 +527,10 @@ public class SASController {
 		}
 	}
 
-	private void uploadFiles(MultipartFile file) {
+	private void uploadFiles() {
 		try {
 
-    	String UPLOAD_DIRECTORY = req.getRealPath("/");
-			if (file.isEmpty()) {
-            System.out.println("=======file.isEmpty ======== ");
-        }else{
-        		System.out.println("======= UPLOAD_DIRECTORY ======"+UPLOAD_DIRECTORY);
-        	  System.out.println("=======file.getOriginalFilename() ======== "+file.getOriginalFilename());
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOAD_DIRECTORY+ file.getOriginalFilename());
-            Files.write(path, bytes);
-        }
-
-
-			// checks if the request actually contains upload file
-			if (!ServletFileUpload.isMultipartContent(req)) {
-				// if not, we stop here
-				PrintWriter writer = res.getWriter();
-				writer.println("Error: Form must has enctype=multipart/form-data.");
-				writer.flush();
-				return;
-			}
-			/* Commented this code as the upload part is handle above
+			String UPLOAD_DIRECTORY = "support\\img\\resourceFiles\\123\\";
 			// configures upload settings
 			DiskFileItemFactory factory = new DiskFileItemFactory();
 			factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
@@ -562,13 +541,11 @@ public class SASController {
 			if (!uploadDir.exists()) {
 				uploadDir.mkdir();
 			}
-
 			// parses the request's content to extract file data
 			@SuppressWarnings("unchecked")
 			List<FileItem> formItems = upload.parseRequest(req);
 			System.out.println("formItems.....:" + formItems);
 			System.out.println("formItems.....:" + formItems.size());
-
 			if (formItems != null && formItems.size() > 0) {
 				// iterates over form's fields
 				for (FileItem item : formItems) {
@@ -583,7 +560,7 @@ public class SASController {
 					}
 				}
 			}
-		*/
+		
 		} catch (Exception ex) {
 			System.out.println("There was an error: " + ex.getMessage());
 		}
