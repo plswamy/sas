@@ -22,13 +22,15 @@
 	<fo:page-sequence master-reference="all" >
       <fo:static-content flow-name="xsl-region-before">
 	    <fo:block >
-		  <fo:table  width="100%">
-		     <fo:table-column column-width="80%"/>
+		  <fo:table  width="100%" padding-bottom="-1.5cm">
+		     <fo:table-column column-width="10%"/>
+		     
+		     
 			   <fo:table-body>
 			      <fo:table-row>
 				      <fo:table-cell >
-				         <fo:block start-indent = "37cm"  padding="4mm">
-							<fo:external-graphic display-align="right">
+				         <fo:block start-indent = "34cm" >
+							<fo:external-graphic display-align="right" width="800pt">
 								<xsl:attribute name="src">
 									<xsl:text>'</xsl:text>
 									<xsl:value-of select="data/main/imgPath"/><xsl:text>/</xsl:text>
@@ -56,8 +58,8 @@
                                   </fo:block>
 				      		</fo:table-cell>	
 						 <fo:table-cell text-align="margin-right" >
-				        	<fo:block start-indent="0.2cm"  font-family="arial" font-weight="bold" color="blue" font-size="47pt" wrap-option="no-wrap" >
-				          			Travel Risk Management self-assessment
+				        	<fo:block start-indent="0.2cm"  font-family="arial" font-weight="bold" color="#2f4696" font-size="47pt" wrap-option="no-wrap" >
+				          			TRAVEL RISK MANAGEMENT SELF-ASSESSMENT
 				        	</fo:block>
 				      	 </fo:table-cell>	
 				       </fo:table-row>	
@@ -68,7 +70,7 @@
 				
 
 			<fo:block text-align="start" line-height="1em + 2pt" > 
-				 <fo:table border-bottom-style="solid" border-bottom-width="2pt" padding="7mm">
+				 <fo:table border-bottom-style="solid" border-bottom-width="2pt" padding="2mm">
 				    	<fo:table-column column-width="10.5cm"/>
 						<fo:table-column column-width="10.5cm"/>
 						<fo:table-column column-width="10.5cm"/> 
@@ -81,10 +83,20 @@
 				      				</fo:table-cell>
 				       
 				     				  <fo:table-cell  text-align="margin-left">
-				      					<fo:block start-indent="-10.2cm"  font-family="arial" color="black" font-size="40pt" wrap-option="no-wrap" >
-				         				 Your Summary - <xsl:value-of select="data/main/user"/><xsl:text></xsl:text>
+				      					<fo:block start-indent="-10.2cm" font-family="arial" font-size="30pt" color="black" wrap-option="no-wrap" >
+				         				Your Summary - 
+									<fo:inline font-size="25pt"> <xsl:value-of select="data/main/user"/> <xsl:text></xsl:text> </fo:inline>
 				                        </fo:block>
-				        			  </fo:table-cell>
+							
+							<fo:block start-indent="-10.2cm" text-align="left" font-family="arial" color="black" font-size="30pt" wrap-option="wrap" padding="2mm" >
+								<xsl:value-of select="data/main/rheading"/><xsl:text> </xsl:text>
+								<xsl:variable name="rurl" select="data/main/rurl"/>
+								<fo:basic-link external-destination="url('{$rurl}')" color="blue">  
+									<xsl:value-of select="data/main/rlink"/><xsl:text> </xsl:text>
+								</fo:basic-link>
+							</fo:block>					
+				        	                  </fo:table-cell>
+								 
                            		</fo:table-row>
                       		</fo:table-body>
                  </fo:table>
@@ -99,11 +111,18 @@
    			            <fo:table table-layout="fixed" start-indent="-4.4cm" >
 				           <fo:table-column column-width="50cm"/>
 					          <fo:table-body>
-						          <fo:table-row>
-				                      <fo:table-cell text-align="center">
-				                            <fo:block  color="navy" font-family="arial" font-size="40pt" font-weight="bold"> WORLDWIDE REACH. 
-				                       <fo:inline color="blue">HUMAN TOUCH.</fo:inline> </fo:block>
-				                       </fo:table-cell>				      
+						    <fo:table-row>
+				                      <fo:table-cell>
+				                           <fo:block start-indent = "14cm"  padding="4mm">
+							<fo:external-graphic display-align="center" width="500pt">
+								<xsl:attribute name="src">
+									<xsl:text>'</xsl:text>
+									<xsl:value-of select="data/main/imgPath"/><xsl:text>/</xsl:text>
+									<xsl:value-of select="data/main/strapline"/><xsl:text>'</xsl:text>
+								</xsl:attribute>
+							</fo:external-graphic>
+				                           </fo:block>
+	      			                      </fo:table-cell>				      
 				                   </fo:table-row>
 		      		           </fo:table-body>
 		                </fo:table>
@@ -116,7 +135,7 @@
      <fo:flow flow-name="xsl-region-body">
 		<xsl:apply-templates select="data"/>
 		<fo:block text-align="start" line-height="1em + 2pt">
-				<fo:table  table-layout="fixed" width="300%" space-before="0.5cm"  border-bottom-style="solid" border-bottom-width="2pt"  padding="5.5mm" >
+				<fo:table  table-layout="fixed" width="300%" space-before="0.5cm"  border-bottom-style="solid" border-bottom-width="2pt"  padding="3mm" >
 						<fo:table-column column-width="10.5cm"/>
 						<fo:table-column column-width="10.5cm"/>
 						<fo:table-column column-width="10.5cm"/> 
@@ -129,7 +148,7 @@
 				        			</fo:table-cell>	
 
 				      				<fo:table-cell text-align="margin-right" >
-				        				<fo:block  start-indent = "7.5cm" font-family="arial" font-weight="bold" color="blue" font-size="40pt" wrap-option="no-wrap" padding="0.8mm">
+				        				<fo:block  start-indent = "6.5cm" font-family="arial" font-weight="bold" color="blue" font-size="43pt" wrap-option="no-wrap" padding-bottom="6mm" padding-top="-2mm">
 				  						You scored <xsl:value-of select="data/main/score"/><xsl:text></xsl:text>
 				        				</fo:block>
 				      				</fo:table-cell>	
@@ -196,27 +215,30 @@
 						<xsl:for-each select="data/main/plan">
 							<xsl:variable name="titleColor">
 								<xsl:choose>
-									<xsl:when test="title='Check'">
-										<xsl:value-of select="'darkorange'" />
+									<xsl:when test="title='do'">
+										<xsl:value-of select="'#009354'" /> <!-- green-->
+									</xsl:when>
+									<xsl:when test="title='check'">
+										<xsl:value-of select="'#6c206b'" /> <!-- purple -->
 									</xsl:when>
 									<xsl:otherwise>
-										<xsl:value-of select="'darkblue'" />
+										<xsl:value-of select="'#232762'" /> <!--blue -->
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:variable>
 							<fo:table-row>
 								<fo:table-cell number-columns-spanned="2">
 									<fo:block font-family="arial" color="{$titleColor}"
-										font-size="40pt" wrap-option="wrap" space-before="1cm">
+										font-size="40pt" wrap-option="wrap" space-before="1cm" font-variant="small-caps">
 										<xsl:value-of select="title" />
-										<xsl:text> </xsl:text>	
+										<xsl:text>  </xsl:text>	
 									</fo:block>
 								</fo:table-cell>
 							</fo:table-row>
 							<xsl:for-each select="question">
 								<fo:table-row background-color="#f2f2f2">
 									<fo:table-cell>
-										<fo:block font-family="arial" color="{$titleColor}"
+										<fo:block font-family="arial"
 											font-size="25pt" wrap-option="wrap" font-weight="bold"
 											space-before="1cm" margin="1.5cm">
 											<xsl:value-of select="title" />
@@ -235,7 +257,7 @@
 								<fo:table-row background-color="#f2f2f2">
 									<fo:table-cell number-columns-spanned="2">
 										<fo:block font-family="arial" color="black"
-											font-size="25pt" wrap-option="wrap" space-before="1cm" margin="1.5cm">
+											font-size="25pt" wrap-option="wrap" space-before="1cm" margin="4.0cm">
 											<xsl:value-of select="answer" />
 											<xsl:text> </xsl:text>
 										</fo:block>
@@ -328,12 +350,20 @@
 				       <xsl:value-of select="data/main/desc31"/><xsl:text></xsl:text> </fo:block> 
                      	<fo:block font-family="arial" font-size="9pt" >
 				      
-				     </fo:block> 
- 							<fo:block text-align="left" font-family="arial" color="black" font-size="21pt" wrap-option="no-wrap" padding="7mm" >
-		<xsl:value-of select="data/main/desc32"/><xsl:text></xsl:text><fo:basic-link 
-		external-destination="url('http://www.internationalsos.com')" color="blue"> http://www.internationalsos.com
-                                                          </fo:basic-link>
-                                                      </fo:block>
+
+				 </fo:block> 
+			<fo:block text-align="left" font-family="arial" color="black" font-size="21pt" wrap-option="no-wrap" padding="7mm" >
+							<xsl:value-of select="data/main/desc32"/><xsl:text></xsl:text>
+							<xsl:variable name="cmailid" select="data/main/cmailid"/>
+							<fo:basic-link external-destination="mailto:{$cmailid}" color="blue">
+								<xsl:value-of select="data/main/cmailid"/><xsl:text> </xsl:text>
+							</fo:basic-link>
+							 | <xsl:variable name="curl" select="data/main/curl"/>
+							<fo:basic-link external-destination="url('{$curl}')" color="blue">  
+								<xsl:value-of select="data/main/clink"/><xsl:text> </xsl:text>
+							</fo:basic-link>
+			</fo:block>
+
                                                       <fo:block text-align="left" font-family="arial" color="black" font-size="21pt" wrap-option="no-wrap" padding="2mm">
             <xsl:value-of select="data/main/desc33"/><xsl:text></xsl:text> </fo:block>
           <fo:block text-align="left" font-family="arial" color="black" font-size="21pt" wrap-option="no-wrap" padding="2mm">
