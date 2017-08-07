@@ -205,6 +205,9 @@
 
     </head>
     <body class="sos-dark-theme">
+        <div class="sos-admin-logo-wrapper">
+            <div id="logo" class="sos-admin-logo"></div>
+        </div>
 		<%
                 String lang = (String) request.getAttribute("language");
 				//System.out.println("\n\n\n\n\n lang: "+lang);
@@ -217,9 +220,58 @@
             %>
         <form name="localeForm" id="localeForm" method="get" action="admin" onsubmit="" >
             <div class="admin-locale-wrapper">
-                <div id="logo" class="pull-right"></div>
-                <div style="float: left;width: 40%;display: inline-block;margin-top: 79px;">
-                    <input class="admin-lang form-control" name="language" id="language" type="text" value="<%=(lang.equals("en") || lang.equals("english") ? "master" : lang)%>" />
+                
+                <div style="sos-admin-first-form">
+                    
+                    
+                    <a style="cursor: pointer;top: 20px;position: relative;display: inline-block;" data-toggle="modal" data-target="#myModalNorm">Create new site</a>
+                    <!--button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalNorm">Launch Normal Form</button-->
+
+                    <div class="modal fade" id="myModalNorm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <button type="button" class="close" 
+                                       data-dismiss="modal">
+                                           <span aria-hidden="true">&times;</span>
+                                           <span class="sr-only">Close</span>
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        Create new site
+                                    </h4>
+                                </div>
+                                
+                                <!-- Modal Body -->
+                                <div class="modal-body">                                    
+                                    <form role="form">
+                                      <div class="form-group">
+                                        <label for="exampleInputEmail1">Enter site name: </label>
+                                        <br />
+                                        <input type="text" class="form-control sos-admin-new-site-input" id="sos-admin-new-site-input" placeholder="Enter site name"/>
+                                      </div>
+                                    </form>
+                                </div>
+                                
+                                <!-- Modal Footer -->
+                                <div class="modal-footer">
+                                    <!--button type="button" class="btn btn-default"
+                                            data-dismiss="modal">
+                                                Close
+                                    </button-->
+                                    <button type="button" class="btn btn-primary" onClick="javascript: createSite();">
+                                        Create!
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+
+
+
+
+                    <input class="admin-lang form-control hidden" name="language" id="language" type="text" value="<%=(lang.equals("en") || lang.equals("english") ? "master" : lang)%>" />
                     <select id="sos-lang-select" class="selectpicker sos-admin-select" onchange="javascript: updateLocaleData();">
 						<option value="master">master</option>
 					<%
@@ -232,8 +284,35 @@
                         <option value="<%=tempLang%>"><%= tempLangDisplayName %></option>
 					<% } %>
                     </select>  
-                    <button style="display: inline-block; width: 17%; float: right;" class="btn btn-primary admin-lang-btn col-lg-4 col-md-6 col-sm-12 col-xs-12" onclick="javascript: return getLocaleData();">Go!</button>
+                    <button style="display: inline-block; width: 58px; float: right;" id="sos-admin-lang-submit" class="btn btn-primary admin-lang-btn col-lg-4 col-md-6 col-sm-12 col-xs-12" onclick="javascript: return getLocaleData();">Go!</button>
                     <script>
+                    function createSite(event) {
+                        var siteName = $("#sos-admin-new-site-input").val().trim();
+                        if (siteName === '') {
+                            alert("Please enter site name");
+                        } else {
+                            // submit new site form.
+                            $("#sos-admin-new-site-input").val(siteName);
+                            $("#sos-admin-lang-submit").trigger("click");
+                        }
+                        console.log(siteName);
+                    }
+                    $(document).ready(function () {
+                        $('#myModal').bind('show', function () {
+                            //do stuf on show
+                        });
+                        $('#btn-modal').click(function() {
+                            $('#myModal').modal('show');
+                        });
+                    });
+
+                    function closeDialog() {
+                        $('#myModal').modal('hide');
+                    };
+
+                    function okClicked() {
+                        closeDialog();
+                    };
                     $(".selectpicker").ready(function() {
                        $(".selectpicker").selectpicker();
                         });
