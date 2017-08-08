@@ -100,16 +100,19 @@
     <systemPath>${basedir}/src/main/resources/lib/commons-fileupload-1.2.2.jar</systemPath>
 </dependency>
 <dependency>
-			<groupId>com.mashape.unirest</groupId>
+			<groupId>unirest-java</groupId>
 			<artifactId>unirest-java</artifactId>
 			<version>1.4.9</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/unirest-java-1.4.9.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>org.json</groupId>
+			<groupId>json</groupId>
 			<artifactId>json</artifactId>
 			<version>20160810</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/json-20160810.jar</systemPath>
 		</dependency>
-    </dependencies>
 
 
 
