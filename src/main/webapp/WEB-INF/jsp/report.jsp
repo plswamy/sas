@@ -1,14 +1,123 @@
 <!DOCTYPE html>
   <html xmlns="http://www.w3.org/1999/xhtml">
+    <%@page import="sas.bean.Question"%>
+    <%@page import="sas.bean.Answer"%>
     <%@ page import="java.util.*" %>
     <head>
+        
+
+      <script>
+        var userSession = {};
+      </script>
       <%
         String webContext = "";
         String userid = (String) request.getAttribute("userid");
+
+
+        /* begin: assuming below inputs are coming from report link from pdf */
+
+        if(request.getAttribute("userdata") != null) {
+
+            %>
+                <script>
+                    var planSection = {}, doSection = {}, checkSection = {}, allSections = {}, surPro = {}, fullD = {},
+                        surveyProgress = {'plan': {}, 'do': {}, 'check': {}}, fullData = {};
+            <%
+                    List<String> userList = (List<String>) request.getAttribute("userdata");
+                    for(int i=0; i < userList.size(); i++) {
+                        %>
+                        userSession["f1"] = "<%= userList.get(i) %>";
+                        userSession["f2"] = "<%= userList.get(++i) %>";
+                        userSession["f4"] = "<%= userList.get(++i) %>";
+                        <%
+                    }
+
+                    Hashtable<String, String> ans = (Hashtable<String, String>) request.getAttribute("answers");
+
+                    Set<String> ansKeys = ans.keySet();
+                    for(String key: ansKeys) {
+                        %>
+                            surPro['<%=key%>'] = '<%= ans.get(key) %>';
+                        <%
+                    }
+
+                    Hashtable<String, List<Question>> hs = (Hashtable<String, List<Question>>) request.getAttribute("questions");  
+                    List<Question> list = hs.get("plan");
+                    int totalQuestions = 0;
+                    Question q = null;
+                    for(int i=0; i < list.size(); i++) {
+                        q = list.get(i);
+            %>
+                        planSection["<%= q.getId() %>"] =  {
+                            "qry" : "<%= q.getText() %>",
+                            "subsection" : "<%= q.getSubtype() %>",
+                            "img" : "<%= q.getImageName() %>",
+                            "val" : surPro['<%= q.getId() %>']
+                        };
+                        surveyProgress['plan']["<%= q.getId() %>"] = surPro['<%= q.getId() %>'];
+            <%
+                    }
+            %>
+                    allSections["plan"] = planSection;
+            <%
+                    list = hs.get("do");
+                    q = null;
+                    System.out.println(list.size());
+                    for(int i=0; i < list.size(); i++) {
+                        q = list.get(i);
+            %>
+                        doSection["<%= q.getId() %>"] =  {
+                            "qry" : "<%= q.getText() %>",
+                            "subsection" : "<%= q.getSubtype() %>",
+                            "img" : "<%= q.getImageName() %>",
+                            "val" : surPro['<%= q.getId() %>']
+                        };
+                        surveyProgress['do']["<%= q.getId() %>"] = surPro['<%= q.getId() %>'];
+            <%
+                    }
+            %>        
+                    allSections["do"] = doSection;
+            <%
+                    list = hs.get("check");
+                    q = null;
+                    System.out.println(list.size());
+                    for(int i=0; i < list.size(); i++) {
+                        q = list.get(i);
+            %>
+                        checkSection["<%= q.getId() %>"] =  {
+                            "qry" : "<%= q.getText() %>",
+                            "subsection" : "<%= q.getSubtype() %>",
+                            "img" : "<%= q.getImageName() %>",
+                            "val" : surPro['<%= q.getId() %>']
+                        };
+                        surveyProgress['check']["<%= q.getId() %>"] = surPro['<%= q.getId() %>'];
+            <%
+                    }
+            %>
+                    allSections["check"] = checkSection;
+                    userSession['surveyProgress'] = surveyProgress;
+                    userSession['fullData'] = allSections;
+                    userSession.finished = true;
+                </script>
+            <%
+                    //System.out.println("Total Question : " + totalQuestions);               
+            
+        } else {
+            %>
+                <script>
+                userSession = JSON.parse(localStorage.getItem("userInfo"));
+                </script>
+            <%
+        }
+
+        
+        /* end: assuming above inputs are coming from report link from pdf */
+
+
       %>
       <script>
-        var userSession = JSON.parse(localStorage.getItem("userInfo")),
-        surveyProgress = {},
+        
+        var surveyProgress = {},
         answers = {};
 
         if(!!userSession && !!userSession.f4) {

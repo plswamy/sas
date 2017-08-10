@@ -36,6 +36,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import sas.bean.Question;
+import sas.bean.Answer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -163,9 +164,14 @@ public class SASController {
 	@RequestMapping(value = "/report", method = RequestMethod.GET)
 	public String getReport(ModelMap model) {
 		System.out.println("report get called....");
-		req.setAttribute("questions", getQuestions(null));
+		String userId = req.getParameter("userid");
+		if (nullCheck(userId).length() > 0) {
+			req.setAttribute("questions", getQuestions(null));
+			req.setAttribute("answers", getAnswers(userId));
+			req.setAttribute("userdata", getUserInfo(userId));
+		}
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", null));
-		return "survey";
+		return "report";
 
 	}
 
@@ -355,6 +361,35 @@ public class SASController {
 		}
 		return hs;
 	}
+	public Hashtable<String, String> getAnswers(String userid) {
+		System.out.println("getAnswers for userid : " + userid);
+		Hashtable<String, String> hs = new Hashtable<String, String>();
+		Answer q = null;
+		try {
+			con = dataSource.getConnection();
+			stmt = con.prepareStatement("select * from userresponse where userid = ?");
+			if (nullCheck(userid).length() == 0) {
+				// error handling here.
+			}
+			stmt.setString(1, userid);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				q = new Answer();
+
+				q.setId(rs.getString("id"));
+				q.setUserid(rs.getString("userid"));
+				q.setQid(rs.getString("qid"));
+				q.setQresponse(rs.getString("qresponse"));
+
+				hs.put(q.getQid(), q.getQresponse());
+			}
+		} catch (Exception exp) {
+			exp.printStackTrace();
+		} finally {
+			close();
+		}
+		return hs;
+	}
 
 	/*
 	 * public List<Question> getQuestionsAsList() { List<Question> list = new
@@ -499,6 +534,30 @@ public class SASController {
 			close();
 		}
 		return id;
+	}
+
+	private List<String> getUserInfo(String userId) {
+		List<String> list = new ArrayList<String>();
+		String temp = null;
+		try {
+			String sql = "select f1, f2, f4 from registrationinfo where id=" + userId;
+			con = dataSource.getConnection();
+			stmt = con.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				if (list == null) {
+					list = new ArrayList<String>();
+				}
+				list.add(rs.getString(1));
+				list.add(rs.getString(2));
+				list.add(rs.getString(3));
+			}
+		} catch (Exception exp) {
+			exp.printStackTrace();
+		} finally {
+			close();
+		}
+		return list;
 	}
 
 	private void saveLangData() {
