@@ -292,8 +292,8 @@
                             alert("Please enter site name");
                         } else {
                             // submit new site form.
-                            $("#sos-admin-new-site-input").val(siteName);
-                            $("#sos-admin-lang-submit").trigger("click");
+                            $("#sos-lang").val(siteName);
+                            $(".admin-lang-btn").trigger("click");
                         }
                         console.log(siteName);
                     }
