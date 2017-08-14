@@ -15,7 +15,7 @@
         <link href="support/lib/font-awesome.min.css" rel="stylesheet">
         <link href="support/lib/jquery-ui.min.css" rel="stylesheet">
         <link href="support/css/site.css" rel="stylesheet">
-
+	<link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
         <script type="text/javascript">
             var allData=[], allFieldsData=[];
             <%
