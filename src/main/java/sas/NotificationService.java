@@ -39,6 +39,8 @@ public class NotificationService {
 			String img = st.nextToken();
 			String user = st.nextToken();
 			String email = st.nextToken();
+			String companyName = st.nextToken();
+			String imageName = st.nextToken();
 			System.out.println("email =" + email);
 			if (st.hasMoreElements()) {
 				user = user + " " + st.nextToken();
