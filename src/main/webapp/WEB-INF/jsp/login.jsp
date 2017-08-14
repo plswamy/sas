@@ -10,6 +10,7 @@
         <script src="support/lib/bootstrap.min.js"></script>
         <link href="support/lib/bootstrap.min.css" rel="stylesheet">
         <link href="support/css/app.css" rel="stylesheet">
+        <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
         <title>Self Assessment Tool</title>
     </head>
     <body>
