@@ -1,5 +1,6 @@
 package sas;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,7 +31,10 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -54,11 +59,20 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 
 @Controller
@@ -76,6 +90,12 @@ public class SASController {
 	@Autowired
 	private NotificationService notificationService;
 
+	@Autowired
+	private RequestMappingHandlerMapping requestMappingHandlerMapping;
+
+	@Autowired
+	private HttpSession session;
+
 	Connection con = null;
 	PreparedStatement stmt = null;
 
@@ -92,6 +112,7 @@ public class SASController {
 	public ModelAndView helloAdmin(ModelMap model, Principal principal) {
 		System.out.println("helloAdmin called");
 		String requestedLang = req.getParameter("language");
+		session.setAttribute("language", requestedLang);
 		System.out.println("requested Lang from page is :" + requestedLang);
 		String loggedInUserName = principal.getName();
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
@@ -127,7 +148,9 @@ public class SASController {
 
 	@RequestMapping(value = "/survey", method = RequestMethod.GET)
 	public String surveyGet(ModelMap model) {
-		String lang = req.getParameter("language");
+		String lang = (String) session.getAttribute("language");
+		if (lang == null)
+			lang = req.getParameter("language");
 		System.out.println("survey get called....:" + lang);
 		req.setAttribute("questions", getQuestions(lang));
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
@@ -142,9 +165,11 @@ public class SASController {
 		System.out.println(
 				"ctl00$ContentPlaceHolder1$tbxLastName ===" + model.get("ctl00$ContentPlaceHolder1$tbxLastName"));
 		System.out.println("request getParameter ====" + request.getParameter("ctl00$ContentPlaceHolder1$tbxLastName"));
-
-		req.setAttribute("questions", getQuestions(null));
-		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", null));
+		String lang = (String) session.getAttribute("language");
+		if (lang == null)
+			lang = req.getParameter("language");
+		req.setAttribute("questions", getQuestions(lang));
+		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		// req.setAttribute("answertypes", getData("answers", "answertype",
 		// "answertypevalue"));
 		return "report";
@@ -152,7 +177,7 @@ public class SASController {
 	}
 
 	@RequestMapping(value = "/report", method = RequestMethod.POST)
-	public String postReport(ModelMap model) {
+	public String postReport(ModelMap model) throws IOException {
 		System.out.println("report post called....");
 		System.out.println("email ....:" + req.getParameter("f4"));
 		saveUser();
@@ -164,13 +189,16 @@ public class SASController {
 	@RequestMapping(value = "/report", method = RequestMethod.GET)
 	public String getReport(ModelMap model) {
 		System.out.println("report get called....");
+		String lang = (String) session.getAttribute("language");
+		if (lang == null)
+			lang = req.getParameter("language");
 		String userId = req.getParameter("userid");
 		if (nullCheck(userId).length() > 0) {
 			req.setAttribute("questions", getQuestions(null));
 			req.setAttribute("answers", getAnswers(userId));
 			req.setAttribute("userdata", getUserInfo(userId));
 		}
-		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", null));
+		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		return "report";
 
 	}
@@ -178,9 +206,10 @@ public class SASController {
 	@RequestMapping(value = "/admin", method = RequestMethod.POST)
 	public String postAdmin(ModelMap model) {
 		System.out.println("admin post called....");
-		
-		saveLangData();
 		String requestedLang = req.getParameter("language");
+		session.setAttribute("language", requestedLang);
+		saveLangData();
+
 		System.out.println("requested Lang from page is :" + requestedLang);
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
 		req.setAttribute("questions", getQuestions(requestedLang));
@@ -235,6 +264,37 @@ public class SASController {
 	// }
 	// return "admin";
 	// }
+	@SuppressWarnings("deprecation")
+	@RequestMapping(value = "/image", method = RequestMethod.POST)
+	public void printImage(ModelMap model) throws IOException {
+		String picture = req.getParameter("picture");
+		String fileName = req.getParameter("filename");
+		if (picture != null) {
+			String base64 = picture.split("[,]")[1];
+			byte[] aByteArray = Base64.decodeBase64(base64.getBytes());
+			//System.out.println("encodedBytes :" + new String(aByteArray));
+			// output = new FileOutputStream(new File(req.getRealPath("/") +
+			// "/support/img/uploadedImages/" +fileName));
+			BufferedImage bufferedImage;
+			try {
+				bufferedImage = ImageIO.read(new ByteArrayInputStream(aByteArray));
+				BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(),
+						BufferedImage.TYPE_INT_RGB);
+				newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
+				ImageIO.write(newBufferedImage, "jpg", new File(req.getRealPath("/") + "/support/img/uploadedImages/" +fileName));
+
+				// output.write(aByteArray);
+				System.out.println(fileName + " image saved");
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+//			finally {
+//				output.close();
+//			}
+
+		}
+	}
+
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	public String printGet(ModelMap model) {
 		System.out.println("printGet");
@@ -253,6 +313,7 @@ public class SASController {
 		return "print";
 	}
 
+	@SuppressWarnings("deprecation")
 	private String generatePDF() {
 		String pdfFilePath = null;
 		try {
@@ -263,6 +324,8 @@ public class SASController {
 			String img = st.nextToken();
 			String userid = st.nextToken();
 			String email = st.nextToken();
+			String companyName = st.nextToken();
+			String imageName = st.nextToken();
 			String user = st.nextToken();
 			
 			if (st.hasMoreElements()) {
@@ -285,6 +348,9 @@ public class SASController {
 			document.getRootElement().getChild("data").getChild("main").getChild("score").setText(score + "%");
 			document.getRootElement().getChild("data").getChild("main").getChild("range").setText(img);
 			document.getRootElement().getChild("data").getChild("main").getChild("user").setText(user);
+			document.getRootElement().getChild("data").getChild("main").getChild("companyname").setText(companyName);
+			document.getRootElement().getChild("data").getChild("main").getChild("spiderwebFileName")
+					.setText(imageName);
 			Element main = document.getRootElement().getChild("data").getChild("main");
 			getQuestionElement(userid, main);
 			System.out.println(
@@ -319,6 +385,53 @@ public class SASController {
 
 		model.setViewName("403");
 		return model;
+	}
+
+	@RequestMapping(value = "*", method = RequestMethod.GET)
+	public String anyPath() {
+
+		System.out.println("request path is : " + req.getServletPath());
+		System.out.println("all end points in this controller : \n");
+		// for(HandlerMethod endPoint :
+		// requestMappingHandlerMapping.getHandlerMethods().values()) {
+		// System.out.println(endPoint. + "\n");
+		// }
+		session.setAttribute("language", req.getServletPath().substring(1));
+		req.setAttribute("language", req.getServletPath().substring(1));
+		loadData();
+		for (RequestMappingInfo info : requestMappingHandlerMapping.getHandlerMethods().keySet()) {
+			for (String urlPattern : info.getPatternsCondition().getPatterns()) {
+				if (req.getServletPath().equals(urlPattern)) {
+					System.out.println(urlPattern.substring(1));
+					return urlPattern.substring(1);
+				}
+			}
+		}
+		return "index";
+	}
+	// @RequestMapping(value = "/404", method = RequestMethod.GET)
+	// public ModelAndView noResource(Principal user) {
+	// ModelAndView model = new ModelAndView();
+	// if (user != null) {
+	// model.addObject("msg", "Hi " + user.getName() + ", You can not access
+	// this page!");
+	// } else {
+	// model.addObject("msg", "You can not access this page!");
+	// }
+	// System.out.println("requested for " + req.getRequestURL());
+	// model.setViewName("404");
+	// return model;
+	// }
+
+	@ExceptionHandler(Exception.class)
+	public ModelAndView handleError(HttpServletRequest req, Exception ex) {
+		LOGGER.error("Request: " + req.getRequestURL() + " raised " + ex);
+
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("exception", ex);
+		mav.addObject("url", req.getRequestURL());
+		mav.setViewName("error");
+		return mav;
 	}
 
 	public Hashtable<String, List<Question>> getQuestions(String lang) {
@@ -405,7 +518,10 @@ public class SASController {
 	 */
 
 	private void loadData() {
-		String lang = req.getParameter("language");
+		String lang = (String) session.getAttribute("language");
+		if (lang == null)
+			lang = req.getParameter("language");
+
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		req.setAttribute("businessindustry", getData("businessindustry", "optkey", "optvalue", lang));
 		req.setAttribute("country", getData("country", "optkey", "optvalue", lang));
@@ -564,6 +680,9 @@ public class SASController {
 		try {
 			uploadFiles();
 			String lang = req.getParameter("lang");
+			if (lang == null) {
+				lang = (String) session.getAttribute("language");
+			}
 			if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
 				lang = "english";
 			}
@@ -586,6 +705,7 @@ public class SASController {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void uploadFiles() {
 		try {
 
@@ -630,6 +750,9 @@ public class SASController {
 		String questions = req.getParameter("questions");
 		String userformsfields = req.getParameter("userformsfields");
 		String lang = req.getParameter("lang");
+		if (lang == null) {
+			session.getAttribute("language");
+		}
 		if (nullCheck(lang).length() == 0 || lang.equals("en")) {
 			lang = "english";
 		}
@@ -805,6 +928,9 @@ public class SASController {
 		String labels = req.getParameter("labels");
 		String questions = req.getParameter("questions");
 		String lang = req.getParameter("lang");
+		if (lang == null) {
+			lang = (String) session.getAttribute("language");
+		}
 		System.out.println("lang:" + lang);
 		System.out.println("labels:" + labels);
 		System.out.println("questions:" + questions);
@@ -870,6 +996,9 @@ public class SASController {
 		String labels = req.getParameter("labels");
 		String questions = req.getParameter("questions");
 		String lang = req.getParameter("lang");
+		if (lang == null) {
+			lang = (String) session.getAttribute("language");
+		}
 		System.out.println("lang:" + lang);
 		System.out.println("labels:" + labels);
 		System.out.println("questions:" + questions);
@@ -1175,36 +1304,43 @@ public class SASController {
 			exp.printStackTrace();
 		}		
 	}
-	public void postEloqua() {
 
-		 try {
-		 String jsonStr = getData4Eloqua();
-		 System.out.println("eloqua json = " + jsonStr);
-		 com.mashape.unirest.http.HttpResponse<String> response =
-		 Unirest.post("https://secure.p06.eloqua.com/api/REST/2.0/data/customObject/34/instance")
-		 .header("authorization", "Basic SW50ZXJuYXRpb25hbFNPU1xTQVRvb2wuU0FUb29sOlNBVG9vbDEyMw==")
-		 .header("content-type", "application/json")
-		 .header("cache-control", "no-cache")
-		 .header("postman-token", "6c51d19d-2327-fc92-8218-c8dd22ac35ee")
-		 .body(jsonStr)
-		 .asString();
-		 System.out.println(response.getBody());
-		 } catch (UnirestException e) {
-		 e.printStackTrace();
-		 }
+	public void postEloqua() throws IOException {
+
+		try {
+			
+			Resource resource = new ClassPathResource("/application.properties");
+			Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+			String token = properties.getProperty(SASConstants.COMPANY_NAME) + "\\" + properties.getProperty(SASConstants.ELOQUA_USER) + ":" + properties.getProperty(SASConstants.ELOQUA_PWD);
+			byte[] encodedBytes = Base64.encodeBase64(token.getBytes());
+			String encodedToken ="Basic" + new String(encodedBytes);
+			String eloquaUrl=properties.getProperty(SASConstants.ELOQUA_URL_CUSTOM_OBJECT);
+			String jsonStr = getData4Eloqua(properties);
+			System.out.println("eloqua json = " + jsonStr);
+			com.mashape.unirest.http.HttpResponse<String> response = Unirest
+					.post(eloquaUrl)
+					.header("authorization", encodedToken)
+					.header("content-type", "application/json").header("cache-control", "no-cache")
+					.header("postman-token", "6c51d19d-2327-fc92-8218-c8dd22ac35ee").body(jsonStr).asString();
+			System.out.println(response.getBody());
+		} catch (UnirestException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public String getData4Eloqua() {
+	public String getData4Eloqua(Properties properties) {
 		String jsonStr = null;
 		String userId = (String) req.getAttribute("userid");
 		Map<String, String> map = new HashMap<String, String>();
 		try {
-			Resource resource = new ClassPathResource("/application.properties");
-			Properties properties = PropertiesLoaderUtils.loadProperties(resource);
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
 					"select info.f6, info.f5, info.f7, info.f4, info.f1, info.f2, info.id, info.lang, response.qid, response.qresponse from registrationinfo info, userresponse response where info.id=response.userid and info.id=? ");
-					//"select max(response.id), info.f6, info.f5, info.f7, info.f4, info.f1, info.f2, info.id, info.lang, response.qid, response.qresponse from registrationinfo info, userresponse response where info.id=response.userid and info.id=? group by info.f4, response.qid HAVING COUNT(*) > 1");
+			// "select max(response.id), info.f6, info.f5, info.f7, info.f4,
+			// info.f1, info.f2, info.id, info.lang, response.qid,
+			// response.qresponse from registrationinfo info, userresponse
+			// response where info.id=response.userid and info.id=? group by
+			// info.f4, response.qid HAVING COUNT(*) > 1");
 			stmt.setString(1, userId);
 			ResultSet rs = stmt.executeQuery();
 			int index = 0;
