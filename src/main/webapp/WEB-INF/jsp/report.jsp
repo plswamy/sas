@@ -139,43 +139,59 @@
         }
 
       </script>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <title>Report Page</title>
-      <link href="<%=webContext%>support/lib/bootstrap.min.css" rel="stylesheet">
-      <link href="<%=webContext%>support/lib/chart/radar-chart.min.css" rel="stylesheet">
-      <link href="<%=webContext%>support/css/site.css" rel="stylesheet">
-      <script type="text/javascript" async="" src="<%=webContext%>support/js/ga.js"></script>
-      <script src="<%=webContext%>/support/lib/jquery-3.2.0.js"></script>
-      <script src="<%=webContext%>support/lib/bootstrap.min.js"></script>
-      <script src="<%=webContext%>support/lib/chart/d3.v3.min.js"></script>
-      <script src="<%=webContext%>support/lib/chart/radar-chart.min.js"></script>
-      <script type="text/javascript" async="" src="<%=webContext%>support/js/assessment.js"></script>
-    </head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Report Page</title>
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
+<link href="<%=webContext%>support/lib/bootstrap.min.css"
+	rel="stylesheet">
+<link href="<%=webContext%>support/lib/chart/radar-chart.min.css"
+	rel="stylesheet">
+<link href="<%=webContext%>support/css/site.css" rel="stylesheet">
 
-    <body>
-      <form name="reportForm" method="post" action="" id="reportForm">
-		<input type="hidden" id="score1" name="score1" value="42"/>
-		<input type="hidden" id="username1" name="username1" value="scas"/>
-        <div class="container">
-          <div id="outer" class="row">
-            <div id="header" class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <div id="logo" class="pull-right"></div>
-            </div>
-            <div id="content_wrap" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <div class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div id="results" style="">
-                  <div class="results-header">
-                    <img class="cover-width" src="./support/img/result_header.png" alt="Sections">
-                    <a id="btnPrintPDF" href="/print" target="_blank" onClick="javascript:updateA();"></a>
-                  </div>
-                  <div class="content">
-                    <div class="results_h2_wrap stripe">
-                      <h2><%= scoreLable %> <span id="score"></span>%</h2>
-                    </div>
-                    <div class="results_padding">
-                      <div id="graph" class="action_needed1">
-                        <img class="cover-width action-consider" id="sos-graph" src="" alt="Action Consider">
-                      </div>
+<script type="text/javascript" async=""
+	src="<%=webContext%>support/js/ga.js"></script>
+<script src="<%=webContext%>/support/lib/jquery-3.2.0.js"></script>
+<script src="<%=webContext%>support/lib/bootstrap.min.js"></script>
+<script src="<%=webContext%>support/lib/chart/d3.v3.min.js"></script>
+<script src="<%=webContext%>support/lib/chart/rgbcolor.js"></script>
+<script src="<%=webContext%>support/lib/chart/canvg.js"></script>
+<!-- <script type="text/javascript" src="//canvg.googlecode.com/svn/trunk/rgbcolor.js"></script>  -->
+<!-- <script type="text/javascript" src="//canvg.googlecode.com/svn/trunk/canvg.js"></script> -->
+<script src="<%=webContext%>support/lib/chart/radar-chart.min.js"></script>
+<script type="text/javascript" async=""
+	src="<%=webContext%>support/js/assessment.js"></script>
+</head>
+
+<body>
+	<form name="reportForm" method="post" action="post" id="reportForm">
+		<input type="hidden" id="score1" name="score1" value="42" /> <input
+			type="hidden" id="username1" name="username1" value="scas" />
+		<div class="container">
+			<div id="outer" class="row">
+				<div id="header"
+					class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div id="logo" class="pull-right"></div>
+				</div>
+				<div id="content_wrap"
+					class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div id="results" style="">
+							<div class="results-header">
+								<img class="cover-width" src="./support/img/result_header.png"
+									alt="Sections"> <a id="btnPrintPDF" href="/print"
+									target="_blank" onClick="javascript:updateA();"></a>
+							</div>
+							<div class="content">
+								<div class="results_h2_wrap stripe">
+									<h2><%=scoreLable%>
+										<span id="score"></span>%
+									</h2>
+								</div>
+								<div class="results_padding">
+									<div id="graph" class="action_needed1">
+										<img class="cover-width action-consider" id="sos-graph" src=""
+											alt="Action Consider">
+									</div>
 
                       <script>
 						function updateA() {
@@ -335,36 +351,148 @@
                               imgSrc = './support/img/no.png';
 							  timgSrc = 'no.png';
                           }
-
+                          
+                          /**********************************image upload****************************************/
+                          var dateTime = new Date().getTime();
+                          var uploadImageName = 'img' + dateTime + '.jpg'
                           $("#sos-graph").prop("src", imgSrc);
-                          $("#scoreinfo").val(scoreVal + '|' + timgSrc + '|<%= userid %>|' + userSession.f4 + '|' + userSession.f1 + '|' + userSession.f2);
+                          $("#scoreinfo").val(scoreVal + '|' + timgSrc + '|<%=userid%>|' + userSession.f4 + '|' + userSession.f5 + '|' + uploadImageName + '|' + userSession.f1 + '|' + userSession.f2);
+                          var convertToBase64 = function(url, imagetype, callback){
+                        	  var spiderwebImagSrc = "./support/img/spiderweb.png"
+  								var doctype = '<?xml version="1.0" standalone="no"?>'
+  									  + '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
+  								var svgDiv = document.getElementById("chart");
+  								var source = (new XMLSerializer()).serializeToString(d3.select('svg').node());
+  								//document.write("source =" + source)
+  								var blob = new Blob([ doctype + source], { type: 'image/svg+xml;charset=utf-8' });
+  								var url = window.URL.createObjectURL(blob);
+  								var img = d3.select('body').append('img')
+  								 .attr('width', 400)
+  								 .attr('height', 500)
+  								 .node();
+  								img.onload = function(){
+  									var chartArea = svgDiv.getElementsByTagName('svg')[0].parentNode;
+  								    var svgNode = d3.select('svg').node();//chartArea.innerHTML;//
+  								   // var svgInnerHTML = svg..innerHTML + "<style>/* <![CDATA[ */.radar-chart .level{stroke:grey;stroke-width:.5}.radar-chart .axis line{stroke:grey;stroke-width:1}.radar-chart .axis .legend{font-family:sans-serif;font-size:10px}.radar-chart .axis .legend.top{dy:1em}.radar-chart .axis .legend.left{text-anchor:start}.radar-chart .axis .legend.middle{text-anchor:middle}.radar-chart .axis .legend.right{text-anchor:end}.radar-chart .tooltip{font-family:sans-serif;font-size:13px;transition:opacity 200ms;opacity:0}.radar-chart .tooltip.visible{opacity:1}.radar-chart .area{stroke-width:2;fill-opacity:.5}.radar-chart.focus .area{fill-opacity:.1}.radar-chart.focus .area.focused{fill-opacity:.7}.radar-chart .circle{fill-opacity:.9}.radar-chart .area,.radar-chart .circle{transition:opacity 300ms,fill-opacity 200ms;opacity:1}.radar-chart .d3-enter,.radar-chart .d3-exit{opacity:0}/* ]]> */</style>";
+  								 <%--  var linkElm = document.createElementNS("http://www.w3.org/1999/xhtml", "link");
+  								linkElm.setAttribute("href", "<%=webContext%>support/lib/chart/radar-chart.min.css");
+  								linkElm.setAttribute("type", "text/css");
+  								linkElm.setAttribute("rel", "stylesheet"); --%>
+  								  	var style = document.createElement("style");
+  								    style.setAttribute("type", "text/css");
+  								  	var styleData = document.createTextNode(".radar-chart .level{stroke:grey;stroke-width:.5}.radar-chart .axis line{stroke:grey;stroke-width:1}.radar-chart .axis .legend{font-family:sans-serif;font-size:10px}.radar-chart .axis .legend.top{dy:1em}.radar-chart .axis .legend.left{text-anchor:start}.radar-chart .axis .legend.middle{text-anchor:middle}.radar-chart .axis .legend.right{text-anchor:end}.radar-chart .tooltip{font-family:sans-serif;font-size:13px;transition:opacity 200ms;opacity:0}.radar-chart .tooltip.visible{opacity:1}.radar-chart .area{stroke-width:2;fill-opacity:.5}.radar-chart.focus .area{fill-opacity:.1}.radar-chart.focus .area.focused{fill-opacity:.7}.radar-chart .circle{fill-opacity:.9}.radar-chart .area,.radar-chart .circle{transition:opacity 300ms,fill-opacity 200ms;opacity:1}.radar-chart .d3-enter,.radar-chart .d3-exit{opacity:0}");
+  								  	style.appendChild(styleData);
+  							    	//style.appendChild(document.createTextNode("@import url('radar-chart.min.css')"));
+  							    	//svgNode.appendChild(style);
+  							    	svgNode.insertBefore(style,svgNode.firstChild);
+  							    	//document.write(svgNode.outerHTML);
+  								  //svg.append("style").text("<style>.radar-chart .level{stroke:grey;stroke-width:.5}.radar-chart .axis line{stroke:grey;stroke-width:1}.radar-chart .axis .legend{font-family:sans-serif;font-size:10px}.radar-chart .axis .legend.top{dy:1em}.radar-chart .axis .legend.left{text-anchor:start}.radar-chart .axis .legend.middle{text-anchor:middle}.radar-chart .axis .legend.right{text-anchor:end}.radar-chart .tooltip{font-family:sans-serif;font-size:13px;transition:opacity 200ms;opacity:0}.radar-chart .tooltip.visible{opacity:1}.radar-chart .area{stroke-width:2;fill-opacity:.5}.radar-chart.focus .area{fill-opacity:.1}.radar-chart.focus .area.focused{fill-opacity:.7}.radar-chart .circle{fill-opacity:.9}.radar-chart .area,.radar-chart .circle{transition:opacity 300ms,fill-opacity 200ms;opacity:1}.radar-chart .d3-enter,.radar-chart .d3-exit{opacity:0}</style>");
+  								  var canvas = d3.select('body').append('canvas').node();
+  								canvas.setAttribute('width', chartArea.offsetWidth);
+  							    canvas.setAttribute('height', chartArea.offsetHeight);
+  							  canvas.setAttribute(
+  							        'style',
+  							        'position: absolute; ' +
+  							        'top: ' + (-chartArea.offsetHeight * 2) + 'px;' +
+  							        'left: ' + (-chartArea.offsetWidth * 2) + 'px;');
+  								  var ctx = canvas.getContext('2d');
+  								  
+  								  //
+  								  //ctx.drawImage(img, 0, 0);
+//   								  var serializer = new XMLSerializer();
+//   								  var svgString = serializer.serializeToString(svg);
+  								  //d3.select('svg').node().outerHTML.trim().replace('&nbsp;',' ')
+  								 
+  								  canvg(canvas,svgNode.outerHTML,{ ignoreMouse: true, ignoreAnimation: true });
+  								  var data1 = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  								  var compositeOperation = ctx.globalCompositeOperation;
+  								  ctx.globalCompositeOperation = "destination-over";
+	   						      ctx.fillStyle = '#f2f2f2';
+	 							  ctx.fillRect(0, 0, canvas.width, canvas.height); 
+  								  data = canvas.toDataURL("image/png");
+  								  ctx.clearRect (0,0,canvas.width, canvas.height);
+  								  ctx.putImageData(data1, 0,0);
+  								  ctx.globalCompositeOperation = compositeOperation; 
+  									//document.write(data);
+  	                              callback(data);
+  								  var canvasUrl = canvas.toDataURL("image/png");
+  								  var img2 = d3.select('body').append('img')
+  								    .attr('width', 300)
+  								    .attr('height', 300)
+  								    .node();
+  								 
+  								  img2.src = canvasUrl; 
+  								  canvas.remove();
+  								  img2.remove();
+  								}
+  								//
+  								img.src = url;
+  								img.remove();
+                    	 };
+                    	convertToBase64("<%=webContext%>/support/img/spiderweb.png", "image/png", function(data){
+  						//document.write("\ndata=" + data);      
+  						var formData = new FormData();
+  						formData.append('filename', uploadImageName);
+						formData.append('picture', data);
+  								$.ajax({
+                            	    url: "<%=webContext%>/image",
+									type : "POST",
+									cache : false,
+									contentType : false,
+									processData : false,
+									data : formData
+								})
+								.done(
+										function(
+												e) {
+											//alert('done!');
+										});
+								//$('#spiderWeb').val(data);
 
-                        });
-                      </script>
-                       <input type="hidden" id="scoreinfo" name="scoreinfo" value="" />
+							});
+							//                   	 		function SVG2PNG(svg, callback) {
+							// 								  var canvas = document.createElement('canvas'); // Create a Canvas element.
+							// 								  var ctx = canvas.getContext('2d'); // For Canvas returns 2D graphic.
+							// 								  var data = svg.outerHTML; // Get SVG element as HTML code.
+							// 								  canvg(canvas, data); // Render SVG on Canvas.
+							// 								  callback(canvas); // Execute callback function.
+							// 								}
 
-                      <div class="question_template col-xs-12 col-sm-12 col-md-12 col-lg-12" style="display: none;">
-                        <div class="question_id" style="display: block;">
-                          <div class="left col-xs-12 col-sm-6 col-md-6 col-lg-7">
-                            <div class="padding">
-                              <span class="question_number"></span>
-                              <p class="question_text"></p>
-                            </div>
-                          </div>
-                          <div class="right col-xs-12 col-sm-6 col-md-6 col-lg-5">
-                            <div class="padding">
-                              <p class="last question_desc"></p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                        <div id="body">
-                            <div id="chart"></div>
-                        </div>
-                      <div id="sos-subsection-graph-grand-wrapper" class="hidden sos-subsection-graph-grand-wrapper">
-                          <div id="sos-subsection-graph-wrapper" class="sos-subsection-graph-wrapper">
-                          </div>
-                      </div>
+							// 								 	var svgDiv =$("#chart");
+							// 									var svg = svgDiv[0].outerHTML;
+							// 									SVG2PNG(svg, function(canvas) { // Arguments: SVG element, callback function.
+							// 									    var base64 = canvas.toDataURL("image/png"); // toDataURL return DataURI as Base64 format.
+							// 									    $('#spiderWeb').val(base64);
+							// 									  });
+						});
+									</script>
+									<input type="hidden" id="scoreinfo" name="scoreinfo" value="" />
+									<!--<input type="hidden" id="spiderWeb" name="spiderWeb" />-->
+									<div
+										class="question_template col-xs-12 col-sm-12 col-md-12 col-lg-12"
+										style="display: none;">
+										<div class="question_id" style="display: block;">
+											<div class="left col-xs-12 col-sm-6 col-md-6 col-lg-7">
+												<div class="padding">
+													<span class="question_number"></span>
+													<p class="question_text"></p>
+												</div>
+											</div>
+											<div class="right col-xs-12 col-sm-6 col-md-6 col-lg-5">
+												<div class="padding">
+													<p class="last question_desc"></p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="body">
+										<div id="chart"></div>
+									</div>
+									<div id="sos-subsection-graph-grand-wrapper"
+										class="hidden sos-subsection-graph-grand-wrapper">
+										<div id="sos-subsection-graph-wrapper"
+											class="sos-subsection-graph-wrapper"></div>
+									</div>
 
                       <template>
                         <div class="sos-subsection-graph"></div>
@@ -445,8 +573,8 @@
                         <a href="http://www.global.selfassessmenttool.com/img/diagram.png" target="_blank"><img class="cover-width diagram" src="./support/img/resourceFiles/do-12.png" alt="Sections"></a>
                         <a href="http://www.global.selfassessmenttool.com/img/diagram.png" class="marginleft" target="_blank">Click here to open larger image of Integrated Travel Risk Mitigation</a>
                       </div>
-                      <p>International SOS commissioned the first ever Duty of Care whitepaper. This reviews employersâ Duty of Care responsibilities and offers guidelines for the development of appropriate risk management strategies.</p>
-                      <p>Following this sector first, our clients requested more research, tools and advice. Resulting in the commission of our Duty of Care and Travel Risk Management Global Benchmarking Study â the first comprehensive and authoritative research publication on the topic.</p>
+                      <p>International SOS commissioned the first ever Duty of Care whitepaper. This reviews employersÃ¢ÂÂ Duty of Care responsibilities and offers guidelines for the development of appropriate risk management strategies.</p>
+                      <p>Following this sector first, our clients requested more research, tools and advice. Resulting in the commission of our Duty of Care and Travel Risk Management Global Benchmarking Study Ã¢ÂÂ the first comprehensive and authoritative research publication on the topic.</p>
                       <p>The paper outlines a framework for organisations to ensure they are adequately meeting their Duty of Care obligations. The framework follows the 'plan-do-check' approach.</p>
                       <p>For more information <a href="http://internationalsos.com/duty-of-care" target="_blank">internationalsos.com/duty-of-care</a> </p>
                       <h3>Need assistance with any of your responses or recommendations?</h3>
