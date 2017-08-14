@@ -6,6 +6,7 @@
 <link href="css/app.css"rel="stylesheet"
 	type="text/css"></link>
 <title>Self Assessment Tool</title>
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
 </head>
 <body class="security-app">
 	<div class="details">
