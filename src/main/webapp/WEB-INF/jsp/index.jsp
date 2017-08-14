@@ -53,6 +53,7 @@
         <script src="support/lib/bootstrap-dialog.min.js"></script>
         <link href="support/lib/bootstrap-dialog.min.css" rel="stylesheet">
         <link href="support/lib/bootstrap-select.min.css" rel="stylesheet">
+        <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
     </head>
     <body class="sos-dark-theme1">
         <form name="gsatForm" method="post" action="survey" onsubmit="javascript:return WebForm_OnSubmit();" id="gsatForm">
