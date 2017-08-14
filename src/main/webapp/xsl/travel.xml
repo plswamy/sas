@@ -3,14 +3,16 @@
   		<data>
     <!--************** XML DATA **************-->
    			 <main>
-       				 <xslPath>C:\chvsr\workspace\csi\.metadata\.plugins\org.eclipse.wst.server.core\tmp1\wtpwebapps\csi_egov\xsl\</xslPath>
-    				 <imgPath>C:\chvsr\cmsedge\sas2\trunk\src\main\webapp\support\img</imgPath>
-      
+       				 <xslPath>E:\sas-master\src\main\webapp\xsl</xslPath>
+    				 <imgPath>E:\sas-master\src\main\webapp\support\img</imgPath>
+      				<spiderwebImgPath>E:\sas-master\src\main\webapp\support\img\uploadedImages</spiderwebImgPath>
       				<Company_Logo>sosheader.jpg</Company_Logo>
       				<range>range.jpg</range>
+      				<spiderwebFileName>range.jpg</spiderwebFileName>
       				<wallpaper>wallpaper.jpg</wallpaper>
-					<strapline>strapline.jpg</strapline>
+					<strapline>\strapline.jpg</strapline>
        				<user>abc</user>
+       				<companyname>company name</companyname>
 					<rheading>Report Link :</rheading>
 					<rlink>Click Here for report</rlink>
 					<rurl>http://localhost:8080/report</rurl>
