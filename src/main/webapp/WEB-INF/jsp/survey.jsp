@@ -26,6 +26,7 @@
       <title>Survey Page</title>
       <link href="<%=webContext%>support/css/site.css" rel="stylesheet">
       <link href="<%=webContext%>/support/lib/bootstrap.min.css" rel="stylesheet">
+      <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
       <script type="text/javascript" async="" src="<%=webContext%>support/js/ga.js"></script>
       <script src="<%=webContext%>/support/lib/jquery-3.2.0.js"></script>
       <script src="<%=webContext%>/support/lib/bootstrap.min.js"></script>
