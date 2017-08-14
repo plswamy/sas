@@ -113,6 +113,41 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/src/main/resources/lib/json-20160810.jar</systemPath>
 		</dependency>
+	    	<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.6</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/commons-codec-1.6.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>httpclient</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.6</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/httpclient-4.3.6.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>httpcore-nio</groupId>
+			<artifactId>httpcore-nio</artifactId>
+			<version>4.4.4</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/httpcore-nio-4.4.4.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>httpcore</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.3.3</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/httpcore-4.3.3.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>httpasyncclient</groupId>
+			<artifactId>httpasyncclient</artifactId>
+			<version>4.0-beta4</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/resources/lib/httpasyncclient-4.0-beta4.jar</systemPath>
+		</dependency>
 	 </dependencies>
 
 
