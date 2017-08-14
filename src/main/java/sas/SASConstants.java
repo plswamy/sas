@@ -15,5 +15,9 @@ public class SASConstants {
 	public static final String USER_ID = "registrationinfo.id";
 	public static final String QUESTION_ID = "userresponse.qid";
 	public static final String QUESTION_RESPONSE = "userresponse.qresponse";
+	public static final String COMPANY_NAME = "eloqua.companyname";
+	public static final String ELOQUA_USER="eloqua.username";
+	public static final String ELOQUA_PWD="eloqua.password";
+	public static final String ELOQUA_URL_CUSTOM_OBJECT="eloqua.url.customeobject";
 	
 }
