@@ -8,6 +8,7 @@
 <head>
 <link href="<c:url value="css/app.css" />" rel="stylesheet"
 	type="text/css">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
 <title>Self Assessment Tool!</title>
 </head>
 <body class="security-app">
