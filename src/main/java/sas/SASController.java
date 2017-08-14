@@ -1313,7 +1313,7 @@ public class SASController {
 			Properties properties = PropertiesLoaderUtils.loadProperties(resource);
 			String token = properties.getProperty(SASConstants.COMPANY_NAME) + "\\" + properties.getProperty(SASConstants.ELOQUA_USER) + ":" + properties.getProperty(SASConstants.ELOQUA_PWD);
 			byte[] encodedBytes = Base64.encodeBase64(token.getBytes());
-			String encodedToken ="Basic" + new String(encodedBytes);
+			String encodedToken ="Basic " + new String(encodedBytes);
 			String eloquaUrl=properties.getProperty(SASConstants.ELOQUA_URL_CUSTOM_OBJECT);
 			String jsonStr = getData4Eloqua(properties);
 			System.out.println("eloqua json = " + jsonStr);
