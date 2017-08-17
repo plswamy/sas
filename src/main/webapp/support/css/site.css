@@ -2,6 +2,7 @@
   border: 0;
   font-size: 100%;
   font: inherit;
+  font-family: "Arial,Helvetica Neue,Helvetica,sans-serif";
   vertical-align: baseline;
   margin: 0;
   padding: 0;
@@ -383,7 +384,7 @@ body {
 
 #results h2 {
   font-weight: bold;
-  color: #003591;
+  color: #3399FF;
   display: inline-block;
   margin: 0px;
   padding: 23px;
@@ -860,7 +861,7 @@ em {
 
 
 body.sos-dark-theme #logo {
-	background-color: #afafaf !important;
+	background-color: #ffffff !important;
 	border-radius: 15px;
 }
 
@@ -929,5 +930,5 @@ body.sos-dark-theme {
 }
 
 #chart > svg {
-    margin-left: 20%;
+    margin-left: 10%;
 }

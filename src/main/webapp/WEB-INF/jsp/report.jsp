@@ -279,7 +279,7 @@
                           //chartData.push(indusStandards);
                           
                           /*****************************************************************************************/
-                            var w = 400, h = 500, 
+                            var w = 500, h = 600, 
                                 colorscale = d3.scale.category10(),
                                 //LegendOptions = ['YOUR SCORECARD','VERSUS INDUSTRY STANDARDS'],
                                 LegendOptions = ['YOUR SCORECARD'],
