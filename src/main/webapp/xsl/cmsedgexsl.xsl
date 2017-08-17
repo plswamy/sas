@@ -54,9 +54,9 @@
 									</fo:table-cell>
 									<fo:table-cell text-align="margin-right">
 										<fo:block start-indent="0.2cm" font-family="arial"
-											font-weight="bold" color="#2f4696" font-size="47pt"
+											font-weight="bold" color="#2f4696" font-size="40pt"
 											wrap-option="no-wrap">
-											TRAVEL RISK MANAGEMENT SELF-ASSESSMENT
+											<xsl:value-of select="data/main/pdf_haading" />
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
@@ -83,12 +83,12 @@
 									<fo:table-cell text-align="margin-left">
 										<fo:block start-indent="-10.2cm" font-family="arial"
 											font-size="30pt" color="black" wrap-option="no-wrap">
-											Your Summary -
+											<xsl:value-of select="data/main/pdf_sub_haading" /> <xsl:text> - </xsl:text>
 											<fo:inline font-size="25pt">
 												<xsl:value-of select="data/main/user" />
 												<xsl:text></xsl:text>
 											</fo:inline>
-											 - 
+											<xsl:text> - </xsl:text>
 											<fo:inline font-size="25pt">
 												<xsl:value-of select="data/main/companyname" />
 												<xsl:text></xsl:text>
@@ -167,9 +167,9 @@
 										<fo:block start-indent="6.5cm" font-family="arial"
 											font-weight="bold" color="blue" font-size="43pt" wrap-option="no-wrap"
 											padding-bottom="6mm" padding-top="-2mm">
-											You scored
+											<xsl:value-of select="data/main/pdf_score_text" /><xsl:text> </xsl:text>
 											<xsl:value-of select="data/main/score" />
-											<xsl:text></xsl:text>
+											
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
@@ -266,11 +266,11 @@
 								<xsl:for-each select="data/main/plan">
 									<xsl:variable name="titleColor">
 										<xsl:choose>
-											<xsl:when test="title='do'">
-												<xsl:value-of select="'#009354'" /> <!-- green -->
+											<xsl:when test="title[@id='2']">
+												<xsl:value-of select="'#009354'" /> <!--do id =2- green -->
 											</xsl:when>
-											<xsl:when test="title='check'">
-												<xsl:value-of select="'#6c206b'" /> <!-- purple -->
+											<xsl:when test="title[@id='3']">
+												<xsl:value-of select="'#6c206b'" /> <!--check id =3 purple -->
 											</xsl:when>
 											<xsl:otherwise>
 												<xsl:value-of select="'#232762'" /> <!--blue -->
