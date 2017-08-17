@@ -49,11 +49,11 @@
 							<fo:table-body>
 								<fo:table-row>
 									<fo:table-cell>
-										<fo:block font-family="arial" font-size="9pt">
+										<fo:block font-family="sans-serif" font-size="9pt">
 										</fo:block>
 									</fo:table-cell>
 									<fo:table-cell text-align="margin-right">
-										<fo:block start-indent="0.2cm" font-family="arial"
+										<fo:block start-indent="0.2cm" font-family="sans-serif"
 											font-weight="bold" color="#2f4696" font-size="40pt"
 											wrap-option="no-wrap">
 											<xsl:value-of select="data/main/pdf_haading" />
@@ -76,12 +76,12 @@
 							<fo:table-body>
 								<fo:table-row>
 									<fo:table-cell>
-										<fo:block font-family="arial" font-size="9pt">
+										<fo:block font-family="sans-serif" font-size="9pt">
 										</fo:block>
 									</fo:table-cell>
 
 									<fo:table-cell text-align="margin-left">
-										<fo:block start-indent="-10.2cm" font-family="arial"
+										<fo:block start-indent="-10.2cm" font-family="sans-serif"
 											font-size="30pt" color="black" wrap-option="no-wrap">
 											<xsl:value-of select="data/main/pdf_sub_haading" /> <xsl:text> - </xsl:text>
 											<fo:inline font-size="25pt">
@@ -96,13 +96,13 @@
 										</fo:block>
 
 										<!-- <fo:block start-indent="-10.2cm" text-align="left"
-											font-family="arial" color="black" font-size="30pt"
+											font-family="sans-serif" color="black" font-size="30pt"
 											wrap-option="wrap" padding="2mm">
 											<xsl:value-of select="data/main/rheading" />
 											<xsl:text> </xsl:text>
 											<xsl:variable name="rurl" select="data/main/rurl" />
 											<fo:basic-link external-destination="url('{$rurl}')"
-												color="blue">
+												color="#2f4696">
 												<xsl:value-of select="data/main/rlink" />
 												<xsl:text> </xsl:text>
 											</fo:basic-link>
@@ -164,8 +164,8 @@
 							<fo:table-body>
 								<fo:table-row>
 									<fo:table-cell text-align="margin-right">
-										<fo:block start-indent="6.5cm" font-family="arial"
-											font-weight="bold" color="blue" font-size="43pt" wrap-option="no-wrap"
+										<fo:block start-indent="6.5cm" font-family="sans-serif"
+											font-weight="bold" color="#2f4696" font-size="43pt" wrap-option="no-wrap"
 											padding-bottom="6mm" padding-top="-2mm">
 											<xsl:value-of select="data/main/pdf_score_text" /><xsl:text> </xsl:text>
 											<xsl:value-of select="data/main/score" />
@@ -211,7 +211,7 @@
 							<fo:table-body>
 								<fo:table-row>
 									<fo:table-cell>
-										<fo:block font-family="arial" font-size="7pt">
+										<fo:block font-family="sans-serif" font-size="7pt">
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
@@ -273,13 +273,13 @@
 												<xsl:value-of select="'#6c206b'" /> <!--check id =3 purple -->
 											</xsl:when>
 											<xsl:otherwise>
-												<xsl:value-of select="'#232762'" /> <!--blue -->
+												<xsl:value-of select="'#2f4696'" /> <!--blue -->
 											</xsl:otherwise>
 										</xsl:choose>
 									</xsl:variable>
 									<fo:table-row>
 										<fo:table-cell number-columns-spanned="2">
-											<fo:block font-family="arial" color="{$titleColor}"
+											<fo:block font-family="sans-serif" color="{$titleColor}"
 												font-size="40pt" wrap-option="wrap" space-before="1cm"
 												font-variant="small-caps">
 												<xsl:value-of select="title" />
@@ -290,7 +290,7 @@
 									<xsl:for-each select="question">
 										<fo:table-row background-color="#f2f2f2">
 											<fo:table-cell>
-												<fo:block font-family="arial" font-size="25pt"
+												<fo:block font-family="sans-serif" font-size="25pt"
 													wrap-option="wrap" font-weight="bold" space-before="1cm"
 													margin="1.5cm">
 													<xsl:value-of select="title" />
@@ -298,7 +298,7 @@
 												</fo:block>
 											</fo:table-cell>
 											<fo:table-cell>
-												<fo:block font-family="arial" color="black"
+												<fo:block font-family="sans-serif" color="black"
 													font-size="25pt" wrap-option="wrap" font-weight="bold"
 													space-before="1cm" margin="1.5cm">
 													<xsl:value-of select="value" />
@@ -308,7 +308,7 @@
 										</fo:table-row>
 										<fo:table-row background-color="#f2f2f2">
 											<fo:table-cell number-columns-spanned="2">
-												<fo:block font-family="arial" color="black"
+												<fo:block font-family="sans-serif" color="black"
 													font-size="25pt" wrap-option="wrap" space-before="1cm"
 													margin="4.0cm">
 													<xsl:value-of select="answer" />
@@ -331,40 +331,40 @@
 							<fo:table-body>
 								<fo:table-row>
 									<fo:table-cell>
-										<fo:block font-family="arial" font-size="9pt">
+										<fo:block font-family="sans-serif" font-size="9pt">
 										</fo:block>
 									</fo:table-cell>
 
 									<!-- <fo:table-cell text-align="left">
-										<fo:block font-family="arial" color="black"
+										<fo:block font-family="sans-serif" color="black"
 											font-size="35pt" wrap-option="wrap">
 											<xsl:value-of select="data/main/desc21" />
 											<xsl:text> </xsl:text>
 										</fo:block>
-										<fo:block font-family="arial" font-size="9pt">
+										<fo:block font-family="sans-serif" font-size="9pt">
 										</fo:block>
-										<fo:block text-align="left" font-family="arial"
+										<fo:block text-align="left" font-family="sans-serif"
 											color="black" font-size="22pt" wrap-option="wrap" padding="2.5mm">
 											<xsl:value-of select="data/main/desc22" />
 											<xsl:text> </xsl:text>
 										</fo:block>
-										<fo:block text-align="left" font-family="arial"
+										<fo:block text-align="left" font-family="sans-serif"
 											color="black" font-size="22pt" wrap-option="wrap" padding="2.5mm">
 											<xsl:value-of select="data/main/desc23" />
 											<xsl:text> </xsl:text>
 										</fo:block>
-										<fo:block text-align="left" font-family="arial"
+										<fo:block text-align="left" font-family="sans-serif"
 											color="black" font-size="22pt" wrap-option="wrap" padding="2.5mm">
 											<xsl:value-of select="data/main/desc24" />
 											<xsl:text> </xsl:text>
 										</fo:block>
-										<fo:block text-align="left" font-family="arial"
+										<fo:block text-align="left" font-family="sans-serif"
 											color="black" font-size="22pt" wrap-option="wrap" padding="2.5mm">
 											<xsl:value-of select="data/main/desc25" />
 											<xsl:text> </xsl:text>
 											<fo:basic-link
 												external-destination="url('http://internationalsos.com/duty-of-care')"
-												color="blue"> http://internationalsos.com/duty-of-care
+												color="#2f4696"> http://internationalsos.com/duty-of-care
 											</fo:basic-link>
 										</fo:block>
 									</fo:table-cell> 
@@ -403,47 +403,47 @@
 
 									<fo:table-cell>
 
-										<fo:block font-family="arial" font-size="9pt">
+										<fo:block font-family="sans-serif" font-size="9pt">
 
 										</fo:block>
 									</fo:table-cell>
 
 
 									<fo:table-cell text-align="left">
-										<fo:block font-family="arial" color="black"
+										<fo:block font-family="sans-serif" color="black"
 											font-size="35pt" wrap-option="no-wrap" padding="7mm">
 											<xsl:value-of select="data/main/desc31" />
 											<xsl:text></xsl:text>
 										</fo:block>
-										<fo:block font-family="arial" font-size="9pt">
+										<fo:block font-family="sans-serif" font-size="9pt">
 
 
 										</fo:block>
-										<fo:block text-align="left" font-family="arial"
+										<fo:block text-align="left" font-family="sans-serif"
 											color="black" font-size="21pt" wrap-option="no-wrap" padding="7mm">
 											<xsl:value-of select="data/main/desc32" />
 											<xsl:text></xsl:text>
 											<xsl:variable name="cmailid" select="data/main/cmailid" />
 											<fo:basic-link external-destination="mailto:{$cmailid}"
-												color="blue">
+												color="#2f4696">
 												<xsl:value-of select="data/main/cmailid" />
 												<xsl:text> </xsl:text>
 											</fo:basic-link>
 											|
 											<xsl:variable name="curl" select="data/main/curl" />
 											<fo:basic-link external-destination="url('{$curl}')"
-												color="blue">
+												color="#2f4696">
 												<xsl:value-of select="data/main/clink" />
 												<xsl:text> </xsl:text>
 											</fo:basic-link>
 										</fo:block>
 
-										<fo:block text-align="left" font-family="arial"
+										<fo:block text-align="left" font-family="sans-serif"
 											color="black" font-size="21pt" wrap-option="no-wrap" padding="2mm">
 											<xsl:value-of select="data/main/desc33" />
 											<xsl:text></xsl:text>
 										</fo:block>
-										<fo:block text-align="left" font-family="arial"
+										<fo:block text-align="left" font-family="sans-serif"
 											color="black" font-size="21pt" wrap-option="no-wrap" padding="2mm">
 											<xsl:value-of select="data/main/desc34" />
 											<xsl:text></xsl:text>
