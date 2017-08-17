@@ -9,8 +9,10 @@ import org.jdom.Element;
 
 import java.security.Principal;
 
+import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -31,6 +33,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -46,6 +49,7 @@ import sas.bean.Answer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Enumeration;
@@ -86,7 +90,7 @@ public class SASController {
 
 	@Autowired
 	private HttpServletResponse res;
-	
+
 	@Autowired
 	private NotificationService notificationService;
 
@@ -182,7 +186,7 @@ public class SASController {
 		System.out.println("email ....:" + req.getParameter("f4"));
 		saveUser();
 		saveUserResponse();
-		postEloqua();
+		// postEloqua();
 		return "report";
 	}
 
@@ -266,50 +270,66 @@ public class SASController {
 	// }
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/image", method = RequestMethod.POST)
-	public void printImage(ModelMap model) throws IOException {
+	@ResponseBody
+	public String printImage(ModelMap model) throws IOException {
+		String pdfFileName = null;
 		String picture = req.getParameter("picture");
 		String fileName = req.getParameter("filename");
 		if (picture != null) {
 			String base64 = picture.split("[,]")[1];
 			byte[] aByteArray = Base64.decodeBase64(base64.getBytes());
-			//System.out.println("encodedBytes :" + new String(aByteArray));
-			// output = new FileOutputStream(new File(req.getRealPath("/") +
-			// "/support/img/uploadedImages/" +fileName));
 			BufferedImage bufferedImage;
 			try {
 				bufferedImage = ImageIO.read(new ByteArrayInputStream(aByteArray));
 				BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(),
 						BufferedImage.TYPE_INT_RGB);
 				newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
-				ImageIO.write(newBufferedImage, "jpg", new File(req.getRealPath("/") + "/support/img/uploadedImages/" +fileName));
+				String realPath = req.getRealPath("/");
+				ImageIO.write(newBufferedImage, "jpg", new File(realPath + "/support/img/uploadedImages/" + fileName));
 
-				// output.write(aByteArray);
 				System.out.println(fileName + " image saved");
-			} catch (IOException e) {
-				e.printStackTrace();
-			} 
-//			finally {
-//				output.close();
-//			}
+				pdfFileName = generatePDF();
+				String scoreInfo = req.getParameter("scoreinfo");
+				StringTokenizer st = new StringTokenizer(scoreInfo, "|");
+				String score = st.nextToken();
+				String img = st.nextToken();
+				String user = st.nextToken();
+				String pdfRealPath = realPath + "pdf/" + pdfFileName;
+				System.out.println("pdfRealPath " + pdfRealPath);
+				if (pdfFileName != null) {
+					try {
+						notificationService.sendNotificaitoin(pdfRealPath, scoreInfo);
 
+					} catch (Exception e) {
+						LOGGER.error("can not able to send mail.", e);
+						e.printStackTrace();
+					}
+					postEloqua(user, pdfRealPath);
+				}
+
+			} catch (IOException e) {
+				LOGGER.error("can not able to upload image.", e);
+				e.printStackTrace();
+			}
 		}
+		return pdfFileName;
 	}
 
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	public String printGet(ModelMap model) {
 		System.out.println("printGet");
-		String pdfFilePath = generatePDF();
-		if (pdfFilePath != null) {
-			try {
-				// sendEmail(pdfFilePath);
-				notificationService.sendNotificaitoin(pdfFilePath, req.getParameter("scoreinfo"));
-				System.out.println("mail sent");
-			} catch (Exception e) {
-				LOGGER.error("can not able to send mail.", e);
-				e.printStackTrace();
-			}
-
-		}
+		String pdfFilePath = req.getParameter("pdfFilePath");
+		req.setAttribute("pdffile", pdfFilePath);
+		/*
+		 * String pdfFilePath = generatePDF(); if (pdfFilePath != null) { try {
+		 * // sendEmail(pdfFilePath);
+		 * //notificationService.sendNotificaitoin(pdfFilePath,
+		 * req.getParameter("scoreinfo")); System.out.println("mail sent"); }
+		 * catch (Exception e) { LOGGER.error("can not able to send mail.", e);
+		 * e.printStackTrace(); }
+		 * 
+		 * }
+		 */
 		return "print";
 	}
 
@@ -327,10 +347,12 @@ public class SASController {
 			String companyName = st.nextToken();
 			String imageName = st.nextToken();
 			String user = st.nextToken();
-			
+
 			if (st.hasMoreElements()) {
 				user = user + " " + st.nextToken();
 			}
+			Resource resource = new ClassPathResource("/application.properties");
+			Properties properties = PropertiesLoaderUtils.loadProperties(resource);
 			System.out.println("score..." + score);
 			System.out.println("img..." + img);
 			img = img.replace("png", "jpg");
@@ -339,23 +361,52 @@ public class SASController {
 			String realPath = req.getRealPath("/");
 			System.out.println("realPath:" + realPath);
 			String pdfFileName = realPath + "/pdf/pdf" + l + ".pdf";
-			pdfFilePath = realPath + "pdf/pdf" + l + ".pdf";
+			pdfFilePath = "pdf" + l + ".pdf";
 			req.setAttribute("pdffile", "pdf" + l + ".pdf");
 			String xslFileName = realPath + "/xsl/cmsedgexsl.xsl";
 			String xmlFileName = realPath + "/xsl/travel.xml";
+			String imagePath = realPath + properties.getProperty(SASConstants.IMAGE_PATH);
+			String uploadImagePath = realPath + properties.getProperty(SASConstants.UPLOAD_IMAGE_PATH);
+			String language = (String) session.getAttribute("language");
+			if (nullCheck(language).length() == 0) {
+				language = "english";
+			}
+			Hashtable<String, String> translationConstants = getTranslationConstants(language);
 			SAXBuilder builder = new SAXBuilder();
 			Document document = builder.build(xmlFileName);
+			document.getRootElement().getChild("data").getChild("main").getChild("imgPath").setText(imagePath);
+			document.getRootElement().getChild("data").getChild("main").getChild("spiderwebImgPath")
+					.setText(uploadImagePath);
+			document.getRootElement().getChild("data").getChild("main").getChild("pdf_haading")
+					.setText(translationConstants.get(SASConstants.PDF_HEADING));
+			document.getRootElement().getChild("data").getChild("main").getChild("pdf_sub_haading")
+					.setText(translationConstants.get(SASConstants.PDF_SUB_HEADING));
+			document.getRootElement().getChild("data").getChild("main").getChild("pdf_score_text")
+					.setText(translationConstants.get(SASConstants.PDF_SCORE_HEADING));
 			document.getRootElement().getChild("data").getChild("main").getChild("score").setText(score + "%");
 			document.getRootElement().getChild("data").getChild("main").getChild("range").setText(img);
 			document.getRootElement().getChild("data").getChild("main").getChild("user").setText(user);
 			document.getRootElement().getChild("data").getChild("main").getChild("companyname").setText(companyName);
 			document.getRootElement().getChild("data").getChild("main").getChild("spiderwebFileName")
 					.setText(imageName);
+			document.getRootElement().getChild("data").getChild("main").getChild("desc31")
+					.setText(translationConstants.get(SASConstants.PDF_LAST_PARA_HEADING));
+			document.getRootElement().getChild("data").getChild("main").getChild("desc32")
+					.setText(translationConstants.get(SASConstants.PDF_LAST_PARA1));
+			document.getRootElement().getChild("data").getChild("main").getChild("desc33")
+					.setText(translationConstants.get(SASConstants.PDF_LAST_PARA2));
+			document.getRootElement().getChild("data").getChild("main").getChild("desc34")
+					.setText(translationConstants.get(SASConstants.PDF_LAST_PARA3));
 			Element main = document.getRootElement().getChild("data").getChild("main");
 			getQuestionElement(userid, main);
 			System.out.println(
 					"root element" + document.getRootElement().getChild("data").getChild("main").getChildText("score"));
+			XMLOutputter xmOut = new XMLOutputter(); 
+			System.out.println("----" + xmOut.outputString(document));
 			Doc2Pdf.start(document, xslFileName, pdfFileName);
+			System.out.println("imagePath..." + imagePath);
+			System.out.println("uploadImagePath..." + uploadImagePath);
+			System.out.println("uploadedImageName..." + imageName);
 			System.out.println("score..." + score);
 			System.out.println("img..." + img);
 			System.out.println("user..." + user);
@@ -396,18 +447,24 @@ public class SASController {
 		// requestMappingHandlerMapping.getHandlerMethods().values()) {
 		// System.out.println(endPoint. + "\n");
 		// }
-		session.setAttribute("language", req.getServletPath().substring(1));
-		req.setAttribute("language", req.getServletPath().substring(1));
-		loadData();
-		for (RequestMappingInfo info : requestMappingHandlerMapping.getHandlerMethods().keySet()) {
-			for (String urlPattern : info.getPatternsCondition().getPatterns()) {
-				if (req.getServletPath().equals(urlPattern)) {
-					System.out.println(urlPattern.substring(1));
-					return urlPattern.substring(1);
+		List<String> langs = getLangs();
+		String requestedLanguage = req.getServletPath().substring(1);
+		for (String language : langs) {
+			if (requestedLanguage.equals(language)) {
+				session.setAttribute("language", requestedLanguage);
+				req.setAttribute("language", requestedLanguage);
+				for (RequestMappingInfo info : requestMappingHandlerMapping.getHandlerMethods().keySet()) {
+					for (String urlPattern : info.getPatternsCondition().getPatterns()) {
+						if (req.getServletPath().equals(urlPattern)) {
+							System.out.println(urlPattern.substring(1));
+							return urlPattern.substring(1);
+						}
+					}
 				}
+				break;
 			}
 		}
-		return "index";
+		return "login";
 	}
 	// @RequestMapping(value = "/404", method = RequestMethod.GET)
 	// public ModelAndView noResource(Principal user) {
@@ -474,6 +531,7 @@ public class SASController {
 		}
 		return hs;
 	}
+
 	public Hashtable<String, String> getAnswers(String userid) {
 		System.out.println("getAnswers for userid : " + userid);
 		Hashtable<String, String> hs = new Hashtable<String, String>();
@@ -518,6 +576,7 @@ public class SASController {
 	 */
 
 	private void loadData() {
+		System.out.println("loadData called ...");
 		String lang = (String) session.getAttribute("language");
 		if (lang == null)
 			lang = req.getParameter("language");
@@ -739,7 +798,7 @@ public class SASController {
 					}
 				}
 			}
-		
+
 		} catch (Exception ex) {
 			System.out.println("There was an error: " + ex.getMessage());
 		}
@@ -1120,7 +1179,7 @@ public class SASController {
 			String st[] = data.split("\\|cmsedge\\|");
 			String[] st1 = null;
 			String temp1 = null;
-			for(int i = 0; i < st.length; i++) {
+			for (int i = 0; i < st.length; i++) {
 				temp1 = st[i];
 				st1 = st[i].split("\\:cmsedge\\:");
 				// fieldname:id:order:type:displayname:required:<<options>>
@@ -1239,14 +1298,14 @@ public class SASController {
 		LinkedHashMap<String, List<Question>> hs = new LinkedHashMap<String, List<Question>>();
 		try {
 			String sql = "select * from questions where id in (select qid from userresponse where qresponse != ? and userid=? order by qid)";
-			con = dataSource.getConnection(); 
+			con = dataSource.getConnection();
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, "yes");
 			stmt.setString(2, userid);
 			ResultSet rs = stmt.executeQuery();
 			Question q = null;
-			List<Question> list = null;			
-			while(rs.next()) {
+			List<Question> list = null;
+			while (rs.next()) {
 				q = new Question();
 				q.setId(rs.getString("id"));
 				q.setType(rs.getString("qtype"));
@@ -1263,32 +1322,36 @@ public class SASController {
 				list.add(q);
 				hs.put(q.getType(), list);
 			}
-		} catch(Exception exp) {
+		} catch (Exception exp) {
 			exp.printStackTrace();
 		} finally {
 			close();
 		}
-		
-		try {			
+
+		try {
 			Iterator<String> keys = hs.keySet().iterator();
 			List<Question> list = null;
 			String key = null;
 			Question q = null;
 			Element qElem = null;
 			Element temp = null;
-			while(keys.hasNext()) {				
+			Attribute attribute = null;
+			int index = 1;
+			while (keys.hasNext()) {
 				Element planElement = new Element("plan");
 				Element title = new Element("title");
 				key = keys.next();
 				title.setText(key);
-				System.out.println("key...."+key);
+				attribute = new Attribute("id", index + "");
+				title.setAttribute(attribute);
+				System.out.println("key...." + key);
 				planElement.addContent(title);
 				list = hs.get(key);
-				for(int i=0; i < list.size(); i++) {
+				for (int i = 0; i < list.size(); i++) {
 					q = list.get(i);
 					qElem = new Element("question");
 					temp = new Element("title");
-					temp.setText("Q"+q.getQorder());
+					temp.setText("Q" + q.getQorder());
 					qElem.addContent(temp);
 					temp = new Element("value");
 					temp.setText(q.getText());
@@ -1299,38 +1362,40 @@ public class SASController {
 					planElement.addContent(qElem);
 				}
 				main.addContent(planElement);
-			}			
-		} catch(Exception exp) {
+				index++;
+			}
+		} catch (Exception exp) {
 			exp.printStackTrace();
-		}		
+		}
 	}
 
-	public void postEloqua() throws IOException {
+	public void postEloqua(String userId, String pdfFilePath) throws IOException {
 
 		try {
-			
+
 			Resource resource = new ClassPathResource("/application.properties");
 			Properties properties = PropertiesLoaderUtils.loadProperties(resource);
-			String token = properties.getProperty(SASConstants.COMPANY_NAME) + "\\" + properties.getProperty(SASConstants.ELOQUA_USER) + ":" + properties.getProperty(SASConstants.ELOQUA_PWD);
+			String token = properties.getProperty(SASConstants.COMPANY_NAME) + "\\"
+					+ properties.getProperty(SASConstants.ELOQUA_USER) + ":"
+					+ properties.getProperty(SASConstants.ELOQUA_PWD);
 			byte[] encodedBytes = Base64.encodeBase64(token.getBytes());
-			String encodedToken ="Basic " + new String(encodedBytes);
-			String eloquaUrl=properties.getProperty(SASConstants.ELOQUA_URL_CUSTOM_OBJECT);
-			String jsonStr = getData4Eloqua(properties);
+			String encodedToken = "Basic" + new String(encodedBytes);
+			String eloquaUrl = properties.getProperty(SASConstants.ELOQUA_URL_CUSTOM_OBJECT);
+			String jsonStr = getData4Eloqua(properties, userId, pdfFilePath);
 			System.out.println("eloqua json = " + jsonStr);
-			com.mashape.unirest.http.HttpResponse<String> response = Unirest
-					.post(eloquaUrl)
-					.header("authorization", encodedToken)
-					.header("content-type", "application/json").header("cache-control", "no-cache")
-					.header("postman-token", "6c51d19d-2327-fc92-8218-c8dd22ac35ee").body(jsonStr).asString();
+			com.mashape.unirest.http.HttpResponse<String> response = Unirest.post(eloquaUrl)
+					.header("authorization", encodedToken).header("content-type", "application/json")
+					.header("cache-control", "no-cache").header("postman-token", "6c51d19d-2327-fc92-8218-c8dd22ac35ee")
+					.body(jsonStr).asString();
 			System.out.println(response.getBody());
 		} catch (UnirestException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public String getData4Eloqua(Properties properties) {
+	public String getData4Eloqua(Properties properties, String userId, String pdfFilePath) {
 		String jsonStr = null;
-		String userId = (String) req.getAttribute("userid");
+		// String userId = (String) req.getAttribute("userid");
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			con = dataSource.getConnection();
@@ -1396,5 +1461,24 @@ public class SASController {
 		System.out.println(JSONObject.quote(dataset.toString()));
 
 		return dataset.toString();
+	}
+
+	public Hashtable<String, String> getTranslationConstants(String language) {
+		Hashtable<String, String> translationConstantsTable = new Hashtable<String, String>();
+		try {
+			con = dataSource.getConnection();
+			stmt = con.prepareStatement(
+					"SELECT translation_key, translation_value FROM translation_constants where translation_language=?");
+			stmt.setString(1, language);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				translationConstantsTable.put(rs.getString("translation_key"), rs.getString("translation_value"));
+			}
+		} catch (Exception exp) {
+			exp.printStackTrace();
+		} finally {
+			close();
+		}
+		return translationConstantsTable;
 	}
 }
