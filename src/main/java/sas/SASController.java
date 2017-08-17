@@ -285,7 +285,7 @@ public class SASController {
 						BufferedImage.TYPE_INT_RGB);
 				newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
 				String realPath = req.getRealPath("/");
-				ImageIO.write(newBufferedImage, "jpg", new File(realPath + "/support/img/uploadedImages/" + fileName));
+				ImageIO.write(newBufferedImage, "jpg", new File(realPath + "support/img/uploadedImages/" + fileName));
 
 				System.out.println(fileName + " image saved");
 				pdfFileName = generatePDF();
@@ -1379,10 +1379,12 @@ public class SASController {
 					+ properties.getProperty(SASConstants.ELOQUA_USER) + ":"
 					+ properties.getProperty(SASConstants.ELOQUA_PWD);
 			byte[] encodedBytes = Base64.encodeBase64(token.getBytes());
-			String encodedToken = "Basic" + new String(encodedBytes);
+			String encodedToken = "Basic " + new String(encodedBytes);
 			String eloquaUrl = properties.getProperty(SASConstants.ELOQUA_URL_CUSTOM_OBJECT);
 			String jsonStr = getData4Eloqua(properties, userId, pdfFilePath);
 			System.out.println("eloqua json = " + jsonStr);
+			System.out.println("eloqua url = https://secure.p06.eloqua.com/api/REST/2.0/data/customObject/34/instance");
+			System.out.println("eloqua url = " + eloquaUrl);
 			com.mashape.unirest.http.HttpResponse<String> response = Unirest.post(eloquaUrl)
 					.header("authorization", encodedToken).header("content-type", "application/json")
 					.header("cache-control", "no-cache").header("postman-token", "6c51d19d-2327-fc92-8218-c8dd22ac35ee")
