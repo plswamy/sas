@@ -196,7 +196,7 @@
                       <script>
 						function updateA() {
                             if($("#btnPrintPDF").attr("href").indexOf("?scoreinfo") === -1) {
-							    $("#btnPrintPDF").attr("href", $("#btnPrintPDF").attr("href")+"?scoreinfo=" + $("#scoreinfo").val());
+							    $("#btnPrintPDF").attr("href", $("#btnPrintPDF").attr("href")+"?pdfFilePath=" + $("#pdfFilePath").val());
                             }
 						}
                         $(document).ready(function () {
@@ -432,20 +432,25 @@
                     	convertToBase64("<%=webContext%>/support/img/spiderweb.png", "image/png", function(data){
   						//document.write("\ndata=" + data);      
   						var formData = new FormData();
+  						formData.append('scoreinfo', $("#scoreinfo").val());
   						formData.append('filename', uploadImageName);
 						formData.append('picture', data);
   								$.ajax({
-                            	    url: "<%=webContext%>/image",
+                            	    //async : false,
+  									url: "<%=webContext%>/image",
 									type : "POST",
 									cache : false,
 									contentType : false,
 									processData : false,
-									data : formData
+									data : formData,
+									success: function(pdfFileName) {
+										//alert(pdfFileName);
+										$('#pdfFilePath').val(pdfFileName);
+									}
 								})
-								.done(
-										function(
-												e) {
-											//alert('done!');
+								 .done(
+										function(pdfFileName) {
+											//alert(pdfFileName);
 										});
 								//$('#spiderWeb').val(data);
 
@@ -467,6 +472,7 @@
 						});
 									</script>
 									<input type="hidden" id="scoreinfo" name="scoreinfo" value="" />
+									<input type="hidden" id="pdfFilePath" name="pdfFilePath" value="" />
 									<!--<input type="hidden" id="spiderWeb" name="spiderWeb" />-->
 									<div
 										class="question_template col-xs-12 col-sm-12 col-md-12 col-lg-12"
