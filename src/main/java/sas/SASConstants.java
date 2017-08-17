@@ -19,5 +19,19 @@ public class SASConstants {
 	public static final String ELOQUA_USER="eloqua.username";
 	public static final String ELOQUA_PWD="eloqua.password";
 	public static final String ELOQUA_URL_CUSTOM_OBJECT="eloqua.url.customeobject";
+	public static final String IMAGE_PATH="image.path";
+	public static final String UPLOAD_IMAGE_PATH="uploadimage.path";
+	
+	
+	public static final String PDF_HEADING = "pdf_heading";
+	public static final String PDF_SUB_HEADING = "pdf_sub_heading";
+	public static final String PDF_SCORE_HEADING = "pdf_you_scored";
+	public static final String PDF_PLAN_SUB_HEADING = "pdf_plan";
+	public static final String PDF_DO_SUB_HEADING = "pdf_do";
+	public static final String PDF_CHECK_SUB_HEADING = "pdf_check";
+	public static final String PDF_LAST_PARA_HEADING = "pdf_last_para_heading";
+	public static final String PDF_LAST_PARA1= "pdf_last_paragraph1";
+	public static final String PDF_LAST_PARA2 = "pdf_last_paragraph2";
+	public static final String PDF_LAST_PARA3 = "pdf_last_paragraph3";
 	
 }
