@@ -6,6 +6,9 @@
        				 <xslPath>E:\sas-master\src\main\webapp\xsl</xslPath>
     				 <imgPath>E:\sas-master\src\main\webapp\support\img</imgPath>
       				<spiderwebImgPath>E:\sas-master\src\main\webapp\support\img\uploadedImages</spiderwebImgPath>
+      				<pdf_haading>TRAVEL RISK MANAGEMENT SELF-ASSESSMENT</pdf_haading>
+      				<pdf_sub_haading>Your Summary</pdf_sub_haading>
+      				<pdf_score_text>You scored</pdf_score_text>
       				<Company_Logo>sosheader.jpg</Company_Logo>
       				<range>range.jpg</range>
       				<spiderwebFileName>range.jpg</spiderwebFileName>
