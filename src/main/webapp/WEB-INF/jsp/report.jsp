@@ -33,7 +33,7 @@
                     }
 
                     Hashtable<String, String> ans = (Hashtable<String, String>) request.getAttribute("answers");
-
+					 
                     Set<String> ansKeys = ans.keySet();
                     for(String key: ansKeys) {
                         %>
@@ -41,6 +41,8 @@
                         <%
                     }
 
+                   
+                    
                     Hashtable<String, List<Question>> hs = (Hashtable<String, List<Question>>) request.getAttribute("questions");  
                     List<Question> list = hs.get("plan");
                     int totalQuestions = 0;
@@ -513,7 +515,26 @@
                             <div class="plan-header-text-section">
                               <div class="plan-header-text">Plan</div>
                               <div class="plan-header-desc">
-                              Key stakeholders are identified and the framework for how the organisation manages travel health and security risks is defined.
+                             <%
+                              
+                              Hashtable<String, String> hLabels = (Hashtable<String, String>) request.getAttribute("labels");  
+                              String planHeaderDesc = hLabels.get("plan_header_desc");
+                              String doHeaderDesc = hLabels.get("do_header_desc");
+                              String checkHeaderDesc = hLabels.get("check_header_desc");
+                              String firstParaHeading = hLabels.get("pdf_first_para_heading");
+                              String firstParagraph1 = hLabels.get("pdf_first_paragraph1");
+                              String firstParagraph2 = hLabels.get("pdf_first_paragraph2");
+                              String firstParagraph3 = hLabels.get("pdf_first_paragraph3");
+                              String firstParagraph4 = hLabels.get("pdf_first_paragraph4");
+                              String lastParaHeading = hLabels.get("pdf_last_para_heading");
+                              String lastParagraph1 = hLabels.get("pdf_last_paragraph1");
+                              String lastParagraph2 = hLabels.get("pdf_last_paragraph2");
+                              String lastParagraph3 = hLabels.get("pdf_last_paragraph3");
+                              String imageClickDesc =  hLabels.get("image_click_description");
+                              out.println(planHeaderDesc);
+                              
+                              %>
+                              
                               </div>
                             </div>
                           </div>
@@ -535,7 +556,8 @@
                             <div class="plan-header-text-section">
                               <div class="plan-header-text">Do</div>
                               <div class="plan-header-desc">
-                                Travel risk management plan is implemented and tools are deployed.
+                              <%=doHeaderDesc%>
+                                
                               </div>
                             </div>
                           </div>
@@ -557,7 +579,7 @@
                             <div class="plan-header-text-section">
                               <div class="plan-header-text">Check</div>
                               <div class="plan-header-desc">
-                                The implementation of the travel risk management plan is regularly tested and maintained, enabling continuous improvement.
+                              <%=checkHeaderDesc%>
                               </div>
                             </div>
                           </div>
@@ -573,25 +595,24 @@
                       </div>
 
                       <div id="footer" class="inner img-responsive">
-                      <h3>Integrated Travel Risk Mitigation, a Duty of Care Plan-Do-Check approach</h3>
+                      <h3><%=firstParaHeading%></h3>
                       <div class="diagram-area">
                         <%--<a href="http://www.global.selfassessmenttool.com/img/diagram.png" target="_blank"><div class="diagram"></div></a>--%>
                         <a href="http://www.global.selfassessmenttool.com/img/diagram.png" target="_blank"><img class="cover-width diagram" src="./support/img/resourceFiles/do-12.png" alt="Sections"></a>
-                        <a href="http://www.global.selfassessmenttool.com/img/diagram.png" class="marginleft" target="_blank">Click here to open larger image of Integrated Travel Risk Mitigation</a>
+                        <a href="http://www.global.selfassessmenttool.com/img/diagram.png" class="marginleft" target="_blank"><%=imageClickDesc%></a>
                       </div>
-                      <p>International SOS commissioned the first ever Duty of Care whitepaper. This reviews employersÃ¢ÂÂ Duty of Care responsibilities and offers guidelines for the development of appropriate risk management strategies.</p>
-                      <p>Following this sector first, our clients requested more research, tools and advice. Resulting in the commission of our Duty of Care and Travel Risk Management Global Benchmarking Study Ã¢ÂÂ the first comprehensive and authoritative research publication on the topic.</p>
-                      <p>The paper outlines a framework for organisations to ensure they are adequately meeting their Duty of Care obligations. The framework follows the 'plan-do-check' approach.</p>
-                      <p>For more information <a href="http://internationalsos.com/duty-of-care" target="_blank">internationalsos.com/duty-of-care</a> </p>
-                      <h3>Need assistance with any of your responses or recommendations?</h3>
-                      <p>Contact International SOS - <a href="mailto:inquiries@internationalsos.com">inquiries@internationalsos.com</a> | <a href="http://www.internationalsos.com/" target="_blank">www.internationalsos.com</a></p>
-                      <p><em>The recommendations, suggested actions and broad maturity measure are for guidance purposes only and do not constitute formal advice. Please contact International SOS for customised analysis and recommendations specific to your organisation.</em></p>
+                      <p><%=firstParagraph1%></p>
+                      <p><%=firstParagraph2%></p>
+                      <p><%=firstParagraph3 %></p>
+                      <p><%=firstParagraph4 %> <a href="http://internationalsos.com/duty-of-care" target="_blank">internationalsos.com/duty-of-care</a> </p>
+                      <h3><%=lastParaHeading%></h3>
+                      <p><%=lastParagraph1%><a href="mailto:inquiries@internationalsos.com">inquiries@internationalsos.com</a> | <a href="http://www.internationalsos.com/" target="_blank">www.internationalsos.com</a></p>
+                      <p><em><%=lastParagraph2%> <%=lastParagraph3%></em></p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <%--<div id="footer" class="inner img-responsive">--%>
               <img class="image-max-width" src="<%=webContext%>support/img/strapline.png" alt="Worldwide reach. Human touch.">
             </div>
           </div>
