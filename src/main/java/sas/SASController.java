@@ -186,6 +186,10 @@ public class SASController {
 		System.out.println("email ....:" + req.getParameter("f4"));
 		saveUser();
 		saveUserResponse();
+		String lang = (String) session.getAttribute("language");
+		if (lang == null)
+			lang = req.getParameter("language");
+		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		// postEloqua();
 		return "report";
 	}
@@ -371,13 +375,14 @@ public class SASController {
 			if (nullCheck(language).length() == 0) {
 				language = "english";
 			}
-			Hashtable<String, String> translationConstants = getTranslationConstants(language);
+			Hashtable<String, String> translationConstants = getData("labels", "labelkey", "labelvalue", language);
+					//getTranslationConstants(language);
 			SAXBuilder builder = new SAXBuilder();
 			Document document = builder.build(xmlFileName);
 			document.getRootElement().getChild("data").getChild("main").getChild("imgPath").setText(imagePath);
 			document.getRootElement().getChild("data").getChild("main").getChild("spiderwebImgPath")
 					.setText(uploadImagePath);
-			document.getRootElement().getChild("data").getChild("main").getChild("pdf_haading")
+			document.getRootElement().getChild("data").getChild("main").getChild("pdf_heading")
 					.setText(translationConstants.get(SASConstants.PDF_HEADING));
 			document.getRootElement().getChild("data").getChild("main").getChild("pdf_sub_haading")
 					.setText(translationConstants.get(SASConstants.PDF_SUB_HEADING));
@@ -450,21 +455,13 @@ public class SASController {
 		List<String> langs = getLangs();
 		String requestedLanguage = req.getServletPath().substring(1);
 		for (String language : langs) {
-			if (requestedLanguage.equals(language)) {
+			if (requestedLanguage.equals(language) || requestedLanguage.equals("english")) {
 				session.setAttribute("language", requestedLanguage);
 				req.setAttribute("language", requestedLanguage);
-				for (RequestMappingInfo info : requestMappingHandlerMapping.getHandlerMethods().keySet()) {
-					for (String urlPattern : info.getPatternsCondition().getPatterns()) {
-						if (req.getServletPath().equals(urlPattern)) {
-							System.out.println(urlPattern.substring(1));
-							return urlPattern.substring(1);
-						}
-					}
-				}
-				break;
 			}
 		}
-		return "login";
+		loadData();
+		return "index";
 	}
 	// @RequestMapping(value = "/404", method = RequestMethod.GET)
 	// public ModelAndView noResource(Principal user) {
