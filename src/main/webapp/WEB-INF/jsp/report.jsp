@@ -53,6 +53,7 @@
                         planSection["<%= q.getId() %>"] =  {
                             "qry" : "<%= q.getText() %>",
                             "subsection" : "<%= q.getSubtype() %>",
+                            "description": "<%= q.getDesc() %>",
                             "img" : "<%= q.getImageName() %>",
                             "val" : surPro['<%= q.getId() %>']
                         };
@@ -71,6 +72,7 @@
                         doSection["<%= q.getId() %>"] =  {
                             "qry" : "<%= q.getText() %>",
                             "subsection" : "<%= q.getSubtype() %>",
+                            "description": "<%= q.getDesc() %>",
                             "img" : "<%= q.getImageName() %>",
                             "val" : surPro['<%= q.getId() %>']
                         };
@@ -89,6 +91,7 @@
                         checkSection["<%= q.getId() %>"] =  {
                             "qry" : "<%= q.getText() %>",
                             "subsection" : "<%= q.getSubtype() %>",
+                            "description": "<%= q.getDesc() %>",
                             "img" : "<%= q.getImageName() %>",
                             "val" : surPro['<%= q.getId() %>']
                         };
@@ -242,7 +245,7 @@
                                     tmpl.find('.question_id').id = qid;
                                     tmpl.find('.question_number')[0].innerText = "Q" + qNum;
                                     tmpl.find('.question_text')[0].innerText = this.qry;
-                                    tmpl.find('.question_desc')[0].innerText = "this is description for this question: " + this.qry;
+                                    tmpl.find('.question_desc')[0].innerText = this.description;
                                     tmpl.show();
                                     $("." + sectionName + "_section")[0].appendChild(tmpl[0]);
                                   }

@@ -50,6 +50,7 @@
           planSection["<%= q.getId() %>"] =  {
           "qry" : "<%= q.getText() %>",
           "subsection" : "<%= q.getSubtype() %>",
+          "description": "<%= q.getDesc() %>",
           "img" : "<%= q.getImageName() %>"
         };
         <%
@@ -67,6 +68,7 @@
           doSection["<%= q.getId() %>"] =  {
           "qry" : "<%= q.getText() %>",
           "subsection" : "<%= q.getSubtype() %>",
+          "description": "<%= q.getDesc() %>",
           "img" : "<%= q.getImageName() %>"
         };
         <%
@@ -87,6 +89,7 @@
           checkSection["<%= q.getId() %>"] =  {
           "qry" : "<%= q.getText() %>",
           "subsection" : "<%= q.getSubtype() %>",
+          "description": "<%= q.getDesc() %>",
           "img" : "<%= q.getImageName() %>"
         };
         <%
