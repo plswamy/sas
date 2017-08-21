@@ -53,7 +53,7 @@
 										<fo:block start-indent="0.2cm" font-family="sans-serif"
 											font-weight="bold" color="#2f4696" font-size="47pt"
 											wrap-option="no-wrap">
-											<xsl:value-of select="data/main/pdf_haading" />
+											<xsl:value-of select="data/main/pdf_heading" />
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
