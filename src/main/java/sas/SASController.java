@@ -308,7 +308,7 @@ public class SASController {
 						LOGGER.error("can not able to send mail.", e);
 						e.printStackTrace();
 					}
-					postEloqua(user, pdfRealPath);
+					postEloqua(user, pdfFileName);
 				}
 
 			} catch (IOException e) {
@@ -1395,6 +1395,7 @@ public class SASController {
 	public String getData4Eloqua(Properties properties, String userId, String pdfFilePath) {
 		String jsonStr = null;
 		// String userId = (String) req.getAttribute("userid");
+		System.out.println(pdfFilePath);
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			con = dataSource.getConnection();
@@ -1410,8 +1411,11 @@ public class SASController {
 			int index = 0;
 			while (rs.next()) {
 				if (index == 0) {
+					String satOrigin = rs.getString("lang");
+					if(satOrigin.equals("english") || satOrigin == null)
+						satOrigin = "master";
 					map.put(properties.getProperty(SASConstants.LANGUAGE),
-							rs.getString("lang") + " " + properties.getProperty(SASConstants.SELF_ASSESSMENT));
+							satOrigin);
 					map.put(properties.getProperty(SASConstants.BUSSINESS_INDUSTRY), rs.getString("f6"));
 					map.put(properties.getProperty(SASConstants.COMPANY), rs.getString("f5"));
 					map.put(properties.getProperty(SASConstants.COUNTRY), rs.getString("f7"));
@@ -1422,6 +1426,7 @@ public class SASController {
 					map.put(properties.getProperty(SASConstants.USER_ID), rs.getString("id"));
 					map.put(properties.getProperty(SASConstants.QUESTION_ID), rs.getString("qid"));
 					map.put(properties.getProperty(SASConstants.QUESTION_RESPONSE), rs.getString("qresponse"));
+					map.put(properties.getProperty(SASConstants.REPORT_PDF_NAME), pdfFilePath);
 				} else {
 					String qidKey = properties.getProperty(SASConstants.QUESTION_ID);
 					String qresponseKey = properties.getProperty(SASConstants.QUESTION_RESPONSE);
