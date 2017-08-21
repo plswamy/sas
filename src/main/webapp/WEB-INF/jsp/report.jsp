@@ -609,7 +609,7 @@
                       <p><%=firstParagraph3 %></p>
                       <p><%=firstParagraph4 %> <a href="http://internationalsos.com/duty-of-care" target="_blank">internationalsos.com/duty-of-care</a> </p>
                       <h3><%=lastParaHeading%></h3>
-                      <p><%=lastParagraph1%><a href="mailto:inquiries@internationalsos.com">inquiries@internationalsos.com</a> | <a href="http://www.internationalsos.com/" target="_blank">www.internationalsos.com</a></p>
+                      <p><%=lastParagraph1%><a href="http://www.internationalsos.com/" target="_blank">www.internationalsos.com</a></p>
                       <p><em><%=lastParagraph2%> <%=lastParagraph3%></em></p>
                     </div>
                   </div>
