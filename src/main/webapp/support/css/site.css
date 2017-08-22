@@ -174,8 +174,11 @@ body {
 
 .section_plan .content {
   position: relative;
-  /*margin-top: -17px;*/
   padding-top: 17px;
+}
+
+.section_plan .content, .section_do .content, .section_check .content {
+  margin-top: 12px;
 }
 
 #assessment .right {
@@ -230,6 +233,27 @@ body {
 
 #progressBarOuter {
   height: 12px;
+}
+
+.sos-down {
+    width: 0px;
+    height: 0px;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    float: right;
+    margin-top: 31px;
+}
+
+.sos-down.sos-down-plan {
+    border-top: 20px solid #232762;
+}
+
+.sos-down.sos-down-do {
+    border-top: 20px solid #009354;
+}
+
+.sos-down.sos-down-check {
+    border-top: 20px solid #6c206b;
 }
 
 .section_plan h3 {

@@ -39,6 +39,15 @@
         var planSection = {}, doSection = {}, checkSection = {}, allSections = {};
 
         <%
+          Hashtable<String, String> lhs = (Hashtable<String, String>) request.getAttribute("labels");
+          String yes=	lhs.get("yes");
+          String no=	lhs.get("no");
+          String notsure=	lhs.get("notsure");
+          String progress = lhs.get("progress");
+          String secName1 = lhs.get("secName1");
+          String secName2 = lhs.get("secName2");
+          String secName3 = lhs.get("secName3");
+
           Hashtable<String, List<Question>> hs = (Hashtable<String, List<Question>>) request.getAttribute("questions");  
           List<Question> list = hs.get("plan");
           int totalQuestions = 0;
@@ -187,7 +196,20 @@
               $(".section_1").addClass('section_' + targetQuestion.currentSection);
               $(".answer_wrap").attr('data-qid', targetQuestion.qid);
               //$("#assessment").removeClass().addClass("section_" + targetQuestion.currentSection);
-              $(".section-imgage").attr("src", "support/img/section_" + targetQuestion.currentSection + ".png");
+
+
+              //$(".section-imgage").attr("src", "support/img/section_" + targetQuestion.currentSection + ".png");
+
+              $(".sos-section-container").removeClass("col-xs-6").removeClass("col-sm-6").removeClass("col-md-6").removeClass("col-lg-6").addClass("col-xs-3 col-sm-3 col-md-3 col-lg-3");
+              $(".sos-down").addClass("hidden");
+
+              var eleClass = "." + targetQuestion.currentSection + "-container";
+              $(eleClass).removeClass("col-xs-3").removeClass("col-sm-3").removeClass("col-md-3").removeClass("col-lg-3");
+              $(eleClass).addClass("col-xs-6 col-sm-6 col-md-6 col-lg-6");
+              $(".sos-down-" + targetQuestion.currentSection).removeClass("hidden");
+
+
+
               //$(".question_image").css("background-image", "url('support/img/resourceFiles/" + targetQuestion.img + "')");
               $(".question_image").attr("src", "support/img/resourceFiles/" + targetQuestion.img);
               $(".question_subsection")[0].innerHTML = targetQuestion.subsection;
@@ -236,10 +258,21 @@
             <div id="content_wrap" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div id="assessment" class="section_1">
-                  <!--<div id="sections"></div>-->
-                  <img class="section-imgage cover-width" src="support/img/section_plan.png" alt="Sections"/>
-                  <%--<img class="section-img-do cover-width" src="support/img/section_do.png" alt="Sections"/>--%>
-                  <%--<img class="section-img-check cover-width" src="support/img/section_check.png" alt="Sections"/>--%>
+                  <div class="banner-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="sos-section-container plan-container">
+                      <span class="header-name"><%= secName1 %></span>
+                      <div class="sos-down sos-down-plan hidden"></div>
+                    </div>
+                    <div class="sos-section-container do-container">
+                      <span class="header-name"><%= secName2 %></span>
+                      <div class="sos-down sos-down-do hidden"></div>
+                    </div>
+                    <div class="sos-section-container check-container">
+                     <span class="header-name"><%= secName3 %></span>
+                      <div class="sos-down sos-down-check hidden"></div>
+                    </div>
+                  </div>
+
                   <div class="content col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="question clearfix" data-section-id="1" data-question-id="1" style="">
                       <div class="left col-xs-12 col-sm-12 col-md-6 col-lg-5">
@@ -257,13 +290,6 @@
                             <h3 class="question_text"></h3>
                           </div>
                           <div class="answer_wrap col-xs-12 col-sm-12 col-md-12 col-lg-12" data-section="" data-qid="">
-						  <%
-				                Hashtable<String, String> lhs = (Hashtable<String, String>) request.getAttribute("labels");  				                  
-								String yes=	lhs.get("yes");
-								String no=	lhs.get("no");
-								String notsure=	lhs.get("notsure");
-								String progress = lhs.get("progress");
-						  %>
                             <a href="javascript:;" class="btn btn-success" data-value="yes"><%=yes%></a>
                             <a href="javascript:;" class="btn btn-danger" data-value="no"><%=no%></a>
                             <a href="javascript:;" class="btn btn-warning" data-value="notsure"><%=notsure%></a>
