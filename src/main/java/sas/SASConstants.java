@@ -35,4 +35,7 @@ public class SASConstants {
 	public static final String PDF_LAST_PARA2 = "pdf_last_paragraph2";
 	public static final String PDF_LAST_PARA3 = "pdf_last_paragraph3";
 	
+	public static final String PLAN_REPORT_DESC = "plan_report_description";
+	public static final String DO_REPORT_DESC = "do_report_description";
+	public static final String CHECK_REPORT_DESC = "check_report_description";
 }
