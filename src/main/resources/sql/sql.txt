@@ -551,3 +551,13 @@ Insert into labels values(id, 'french', 'pdf_first_paragraph2', 'Dans le cadre d
 Insert into labels values(id, 'french', 'pdf_first_paragraph3', 'Le document décrit un cadre pour les organisations afin de s\'assurer qu\'elles respectent adéquatement leurs obligations en matière de devoir de diligence. Le cadre suit l\'approche plan-do-check.');
 Insert into labels values(id, 'french', 'pdf_first_paragraph4', 'Pour plus d\'informations');
 Insert into labels values(id, 'french', 'image_click_description', 'Cliquez ici pour ouvrir une image plus large de l\'atténuation intégrée des risques de voyage');
+
+
+
+Insert into labels values(id, 'english', 'plan_report_description', 'ANALYSE');
+Insert into labels values(id, 'english', 'do_report_description', 'MITIGATE');
+Insert into labels values(id, 'english', 'check_report_description', 'CONTROL');
+
+Insert into labels values(id, 'french', 'plan_report_description', 'ANALYSER');
+Insert into labels values(id, 'french', 'do_report_description', 'ATTÉNUER');
+Insert into labels values(id, 'french', 'check_report_description', 'CONTRÔLE');
