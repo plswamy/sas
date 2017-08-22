@@ -92,6 +92,8 @@
                     $.each(userFormFields, function(fid) {
                         userInfo[this.fkey] = $(".user-form-field-" + this.fkey).val();
                     });
+
+                    userInfo["lang"] = '<%= request.getAttribute("language") %>';
                 
                     localStorage.setItem("userInfo", JSON.stringify(userInfo));
                     return true;
@@ -310,6 +312,7 @@
                     </div>
                 </div>
             </div>
+            <input type="hidden" id="sos-lang-val" value='<%= request.getAttribute("language") %>'/>
     </body>
     <script language="javascript">
         $(document).ready(function () {
@@ -397,7 +400,7 @@
         if (typeof(ValidatorOnLoad) == "function") {
             var userInfo = localStorage.getItem('userInfo'),
             userSession = !!userInfo ? JSON.parse(userInfo) : {};
-            if(!!userSession && !!userSession.f4) {            
+            if(!!userSession && !!userSession.f4 && userSession.lang === $("#sos-lang-val").val()) {            
                  BootstrapDialog.confirm({
                     title: 'Session exists!',
                     message: 'Hi '+ userSession.f1 + ' ' + userSession.f2+'! your session is still exists.',

@@ -579,6 +579,7 @@ public class SASController {
 			lang = req.getParameter("language");
 
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
+		req.setAttribute("language", lang);
 		req.setAttribute("businessindustry", getData("businessindustry", "optkey", "optvalue", lang));
 		req.setAttribute("country", getData("country", "optkey", "optvalue", lang));
 		req.setAttribute("userformfields", getFormFields(lang));
