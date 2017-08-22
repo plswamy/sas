@@ -929,6 +929,23 @@ body.sos-dark-theme {
     padding-bottom: 20px;
 }
 
-#chart > svg {
-    margin-left: 10%;
+
+
+
+@media screen and (min-width: 980px) /* Desktop */ {
+    #chart > svg {
+        margin-left: 25%;
+    }
+}
+
+@media screen  and (max-width: 979px) /* Tablet */ {
+    #chart > svg {
+        margin-left: 10%;
+    }
+}
+
+@media screen and (max-width: 500px) /* Mobile */ {
+    #chart > svg {
+        margin-left: 10%;
+    }
 }
