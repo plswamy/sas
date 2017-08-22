@@ -403,7 +403,7 @@ public class SASController {
 			document.getRootElement().getChild("data").getChild("main").getChild("desc34")
 					.setText(translationConstants.get(SASConstants.PDF_LAST_PARA3));
 			Element main = document.getRootElement().getChild("data").getChild("main");
-			getQuestionElement(userid, main);
+			getQuestionElement(userid, main, translationConstants);
 			System.out.println(
 					"root element" + document.getRootElement().getChild("data").getChild("main").getChildText("score"));
 			XMLOutputter xmOut = new XMLOutputter(); 
@@ -1291,7 +1291,7 @@ public class SASController {
 		}
 	}
 
-	private void getQuestionElement(String userid, Element main) {
+	private void getQuestionElement(String userid, Element main, Hashtable<String, String> translationConstants) {
 		LinkedHashMap<String, List<Question>> hs = new LinkedHashMap<String, List<Question>>();
 		try {
 			String sql = "select * from questions where id in (select qid from userresponse where qresponse != ? and userid=? order by qid)";
@@ -1338,7 +1338,12 @@ public class SASController {
 				Element planElement = new Element("plan");
 				Element title = new Element("title");
 				key = keys.next();
-				title.setText(key);
+				if(key.equals("plan"))
+					title.setText(translationConstants.get(SASConstants.PLAN_REPORT_DESC));
+				else if(key.equals("do"))
+					title.setText(translationConstants.get(SASConstants.DO_REPORT_DESC));
+				else if(key.equals("check"))
+					title.setText(translationConstants.get(SASConstants.CHECK_REPORT_DESC));
 				attribute = new Attribute("id", index + "");
 				title.setAttribute(attribute);
 				System.out.println("key...." + key);
