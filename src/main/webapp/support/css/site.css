@@ -259,19 +259,20 @@ body {
   line-height: 40px;
 }
 .plan-container {
-  background-color: #2f4696;
-}
-.do-container {
   background-color: #232762;
 }
+.do-container {
+  background-color: #009354;
+}
 .check-container {
-  background-color: #EF820F;
+  background-color: #6c206b;
 }
 .header-name {
-  font-size: 2em;
-  color: #fff;
-  margin-left: 35px;
-  vertical-align: middle;
+    font-size: 2em;
+    color: #fff;
+    vertical-align: middle;
+    text-transform: uppercase;
+    font: caption;
 }
 
 @media screen and (max-width: 768px) {

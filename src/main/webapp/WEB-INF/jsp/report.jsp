@@ -516,27 +516,29 @@
                           <div class="plan-section-style col-xs-12 col-sm-6 col-md-6 col-lg-7">
                             <span class="plan-icon"></span>
                             <div class="plan-header-text-section">
-                              <div class="plan-header-text">Plan</div>
-                              <div class="plan-header-desc">
                              <%
                               
-                              Hashtable<String, String> hLabels = (Hashtable<String, String>) request.getAttribute("labels");  
-                              String planHeaderDesc = hLabels.get("plan_header_desc");
-                              String doHeaderDesc = hLabels.get("do_header_desc");
-                              String checkHeaderDesc = hLabels.get("check_header_desc");
-                              String firstParaHeading = hLabels.get("pdf_first_para_heading");
-                              String firstParagraph1 = hLabels.get("pdf_first_paragraph1");
-                              String firstParagraph2 = hLabels.get("pdf_first_paragraph2");
-                              String firstParagraph3 = hLabels.get("pdf_first_paragraph3");
-                              String firstParagraph4 = hLabels.get("pdf_first_paragraph4");
-                              String lastParaHeading = hLabels.get("pdf_last_para_heading");
-                              String lastParagraph1 = hLabels.get("pdf_last_paragraph1");
-                              String lastParagraph2 = hLabels.get("pdf_last_paragraph2");
-                              String lastParagraph3 = hLabels.get("pdf_last_paragraph3");
-                              String imageClickDesc =  hLabels.get("image_click_description");
-                              out.println(planHeaderDesc);
+                                Hashtable<String, String> hLabels = (Hashtable<String, String>) request.getAttribute("labels");  
+                                String planHeaderDesc = hLabels.get("plan_header_desc");
+                                String doHeaderDesc = hLabels.get("do_header_desc");
+                                String checkHeaderDesc = hLabels.get("check_header_desc");
+                                String firstParaHeading = hLabels.get("pdf_first_para_heading");
+                                String firstParagraph1 = hLabels.get("pdf_first_paragraph1");
+                                String firstParagraph2 = hLabels.get("pdf_first_paragraph2");
+                                String firstParagraph3 = hLabels.get("pdf_first_paragraph3");
+                                String firstParagraph4 = hLabels.get("pdf_first_paragraph4");
+                                String lastParaHeading = hLabels.get("pdf_last_para_heading");
+                                String lastParagraph1 = hLabels.get("pdf_last_paragraph1");
+                                String lastParagraph2 = hLabels.get("pdf_last_paragraph2");
+                                String lastParagraph3 = hLabels.get("pdf_last_paragraph3");
+                                String imageClickDesc =  hLabels.get("image_click_description");
+                                String secName1 = hLabels.get("secName1");
+                                String secName2 = hLabels.get("secName2");
+                                String secName3 = hLabels.get("secName3");
                               
                               %>
+                              <div class="plan-header-text"><%= secName1 %></div>
+                              <div class="plan-header-desc"><%= planHeaderDesc %>
                               
                               </div>
                             </div>
@@ -557,7 +559,7 @@
                           <div class="plan-section-style col-xs-12 col-sm-6 col-md-6 col-lg-7">
                             <span class="do-icon"></span>
                             <div class="plan-header-text-section">
-                              <div class="plan-header-text">Do</div>
+                              <div class="plan-header-text"><%= secName2 %></div>
                               <div class="plan-header-desc">
                               <%=doHeaderDesc%>
                                 
@@ -580,7 +582,7 @@
                           <div class="plan-section-style col-xs-12 col-sm-6 col-md-6 col-lg-7">
                             <span class="check-icon"></span>
                             <div class="plan-header-text-section">
-                              <div class="plan-header-text">Check</div>
+                              <div class="plan-header-text"><%= secName3 %></div>
                               <div class="plan-header-desc">
                               <%=checkHeaderDesc%>
                               </div>

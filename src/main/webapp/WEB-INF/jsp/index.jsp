@@ -117,6 +117,9 @@
                     String enterLabel = hs.get("enter");
                     String mustbevalid = hs.get("mustbevalid");
                     String pleaseSelect = hs.get("pleaseselect");
+                    String secName1 = hs.get("secName1");
+                    String secName2 = hs.get("secName2");
+                    String secName3 = hs.get("secName3");
                     
                     Hashtable<String, String> hmf1 = (Hashtable<String, String>) request.getAttribute("userformfields");                    
                     Set<String> hmf1Keys = hmf1.keySet();
@@ -175,16 +178,13 @@
 
                             <div class="banner-container col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="plan-container col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <span class="icon plan-icon"></span>
-                                    <span class="header-name">Plan</span>
+                                    <span class="header-name"><%= secName1 %></span>
                                 </div>
                                 <div class="do-container col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <span class="icon do-icon"></span>
-                                    <span class="header-name">Do</span>
+                                    <span class="header-name"><%= secName2 %></span>
                                 </div>
                                 <div class="check-container col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <span class="icon check-icon"></span>
-                                    <span class="header-name">Check</span>
+                                    <span class="header-name"><%= secName3 %></span>
                                 </div>
                             </div>
 

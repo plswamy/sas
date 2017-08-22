@@ -82,6 +82,9 @@ Insert into labels values(17, 'english', 'yes', 'Yes');
 Insert into labels values(18, 'english', 'no', 'No');
 Insert into labels values(19, 'english', 'notsure', 'Not Sure');
 Insert into labels values(20, 'english', 'adminEmails', '');
+Insert into labels values(21, 'english', 'secName1', 'Analyse');
+Insert into labels values(22, 'english', 'secName2', 'Mitigate');
+Insert into labels values(23, 'english', 'secName3', 'Control');
 
 
 
