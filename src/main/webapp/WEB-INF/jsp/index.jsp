@@ -319,21 +319,31 @@
         
             $('#ctl00_ContentPlaceHolder1_btnRegister').html(
             "Start <span class='arrow'></span>");
-            load_countries('ctl00_ContentPlaceHolder1_ddlf7');
-            
-            $('#ctl00_ContentPlaceHolder1_ddlf7').change(function () {
-                $('#ctl00_ContentPlaceHolder1_hidCountryCode').val($(this).val());
-                $('#ctl00_ContentPlaceHolder1_hidStateCode').val(
-                $('#ctl00_ContentPlaceHolder1_ddlf8').val());            
-                $(".ddlCountry").find(".sos-btn-danger").removeClass("sos-btn-danger");
-            });
-            
-            $('#ctl00_ContentPlaceHolder1_ddlf8').change(function () {
-                $('#ctl00_ContentPlaceHolder1_hidStateCode').val(
-                $('#ctl00_ContentPlaceHolder1_ddlf8').val());
-                $(".ddlState").find(".sos-btn-danger").removeClass("sos-btn-danger");
-            });
-        
+            //alert("country =" +  document.getElementById('ctl00_ContentPlaceHolder1_ddlf7') + "\n State = " + document.getElementById('ctl00_ContentPlaceHolder1_ddlf8'));
+            if(document.getElementById('ctl00_ContentPlaceHolder1_ddlf7') !== null) {
+	            load_countries('ctl00_ContentPlaceHolder1_ddlf7');
+	            
+	            $('#ctl00_ContentPlaceHolder1_ddlf7').change(function () {
+	                $('#ctl00_ContentPlaceHolder1_hidCountryCode').val($(this).val());
+	                $('#ctl00_ContentPlaceHolder1_hidStateCode').val(
+	                $('#ctl00_ContentPlaceHolder1_ddlf8').val());            
+	                $(".ddlCountry").find(".sos-btn-danger").removeClass("sos-btn-danger");
+	            });
+	            $.each(userFormFields, function(fid) {
+	                 	if(this.fkey == 'f8' && !this.frequired) {
+	                 		$('#ctl00_ContentPlaceHolder1_ddlf8').parent().remove();
+	                 	}
+	            });
+            } else {
+            	$('#ctl00_ContentPlaceHolder1_ddlf8').parent().remove();
+            }
+            if(document.getElementById('ctl00_ContentPlaceHolder1_ddlf8') !== null) {
+	            $('#ctl00_ContentPlaceHolder1_ddlf8').change(function () {
+	                $('#ctl00_ContentPlaceHolder1_hidStateCode').val(
+	                $('#ctl00_ContentPlaceHolder1_ddlf8').val());
+	                $(".ddlState").find(".sos-btn-danger").removeClass("sos-btn-danger");
+	            });
+            }
             $('#ctl00_ContentPlaceHolder1_ddlf6').change(function () {
                 $(".ddlBusinessIndustry").find(".sos-btn-danger").removeClass("sos-btn-danger");
             });
@@ -375,8 +385,9 @@
                 formEle = document.getElementById("ctl00_ContentPlaceHolder1_req_" + key);
         
             if(!!this.frequired) {
+            	if(this.fkey=='f8' && formEle==null) {return;}
                 Page_Validators.push(document.getElementById("ctl00_ContentPlaceHolder1_req_" + key));
-        
+        		
                 formEle.controltovalidate = "ctl00_ContentPlaceHolder1_" + postFix + key;
                 formEle.errormessage = $("#ctl00_ContentPlaceHolder1_" + key).html();
                 formEle.display = "None";
