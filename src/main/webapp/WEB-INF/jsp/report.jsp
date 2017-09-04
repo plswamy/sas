@@ -345,14 +345,15 @@
                             ;
                           /*****************************************************************************************/
 
-                          var scoreVal = Math.round((totalYes / totalQuestions) * 100);
+                        
+                           var scoreVal = Math.round((totalYes / totalQuestions) * 100);
                           $("#score").html(scoreVal);
                           var imgSrc = './support/img/notsure.png';
 						  var timgSrc = 'notsure.png';
-                          if(totalYes === totalQuestions) {
+                          if(scoreVal >= 71) {
                               imgSrc = './support/img/yes.png';
 							  timgSrc = 'yes.png';
-                          } else if(totalNo === totalQuestions) {
+                          } else  if(scoreVal <= 40) {
                               imgSrc = './support/img/no.png';
 							  timgSrc = 'no.png';
                           }
