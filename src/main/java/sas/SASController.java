@@ -116,6 +116,11 @@ public class SASController {
 	public ModelAndView helloAdmin(ModelMap model, Principal principal) {
 		System.out.println("helloAdmin called");
 		String requestedLang = req.getParameter("language");
+		if(requestedLang!= null && requestedLang.equals("master"))
+			requestedLang = "english";
+		else if (nullCheck(requestedLang).length() == 0 || requestedLang.equals("en")) {
+			requestedLang = "english";
+		}
 		session.setAttribute("language", requestedLang);
 		System.out.println("requested Lang from page is :" + requestedLang);
 		String loggedInUserName = principal.getName();
@@ -302,7 +307,7 @@ public class SASController {
 				System.out.println("pdfRealPath " + pdfRealPath);
 				if (pdfFileName != null) {
 					try {
-						notificationService.sendNotificaitoin(pdfRealPath, scoreInfo);
+						//notificationService.sendNotificaitoin(pdfRealPath, scoreInfo);
 
 					} catch (Exception e) {
 						LOGGER.error("can not able to send mail.", e);
@@ -577,7 +582,7 @@ public class SASController {
 		String lang = (String) session.getAttribute("language");
 		if (lang == null)
 			lang = req.getParameter("language");
-
+		
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		req.setAttribute("language", lang);
 		req.setAttribute("businessindustry", getData("businessindustry", "optkey", "optvalue", lang));
@@ -1445,6 +1450,7 @@ public class SASController {
 				}
 				index++;
 			}
+			map = setEloquaExtraVaues(map,userId,properties);
 			jsonStr = generateJson(properties, map);
 
 		} catch (Exception exp) {
@@ -1455,6 +1461,50 @@ public class SASController {
 		return jsonStr;
 	}
 
+	public Map<String, String> setEloquaExtraVaues(Map<String, String> mapdataMap, String userId, final Properties properties) throws SQLException {
+		String sql = "select questions.qsubtype, count(userresponse.qresponse) totalCount, COUNT(CASE WHEN userresponse.qresponse='yes' THEN 1 END) AS totalYesCount from questions, userresponse where questions.id = userresponse.qid and userresponse.userid=? group by questions.qsubtype;";
+		con = dataSource.getConnection();
+		stmt = con.prepareStatement(
+				"select questions.qsubtype, count(userresponse.qresponse) totalCount, COUNT(CASE WHEN userresponse.qresponse='yes' THEN 1 END) AS totalYesCount from questions, userresponse where questions.id = userresponse.qid and userresponse.userid=? group by questions.qsubtype;");
+		stmt.setString(1, userId);
+		ResultSet rs = stmt.executeQuery();
+		Map<String, String> map = new HashMap<String, String>();
+		while (rs.next()) {
+			String qtype = rs.getString("qsubtype");
+			if(qtype.equals(SASConstants.QTYPE_ASSESS_RISK)) {
+				map.put(properties.getProperty(SASConstants.REPORT_ASSESS_RISKS), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
+			} else if(qtype.equals(SASConstants.QTYPE_PLAN)) {
+				map.put(properties.getProperty(SASConstants.REPORT_PLAN), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
+			} else if(qtype.equals(SASConstants.QTYPE_POLICIES)) {
+				map.put(properties.getProperty(SASConstants.REPORT_POLICIES_PROCESSES), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
+			} 
+//					else if(qtype.equals(SASConstants.QTYPE_MOBILITY)) {
+//						map.put(properties.getProperty(SASConstants.REPORT_COMMUNICATE_EDUCATE_TRAIN), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
+//					} 
+			else if(qtype.equals(SASConstants.QTYPE_COMMUNICATE)) {
+				map.put(properties.getProperty(SASConstants.REPORT_COMMUNICATE_EDUCATE_TRAIN), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
+			} else if(qtype.equals(SASConstants.QTYPE_LOCATE)) {
+				map.put(properties.getProperty(SASConstants.REPORT_LOCATE_MONITOR_INFORM), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
+			} else if(qtype.equals(SASConstants.QTYPE_ADVICE)) {
+				map.put(properties.getProperty(SASConstants.REPORT_ADVICE_ASSIST_EVACUATE), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
+			} else if(qtype.equals(SASConstants.QTYPE_CONTROL)) {
+				map.put(properties.getProperty(SASConstants.REPORT_CONTROL_REVIEW), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
+			}
+			
+		}
+	  Iterator<String> iterator = map.keySet().iterator();
+	  while(iterator.hasNext()) {
+		  String key = iterator.next();
+		  mapdataMap.put(key, map.get(key));
+	  }
+		return mapdataMap;
+	}
+	
+	private String getPercentageValue(String toatalYesCount, String toatlQuestionCount) {
+		double percentage = Double.parseDouble(toatalYesCount)/Double.parseDouble(toatlQuestionCount);
+		return percentage + "";
+	}
+	
 	public String generateJson(Properties properties, Map<String, String> hs) {
 		JSONObject dataset = new JSONObject();
 		dataset.put("type", SASConstants.CUSTOM_OBJECT_DATA);
