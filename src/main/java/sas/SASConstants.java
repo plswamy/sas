@@ -16,6 +16,14 @@ public class SASConstants {
 	public static final String QUESTION_ID = "userresponse.qid";
 	public static final String QUESTION_RESPONSE = "userresponse.qresponse";
 	public static final String REPORT_PDF_NAME="report.pdf.name";
+	public static final String REPORT_ASSESS_RISKS="report.assesrisk";
+	public static final String REPORT_PLAN="report.plan";
+	public static final String REPORT_POLICIES_PROCESSES="report.policies-processes";
+	public static final String REPORT_COMMUNICATE_EDUCATE_TRAIN="report.communicate-educate-train";
+	public static final String REPORT_LOCATE_MONITOR_INFORM="report.locate-monitor-train";
+	public static final String REPORT_ADVICE_ASSIST_EVACUATE="report.advice-assist-evacuate";
+	public static final String REPORT_CONTROL_REVIEW="report.control-review";
+	
 	public static final String COMPANY_NAME = "eloqua.companyname";
 	public static final String ELOQUA_USER="eloqua.username";
 	public static final String ELOQUA_PWD="eloqua.password";
@@ -38,4 +46,13 @@ public class SASConstants {
 	public static final String PLAN_REPORT_DESC = "plan_report_description";
 	public static final String DO_REPORT_DESC = "do_report_description";
 	public static final String CHECK_REPORT_DESC = "check_report_description";
+	
+	public static final String QTYPE_ASSESS_RISK="Assess risks";
+	public static final String QTYPE_PLAN="Plan";
+	public static final String QTYPE_POLICIES="Policies & processess";
+	public static final String QTYPE_MOBILITY="Manage mobility";
+	public static final String QTYPE_COMMUNICATE="Communicate, Educate and Train";
+	public static final String QTYPE_LOCATE="Locate, Monitor, Inform";
+	public static final String QTYPE_ADVICE="Advice, assist and evacuate";
+	public static final String QTYPE_CONTROL="Control and review";
 }
