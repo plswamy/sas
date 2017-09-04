@@ -441,6 +441,7 @@
   						formData.append('scoreinfo', $("#scoreinfo").val());
   						formData.append('filename', uploadImageName);
 						formData.append('picture', data);
+						$("#btnPrintPDF").hide();
   								$.ajax({
                             	    //async : false,
   									url: "<%=webContext%>/image",
@@ -458,6 +459,7 @@
 										function(pdfFileName) {
 											//alert(pdfFileName);
 										});
+								$("#btnPrintPDF").delay(5000).show(0);
 								//$('#spiderWeb').val(data);
 
 							});
