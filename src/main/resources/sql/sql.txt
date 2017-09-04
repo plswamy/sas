@@ -431,32 +431,6 @@ insert into domain value (2, 'english', 'finance', 'Finance');
 insert into domain value (3, 'english', 'software', 'Software');
 insert into domain value (4, 'english', 'pharmaceutical', 'Pharmaceutical');
 
-drop table translation_constants;
-Create table translation_constants(id integer PRIMARY KEY AUTO_INCREMENT, translation_key varchar(100), translation_value varchar(500), translation_language varchar(50));
-SELECT * FROM translation_constants;
-SELECT translation_key, translation_value FROM translation_constants where translation_language='english';
-insert into translation_constants values(1, 'pdf_heading', 'TRAVEL RISK MANAGEMENT SELF-ASSESSMENT', 'english');
-insert into translation_constants values(id, 'pdf_sub_heading', 'Your Summary', 'english');
-insert into translation_constants values(id, 'pdf_you_scored', 'You scored', 'english');
-insert into translation_constants values(id, 'pdf_plan', 'Plan', 'english');
-insert into translation_constants values(id, 'pdf_do', 'Do', 'english');
-insert into translation_constants values(id, 'pdf_check', 'Check', 'english');
-insert into translation_constants values(id, 'pdf_last_para_heading', 'Need assistance with any of your responses or recommendations?', 'english');
-insert into translation_constants values(id, 'pdf_last_paragraph1', 'Contact International SOS - ', 'english');
-insert into translation_constants values(id, 'pdf_last_paragraph2', 'The recommendations, suggested actions and broad maturity measure are for guidance purposes only and do not 	constitute formal advice. Please', 'english');
-insert into translation_constants values(id, 'pdf_last_paragraph3', 'contact International SOS for customised analysis and recommendations specific to your organisation.', 'english');
-
-insert into translation_constants values(id, 'pdf_heading', 'AUTO-ÉVALUATION DE LA GESTION DES RISQUES DE VOYAGE', 'french');
-insert into translation_constants values(id, 'pdf_sub_heading', 'Votre résumé', 'french');
-insert into translation_constants values(id, 'pdf_you_scored', 'Vous avez marqué des points', 'french');
-insert into translation_constants values(id, 'pdf_plan', 'Plan', 'french');
-insert into translation_constants values(id, 'pdf_do', 'FAIRE', 'french');
-insert into translation_constants values(id, 'pdf_check', 'Vérifier', 'french');
-insert into translation_constants values(id, 'pdf_last_para_heading', 'Besoin d\'aide pour vos réponses ou vos recommandations?', 'french');
-insert into translation_constants values(id, 'pdf_last_paragraph1', 'Contactez International SOS -', 'french');
-insert into translation_constants values(id, 'pdf_last_paragraph2', 'Les recommandations, les actions proposées et la vaste mesure de maturité sont à titre indicatif et ne constituent pas un avis formel. S\'il vous plaît', 'french');
-insert into translation_constants values(id, 'pdf_last_paragraph3', 'Contactez International SOS pour des analyses personnalisées et des recommandations spécifiques à votre organisation.', 'french');
-
 Insert into questions values(id, 'plan', 'plan-1.png','Pouvez-vous localiser tous vos travailleurs mobiles?','Recherchez la description de tous les travailleurs mobiles', null, 'Évaluer les risques', 1, 'french');
 Insert into questions values(id, 'plan','plan-2.png','Évaluez-vous les risques pour vos personnes dans les endroits où ils travaillent?','La description de laccessibilité au risque des employés va', null, 'Évaluer les risques', 2, 'french');
 Insert into questions values(id, 'plan','plan-3.png','Surveillez-vous le type et la quantité dincidents sur lesquels vos personnes ont participé au cours des 2 ou 3 dernières années?','Le type et la quantité de la description des incidents vont',null,'Évaluer les risques', 3, 'french'); 
@@ -564,3 +538,11 @@ Insert into labels values(id, 'english', 'check_report_description', 'CONTROL');
 Insert into labels values(id, 'french', 'plan_report_description', 'ANALYSER');
 Insert into labels values(id, 'french', 'do_report_description', 'ATTÉNUER');
 Insert into labels values(id, 'french', 'check_report_description', 'CONTRÔLE');
+
+Insert into labels values(id, 'english', 'secName1', 'Analyse');
+Insert into labels values(id, 'english', 'secName2', 'Mitigate');
+Insert into labels values(id, 'english', 'secName3', 'Control');
+
+Insert into labels values(id, 'french', 'secName1', 'Analyser');
+Insert into labels values(id, 'french', 'secName2', 'Atténuer');
+Insert into labels values(id, 'french', 'secName3', 'Contrôle');
