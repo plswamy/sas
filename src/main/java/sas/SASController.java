@@ -1392,13 +1392,15 @@ public class SASController {
 			String jsonStr = getData4Eloqua(properties, userId, pdfFilePath);
 			System.out.println("eloqua json = " + jsonStr);
 			System.out.println("eloqua url = https://secure.p06.eloqua.com/api/REST/2.0/data/customObject/34/instance");
-			System.out.println("eloqua url = " + eloquaUrl);
+			LOGGER.info("eloqua json = " + jsonStr);
 			com.mashape.unirest.http.HttpResponse<String> response = Unirest.post(eloquaUrl)
 					.header("authorization", encodedToken).header("content-type", "application/json")
 					.header("cache-control", "no-cache").header("postman-token", "6c51d19d-2327-fc92-8218-c8dd22ac35ee")
 					.body(jsonStr).asString();
+			LOGGER.info(response.getBody());
 			System.out.println(response.getBody());
 		} catch (UnirestException e) {
+			LOGGER.error("can able to send data to eloqua:", e);
 			e.printStackTrace();
 		}
 	}
