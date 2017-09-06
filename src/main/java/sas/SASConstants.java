@@ -19,6 +19,7 @@ public class SASConstants {
 	public static final String REPORT_ASSESS_RISKS="report.assesrisk";
 	public static final String REPORT_PLAN="report.plan";
 	public static final String REPORT_POLICIES_PROCESSES="report.policies-processes";
+	public static final String REPORT_MANAGE_MOBILITY="report.manage-mobility";
 	public static final String REPORT_COMMUNICATE_EDUCATE_TRAIN="report.communicate-educate-train";
 	public static final String REPORT_LOCATE_MONITOR_INFORM="report.locate-monitor-train";
 	public static final String REPORT_ADVICE_ASSIST_EVACUATE="report.advice-assist-evacuate";
