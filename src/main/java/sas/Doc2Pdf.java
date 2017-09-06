@@ -4,7 +4,8 @@ import org.jdom.Document;
 import org.jdom.transform.JDOMSource;
 import org.apache.fop.apps.Driver;
 import org.apache.fop.messaging.MessageHandler;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import javax.xml.transform.Result;
@@ -20,7 +21,7 @@ import java.io.OutputStream;
 import javax.xml.parsers.SAXParser;
 //import embedding.model.*;
 
-import org.apache.log4j.Logger;
+
 
 /**
  * This class do the conversion of an arbitrary object file to a
@@ -31,7 +32,7 @@ public class Doc2Pdf {
     /**
      * The Logger
      */
-    static Logger logger = Logger.getLogger(Doc2Pdf.class.getName());
+   static Logger logger = LoggerFactory.getLogger(Doc2Pdf.class.getName());
 
     /**
      * Convert document to PDF
