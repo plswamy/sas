@@ -114,7 +114,7 @@ public class SASController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping("/admin")
 	public ModelAndView helloAdmin(ModelMap model, Principal principal) {
-		System.out.println("helloAdmin called");
+		LOGGER.info("helloAdmin called");
 		String requestedLang = req.getParameter("language");
 		if(requestedLang!= null && requestedLang.equals("master"))
 			requestedLang = "english";
@@ -122,7 +122,7 @@ public class SASController {
 			requestedLang = "english";
 		}
 		session.setAttribute("language", requestedLang);
-		System.out.println("requested Lang from page is :" + requestedLang);
+		LOGGER.info("requested Lang from page is :" + requestedLang);
 		String loggedInUserName = principal.getName();
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
 		req.setAttribute("questions", getQuestions(requestedLang));
@@ -142,7 +142,7 @@ public class SASController {
 
 	@RequestMapping(value = "/hello", method = RequestMethod.GET)
 	public String hello(ModelMap model) {
-		System.out.println("hello called");
+		LOGGER.info("hello called");
 		loadData();
 		return "index";
 
@@ -160,7 +160,7 @@ public class SASController {
 		String lang = (String) session.getAttribute("language");
 		if (lang == null)
 			lang = req.getParameter("language");
-		System.out.println("survey get called....:" + lang);
+		LOGGER.info("survey get called....:" + lang);
 		req.setAttribute("questions", getQuestions(lang));
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		// req.setAttribute("answertypes", getData("answers", "answertype",
@@ -170,10 +170,10 @@ public class SASController {
 
 	@RequestMapping(value = "/survey", method = RequestMethod.POST)
 	public String survey(ModelMap model, HttpSession session, HttpServletRequest request) {
-		System.out.println("survey post called....");
-		System.out.println(
+		LOGGER.info("survey post called....");
+		LOGGER.info(
 				"ctl00$ContentPlaceHolder1$tbxLastName ===" + model.get("ctl00$ContentPlaceHolder1$tbxLastName"));
-		System.out.println("request getParameter ====" + request.getParameter("ctl00$ContentPlaceHolder1$tbxLastName"));
+		LOGGER.info("request getParameter ====" + request.getParameter("ctl00$ContentPlaceHolder1$tbxLastName"));
 		String lang = (String) session.getAttribute("language");
 		if (lang == null)
 			lang = req.getParameter("language");
@@ -187,8 +187,8 @@ public class SASController {
 
 	@RequestMapping(value = "/report", method = RequestMethod.POST)
 	public String postReport(ModelMap model) throws IOException {
-		System.out.println("report post called....");
-		System.out.println("email ....:" + req.getParameter("f4"));
+		LOGGER.info("report post called....");
+		LOGGER.info("email ....:" + req.getParameter("f4"));
 		saveUser();
 		saveUserResponse();
 		String lang = (String) session.getAttribute("language");
@@ -201,7 +201,7 @@ public class SASController {
 
 	@RequestMapping(value = "/report", method = RequestMethod.GET)
 	public String getReport(ModelMap model) {
-		System.out.println("report get called....");
+		LOGGER.info("report get called....");
 		String lang = (String) session.getAttribute("language");
 		if (lang == null)
 			lang = req.getParameter("language");
@@ -218,12 +218,12 @@ public class SASController {
 
 	@RequestMapping(value = "/admin", method = RequestMethod.POST)
 	public String postAdmin(ModelMap model) {
-		System.out.println("admin post called....");
+		LOGGER.info("admin post called....");
 		String requestedLang = req.getParameter("language");
 		session.setAttribute("language", requestedLang);
 		saveLangData();
 
-		System.out.println("requested Lang from page is :" + requestedLang);
+		LOGGER.info("requested Lang from page is :" + requestedLang);
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
 		req.setAttribute("questions", getQuestions(requestedLang));
 		req.setAttribute("langList", getLangs());
@@ -236,20 +236,20 @@ public class SASController {
 
 	@RequestMapping(value = "/home", method = RequestMethod.POST)
 	public String home(ModelMap model) {
-		System.out.println("home called");
+		LOGGER.info("home called");
 		return "survey";
 
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String home1(ModelMap model) {
-		System.out.println("home1 called");
+		LOGGER.info("home1 called");
 		return "survey";
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String homeGet1(ModelMap model) {
-		System.out.println("homeGet1");
+		LOGGER.info("homeGet1");
 		loadData();
 		return "index";
 
@@ -257,7 +257,7 @@ public class SASController {
 
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String homeGet(ModelMap model) {
-		System.out.println("homeGet");
+		LOGGER.info("homeGet");
 		loadData();
 		return "index";
 
@@ -267,12 +267,12 @@ public class SASController {
 	// RequestMethod.POST)
 	// public String postAdmin(@RequestParam("file_upload") MultipartFile file
 	// ){
-	// System.out.println("admin post called....");
-	// System.out.println(file.getOriginalFilename());
+	// LOGGER.info("admin post called....");
+	// LOGGER.info(file.getOriginalFilename());
 	// try {
 	// Files.copy(file.getInputStream(),Paths.get("E:/"+file.getOriginalFilename()));
 	// } catch (IOException e) {
-	// System.out.println("error in uploading"+e);
+	// LOGGER.info("error in uploading"+e);
 	// e.printStackTrace();
 	// }
 	// return "admin";
@@ -296,7 +296,7 @@ public class SASController {
 				String realPath = req.getRealPath("/");
 				ImageIO.write(newBufferedImage, "jpg", new File(realPath + "support/img/uploadedImages/" + fileName));
 
-				System.out.println(fileName + " image saved");
+				LOGGER.info(fileName + " image saved");
 				pdfFileName = generatePDF();
 				String scoreInfo = req.getParameter("scoreinfo");
 				StringTokenizer st = new StringTokenizer(scoreInfo, "|");
@@ -304,7 +304,7 @@ public class SASController {
 				String img = st.nextToken();
 				String user = st.nextToken();
 				String pdfRealPath = realPath + "pdf/" + pdfFileName;
-				System.out.println("pdfRealPath " + pdfRealPath);
+				LOGGER.info("pdfRealPath " + pdfRealPath);
 				if (pdfFileName != null) {
 					try {
 						//notificationService.sendNotificaitoin(pdfRealPath, scoreInfo);
@@ -326,14 +326,14 @@ public class SASController {
 
 	@RequestMapping(value = "/print", method = RequestMethod.GET)
 	public String printGet(ModelMap model) {
-		System.out.println("printGet");
+		LOGGER.info("printGet");
 		String pdfFilePath = req.getParameter("pdfFilePath");
 		req.setAttribute("pdffile", pdfFilePath);
 		/*
 		 * String pdfFilePath = generatePDF(); if (pdfFilePath != null) { try {
 		 * // sendEmail(pdfFilePath);
 		 * //notificationService.sendNotificaitoin(pdfFilePath,
-		 * req.getParameter("scoreinfo")); System.out.println("mail sent"); }
+		 * req.getParameter("scoreinfo")); LOGGER.info("mail sent"); }
 		 * catch (Exception e) { LOGGER.error("can not able to send mail.", e);
 		 * e.printStackTrace(); }
 		 * 
@@ -346,7 +346,7 @@ public class SASController {
 	private String generatePDF() {
 		String pdfFilePath = null;
 		try {
-			System.out.println("begin");
+			LOGGER.info("begin");
 			String temp = req.getParameter("scoreinfo");
 			StringTokenizer st = new StringTokenizer(temp, "|");
 			String score = st.nextToken();
@@ -362,13 +362,13 @@ public class SASController {
 			}
 			Resource resource = new ClassPathResource("/application.properties");
 			Properties properties = PropertiesLoaderUtils.loadProperties(resource);
-			System.out.println("score..." + score);
-			System.out.println("img..." + img);
+			LOGGER.info("score..." + score);
+			LOGGER.info("img..." + img);
 			img = img.replace("png", "jpg");
-			System.out.println("user..." + user);
+			LOGGER.info("user..." + user);
 			long l = System.currentTimeMillis();
 			String realPath = req.getRealPath("/");
-			System.out.println("realPath:" + realPath);
+			LOGGER.info("realPath:" + realPath);
 			String pdfFileName = realPath + "/pdf/pdf" + l + ".pdf";
 			pdfFilePath = "pdf" + l + ".pdf";
 			req.setAttribute("pdffile", "pdf" + l + ".pdf");
@@ -409,19 +409,20 @@ public class SASController {
 					.setText(translationConstants.get(SASConstants.PDF_LAST_PARA3));
 			Element main = document.getRootElement().getChild("data").getChild("main");
 			getQuestionElement(userid, main, translationConstants);
-			System.out.println(
+			LOGGER.info(
 					"root element" + document.getRootElement().getChild("data").getChild("main").getChildText("score"));
 			XMLOutputter xmOut = new XMLOutputter(); 
-			System.out.println("----" + xmOut.outputString(document));
+			LOGGER.info("----" + xmOut.outputString(document));
 			Doc2Pdf.start(document, xslFileName, pdfFileName);
-			System.out.println("imagePath..." + imagePath);
-			System.out.println("uploadImagePath..." + uploadImagePath);
-			System.out.println("uploadedImageName..." + imageName);
-			System.out.println("score..." + score);
-			System.out.println("img..." + img);
-			System.out.println("user..." + user);
-			System.out.println("end");
+			LOGGER.info("imagePath..." + imagePath);
+			LOGGER.info("uploadImagePath..." + uploadImagePath);
+			LOGGER.info("uploadedImageName..." + imageName);
+			LOGGER.info("score..." + score);
+			LOGGER.info("img..." + img);
+			LOGGER.info("user..." + user);
+			LOGGER.info("end");
 		} catch (Exception exp) {
+			LOGGER.error("cannot generate pdf :", exp);
 			exp.printStackTrace();
 		}
 		return pdfFilePath;
@@ -451,11 +452,11 @@ public class SASController {
 	@RequestMapping(value = "*", method = RequestMethod.GET)
 	public String anyPath() {
 
-		System.out.println("request path is : " + req.getServletPath());
-		System.out.println("all end points in this controller : \n");
+		LOGGER.info("request path is : " + req.getServletPath());
+		LOGGER.info("all end points in this controller : \n");
 		// for(HandlerMethod endPoint :
 		// requestMappingHandlerMapping.getHandlerMethods().values()) {
-		// System.out.println(endPoint. + "\n");
+		// LOGGER.info(endPoint. + "\n");
 		// }
 		List<String> langs = getLangs();
 		String requestedLanguage = req.getServletPath().substring(1);
@@ -477,7 +478,7 @@ public class SASController {
 	// } else {
 	// model.addObject("msg", "You can not access this page!");
 	// }
-	// System.out.println("requested for " + req.getRequestURL());
+	// LOGGER.info("requested for " + req.getRequestURL());
 	// model.setViewName("404");
 	// return model;
 	// }
@@ -494,7 +495,7 @@ public class SASController {
 	}
 
 	public Hashtable<String, List<Question>> getQuestions(String lang) {
-		System.out.println("getQuestions method called with lang: " + lang);
+		LOGGER.info("getQuestions method called with lang: " + lang);
 		Hashtable<String, List<Question>> hs = new Hashtable<String, List<Question>>();
 		List<Question> list = null;
 		Question q = null;
@@ -527,6 +528,7 @@ public class SASController {
 				hs = getQuestions("english");
 			}
 		} catch (Exception exp) {
+			LOGGER.error("error getting question :", exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -535,7 +537,7 @@ public class SASController {
 	}
 
 	public Hashtable<String, String> getAnswers(String userid) {
-		System.out.println("getAnswers for userid : " + userid);
+		LOGGER.info("getAnswers for userid : " + userid);
 		Hashtable<String, String> hs = new Hashtable<String, String>();
 		Answer q = null;
 		try {
@@ -557,6 +559,7 @@ public class SASController {
 				hs.put(q.getQid(), q.getQresponse());
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot get answers :", exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -578,7 +581,7 @@ public class SASController {
 	 */
 
 	private void loadData() {
-		System.out.println("loadData called ...");
+		LOGGER.info("loadData called ...");
 		String lang = (String) session.getAttribute("language");
 		if (lang == null)
 			lang = req.getParameter("language");
@@ -598,7 +601,7 @@ public class SASController {
 	}
 
 	public Hashtable<String, String> getData(String table, String cKey, String cValue, String lang) {
-		System.out.println("getData called with lang:" + lang);
+		LOGGER.info("getData called with lang:" + lang);
 		Hashtable<String, String> hs = new Hashtable<String, String>();
 		try {
 			con = dataSource.getConnection();
@@ -615,6 +618,7 @@ public class SASController {
 				hs = getData(table, cKey, cValue, "english");
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot get data from table " + table + " :", exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -623,12 +627,12 @@ public class SASController {
 	}
 
 	private void saveUser() {
-		System.out.println("save user called");
+		LOGGER.info("save user called");
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
 					"insert into registrationinfo (f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, lang) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-			// System.out.println("email
+			// LOGGER.info("email
 			// ============================================== : " +
 			// req.getParameter("f4"));
 			stmt.setString(1, nullCheck(req.getParameter("f1")));
@@ -650,6 +654,7 @@ public class SASController {
 			stmt.setString(17, "english");
 			stmt.executeUpdate();
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to save user :", exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -663,12 +668,13 @@ public class SASController {
 			if (con != null)
 				con.close();
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to close db connection :", exp);
 			exp.printStackTrace();
 		}
 	}
 
 	private void saveUserResponse() {
-		System.out.println("save user response called");
+		LOGGER.info("save user response called");
 		String userid = getUserId(nullCheck(req.getParameter("f4")));
 		req.setAttribute("userid", userid);
 		/* List<Question> list = getQuestionsAsList(); */
@@ -690,6 +696,7 @@ public class SASController {
 					stmt.executeUpdate();
 				}
 			} catch (Exception exp) {
+				LOGGER.error("cannot able to save user response :", exp);
 				exp.printStackTrace();
 			} finally {
 				close();
@@ -707,6 +714,7 @@ public class SASController {
 				id = rs.getString(1);
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to get user id for mailid " + key +" :", exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -731,6 +739,7 @@ public class SASController {
 				list.add(rs.getString(3));
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to get user information :", exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -753,14 +762,15 @@ public class SASController {
 			} else {
 				boolean update = getData(lang);
 				if (update) {
-					System.out.println("updating data for lang:" + lang);
+					LOGGER.info("updating data for lang:" + lang);
 					updateData();
 				} else {
-					System.out.println("inserting data for lang:" + lang);
+					LOGGER.info("inserting data for lang:" + lang);
 					insertData();
 				}
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to save language data :", exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -785,8 +795,8 @@ public class SASController {
 			// parses the request's content to extract file data
 			@SuppressWarnings("unchecked")
 			List<FileItem> formItems = upload.parseRequest(req);
-			System.out.println("formItems.....:" + formItems);
-			System.out.println("formItems.....:" + formItems.size());
+			LOGGER.info("formItems.....:" + formItems);
+			LOGGER.info("formItems.....:" + formItems.size());
 			if (formItems != null && formItems.size() > 0) {
 				// iterates over form's fields
 				for (FileItem item : formItems) {
@@ -797,13 +807,13 @@ public class SASController {
 						File storeFile = new File(filePath);
 						// saves the file on disk
 						item.write(storeFile);
-						System.out.println("filename uploaded...:" + fileName);
+						LOGGER.info("filename uploaded...:" + fileName);
 					}
 				}
 			}
 
 		} catch (Exception ex) {
-			System.out.println("There was an error: " + ex.getMessage());
+			LOGGER.error("There was an error in uploading image: " + ex.getMessage());
 		}
 	}
 
@@ -819,11 +829,11 @@ public class SASController {
 			lang = "english";
 		}
 		String deletedquestions = req.getParameter("deletedquestions");
-		System.out.println("lang:" + lang);
-		System.out.println("labels:" + labels);
-		System.out.println("questions:" + questions);
-		System.out.println("deletedquestions:" + deletedquestions);
-		System.out.println("userformsfields:" + userformsfields);
+		LOGGER.info("lang:" + lang);
+		LOGGER.info("labels:" + labels);
+		LOGGER.info("questions:" + questions);
+		LOGGER.info("deletedquestions:" + deletedquestions);
+		LOGGER.info("userformsfields:" + userformsfields);
 		updateFormFields(userformsfields);
 		PreparedStatement pstmt = null;
 		PreparedStatement ustmt = null;
@@ -901,7 +911,7 @@ public class SASController {
 					pstmt.executeUpdate();
 					eqid = getEnglishQId(temp2, temp3, temp4, temp5);
 					for (int i = 0; i < langs.size(); i++) {
-						System.out.println("inserting question for the language: " + langs.get(i));
+						LOGGER.info("inserting question for the language: " + langs.get(i));
 						pstmt.setString(5, langs.get(i));
 						pstmt.setString(6, eqid);
 						pstmt.executeUpdate();
@@ -918,6 +928,7 @@ public class SASController {
 				stmt.executeUpdate();
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to update english data: " , exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -927,6 +938,7 @@ public class SASController {
 				if (ustmt != null)
 					ustmt.close();
 			} catch (Exception exp) {
+				LOGGER.error("cannot able to close db statement: " , exp);
 			}
 		}
 	}
@@ -949,6 +961,7 @@ public class SASController {
 				returnValue = rs.getString(1);
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to get questions in getEnglishQId method : " , exp);
 			exp.printStackTrace();
 		} finally {
 			try {
@@ -957,6 +970,7 @@ public class SASController {
 				if (pstmt1 != null)
 					pstmt1.close();
 			} catch (Exception exp) {
+				LOGGER.error("cannot able to close db connection : " , exp);
 				exp.printStackTrace();
 			}
 		}
@@ -970,7 +984,7 @@ public class SASController {
 			String sql = "select distinct(lang) from questions;";
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(sql);
-			System.out.println("sql stmt for lang....:" + sql);
+			LOGGER.info("sql stmt for lang....:" + sql);
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				temp = rs.getString(1);
@@ -979,6 +993,7 @@ public class SASController {
 				}
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to get languages in getLangs methods : " , exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -993,11 +1008,11 @@ public class SASController {
 		if (lang == null) {
 			lang = (String) session.getAttribute("language");
 		}
-		System.out.println("lang:" + lang);
-		System.out.println("labels:" + labels);
-		System.out.println("questions:" + questions);
+		LOGGER.info("lang:" + lang);
+		LOGGER.info("labels:" + labels);
+		LOGGER.info("questions:" + questions);
 		String userformsfields = req.getParameter("userformsfields");
-		System.out.println("userformsfields:" + userformsfields);
+		LOGGER.info("userformsfields:" + userformsfields);
 		updateFormFields(userformsfields);
 		try {
 			String temp1 = null;
@@ -1030,7 +1045,7 @@ public class SASController {
 			StringTokenizer qToken = new StringTokenizer(questions, "|");
 			while (qToken.hasMoreElements()) {
 				st = new StringTokenizer(qToken.nextToken(), ":");
-				System.out.println("st token length....:" + st.countTokens());
+				LOGGER.info("st token length....:" + st.countTokens());
 				// id:section:question:desc:imageName
 				// id:section:question:subsection:desc:imageName:order
 				temp1 = st.nextToken(); // id
@@ -1049,6 +1064,7 @@ public class SASController {
 				stmt.executeUpdate();
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to update data from method updateData : " , exp);
 			exp.printStackTrace();
 		}
 	}
@@ -1061,11 +1077,11 @@ public class SASController {
 		if (lang == null) {
 			lang = (String) session.getAttribute("language");
 		}
-		System.out.println("lang:" + lang);
-		System.out.println("labels:" + labels);
-		System.out.println("questions:" + questions);
+		LOGGER.info("lang:" + lang);
+		LOGGER.info("labels:" + labels);
+		LOGGER.info("questions:" + questions);
 		String userformsfields = req.getParameter("userformsfields");
-		System.out.println("userformsfields:" + userformsfields);
+		LOGGER.info("userformsfields:" + userformsfields);
 		insertFormFields(userformsfields, lang);
 		try {
 			con = dataSource.getConnection();
@@ -1103,6 +1119,7 @@ public class SASController {
 				stmt.executeUpdate();
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to insert data from method insertData : " , exp);
 			exp.printStackTrace();
 		}
 	}
@@ -1126,6 +1143,7 @@ public class SASController {
 				value = true;
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to get labels from method getData : " , exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -1135,7 +1153,7 @@ public class SASController {
 
 	public Hashtable<String, String> getFormFields(String lang) {
 		Hashtable<String, String> hs = new Hashtable<String, String>();
-		System.out.println("getFormFields method called with lang: " + lang);
+		LOGGER.info("getFormFields method called with lang: " + lang);
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement("select * from registrationfields where lang = ?");
@@ -1164,6 +1182,7 @@ public class SASController {
 				hs = getFormFields("english");
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to get labels from method getData : " , exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -1173,7 +1192,7 @@ public class SASController {
 	}
 
 	private void insertFormFields(String data, String lang) {
-		System.out.println("data in insertFormFields....:" + data);
+		LOGGER.info("data in insertFormFields....:" + data);
 
 		try {
 			con = dataSource.getConnection();
@@ -1200,6 +1219,7 @@ public class SASController {
 				stmt.executeUpdate();
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to get registration fields from method registrationfields : " , exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -1207,7 +1227,7 @@ public class SASController {
 	}
 
 	private void updateFormFields(String data) {
-		System.out.println("data in updateformfields....:" + data);
+		LOGGER.info("data in updateformfields....:" + data);
 
 		try {
 			con = dataSource.getConnection();
@@ -1235,6 +1255,7 @@ public class SASController {
 				stmt.executeUpdate();
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to update registration fields from method updateFormFields : " , exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -1242,7 +1263,7 @@ public class SASController {
 	}
 
 	private void loadUserSelectionData(String lang) {
-		System.out.println("loadUserSelectionData called with lang:" + lang);
+		LOGGER.info("loadUserSelectionData called with lang:" + lang);
 		Hashtable<String, String> hs = new Hashtable<String, String>();
 		try {
 			con = dataSource.getConnection();
@@ -1261,6 +1282,7 @@ public class SASController {
 				getOptionsData(hs);
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to get registration fields from method loadUserSelectionData : " , exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -1291,6 +1313,7 @@ public class SASController {
 				}
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to get options data from method getOptionsData : " , exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -1326,6 +1349,7 @@ public class SASController {
 				hs.put(q.getType(), list);
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to get questions from method getQuestionElement : " , exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -1352,7 +1376,7 @@ public class SASController {
 					title.setText(translationConstants.get(SASConstants.CHECK_REPORT_DESC));
 				attribute = new Attribute("id", index + "");
 				title.setAttribute(attribute);
-				System.out.println("key...." + key);
+				LOGGER.info("key...." + key);
 				planElement.addContent(title);
 				list = hs.get(key);
 				for (int i = 0; i < list.size(); i++) {
@@ -1373,6 +1397,7 @@ public class SASController {
 				index++;
 			}
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to create plan element for pdf method getQuestionElement : " , exp);
 			exp.printStackTrace();
 		}
 	}
@@ -1390,15 +1415,15 @@ public class SASController {
 			String encodedToken = "Basic " + new String(encodedBytes);
 			String eloquaUrl = properties.getProperty(SASConstants.ELOQUA_URL_CUSTOM_OBJECT);
 			String jsonStr = getData4Eloqua(properties, userId, pdfFilePath);
-			System.out.println("eloqua json = " + jsonStr);
-			System.out.println("eloqua url = https://secure.p06.eloqua.com/api/REST/2.0/data/customObject/34/instance");
+			LOGGER.info("eloqua json = " + jsonStr);
+			LOGGER.info("eloqua url = https://secure.p06.eloqua.com/api/REST/2.0/data/customObject/34/instance");
 			LOGGER.info("eloqua json = " + jsonStr);
 			com.mashape.unirest.http.HttpResponse<String> response = Unirest.post(eloquaUrl)
 					.header("authorization", encodedToken).header("content-type", "application/json")
 					.header("cache-control", "no-cache").header("postman-token", "6c51d19d-2327-fc92-8218-c8dd22ac35ee")
 					.body(jsonStr).asString();
 			LOGGER.info(response.getBody());
-			System.out.println(response.getBody());
+			LOGGER.info(response.getBody());
 		} catch (UnirestException e) {
 			LOGGER.error("can able to send data to eloqua:", e);
 			e.printStackTrace();
@@ -1408,7 +1433,7 @@ public class SASController {
 	public String getData4Eloqua(Properties properties, String userId, String pdfFilePath) {
 		String jsonStr = null;
 		// String userId = (String) req.getAttribute("userid");
-		System.out.println(pdfFilePath);
+		LOGGER.info(pdfFilePath);
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			con = dataSource.getConnection();
@@ -1456,6 +1481,7 @@ public class SASController {
 			jsonStr = generateJson(properties, map);
 
 		} catch (Exception exp) {
+			LOGGER.error("cannot able to get data for eloqua from  method getData4Eloqua : " , exp);
 			exp.printStackTrace();
 		} finally {
 			close();
@@ -1479,11 +1505,9 @@ public class SASController {
 				map.put(properties.getProperty(SASConstants.REPORT_PLAN), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
 			} else if(qtype.equals(SASConstants.QTYPE_POLICIES)) {
 				map.put(properties.getProperty(SASConstants.REPORT_POLICIES_PROCESSES), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
-			} 
-//					else if(qtype.equals(SASConstants.QTYPE_MOBILITY)) {
-//						map.put(properties.getProperty(SASConstants.REPORT_COMMUNICATE_EDUCATE_TRAIN), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
-//					} 
-			else if(qtype.equals(SASConstants.QTYPE_COMMUNICATE)) {
+			} else if(qtype.equals(SASConstants.QTYPE_MOBILITY)) {
+				map.put(properties.getProperty(SASConstants.REPORT_MANAGE_MOBILITY), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
+			} else if(qtype.equals(SASConstants.QTYPE_COMMUNICATE)) {
 				map.put(properties.getProperty(SASConstants.REPORT_COMMUNICATE_EDUCATE_TRAIN), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
 			} else if(qtype.equals(SASConstants.QTYPE_LOCATE)) {
 				map.put(properties.getProperty(SASConstants.REPORT_LOCATE_MONITOR_INFORM), getPercentageValue(rs.getString("totalYesCount"),rs.getString("totalCount")));
@@ -1520,7 +1544,7 @@ public class SASController {
 		}
 		dataset.put("fieldValues", fieldset);
 
-		System.out.println(JSONObject.quote(dataset.toString()));
+		LOGGER.info(JSONObject.quote(dataset.toString()));
 
 		return dataset.toString();
 	}
@@ -1544,3 +1568,4 @@ public class SASController {
 		return translationConstantsTable;
 	}
 }
+
