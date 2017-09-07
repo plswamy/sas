@@ -107,8 +107,17 @@
                     
                     String welcomeHeader = hs.get("welcomeHeader");
                     String welcomeDesc = hs.get("welcomeDesc");
-                    String[] welcomePoints = {"A broad indication of your organisations current maturity with regard to travel risk mitigation systems, processes and tools", "The level of remedial action required to minimise the risks facing your organisation and employees", "Recommended steps to improve your systems", "Outline of the Duty of Care Plan-Do-Check approach"};
-                    String welcomeFooter = hs.get("welcomeFooter");
+                    ArrayList<String> welcomePoints = new ArrayList<String>();
+                    if(hs.containsKey("welcomePoints")) {
+                    	 String welcomePointsStr =hs.get("welcomePoints");
+                    	 if(welcomePointsStr.indexOf("$")>0) {
+                    		 String[] welcomePointsArray =welcomePointsStr.split("[$]");
+                    		 for(String welcomePoint : welcomePointsArray) {
+                    			 welcomePoints.add(welcomePoint);
+                    		 }
+                    	 }
+                    }
+		    String welcomeFooter = hs.get("welcomeFooter");
                     String regFormHeaderMsg = hs.get("regFormHeaderMsg");
                     String regFormHeaderErrorMsg = hs.get("regFormHeaderErrorMsg");
                     String countryLabel = "Country";
@@ -194,9 +203,9 @@
                                     <p><%= welcomeDesc %></p>
                                     <ul class="sos-wrapper-ul">
                                         <%
-                                            for (int i = 0; i < welcomePoints.length; i++) {
-                                                out.println("<li>" + welcomePoints[i] + "</li>");
-                                            }
+                                            for (String welcomePoint: welcomePoints) {
+	                                            out.println("<li>" + welcomePoint + "</li>");
+	                                    }
                                             %>
                                     </ul>
                                     <p><%= welcomeFooter %></p>
