@@ -786,7 +786,7 @@ public class SASController {
 	private void uploadFiles(MultipartFile file, MultipartHttpServletRequest request) {				
 
 			try {
-				String UPLOAD_DIRECTORY = "support\\img\\resourceFiles";
+				String UPLOAD_DIRECTORY = "support" + File.separator + "img" + File.separator + "resourceFiles";
 		    	String realPath = req.getRealPath("/");
 		    	String uploadPath = realPath + File.separator + UPLOAD_DIRECTORY;
 					if (file.isEmpty()) {
