@@ -1,8 +1,11 @@
 package sas;
 
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -24,7 +27,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
   	public DriverManagerDataSource dataSource() {
   	    DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
   	    driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-  	    driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/mysql");
+  	    driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/sas");
   	    driverManagerDataSource.setUsername("root");
   	    driverManagerDataSource.setPassword("root");
   	    return driverManagerDataSource;
@@ -37,8 +40,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
   		resolver.setSuffix(".jsp");
   		return resolver;
   	}
-
- @Bean
+    
+    @Bean
     public CommonsMultipartResolver commonsMultipartResolver() {
         final CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
         commonsMultipartResolver.setMaxUploadSize(-1);
@@ -52,4 +55,5 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         filterRegistrationBean.addInitParameter("multipartResolverBeanName", "commonsMultipartResolver");
         return filterRegistrationBean;
     }
+
 }
