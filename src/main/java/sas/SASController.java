@@ -32,13 +32,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,19 +60,13 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 
 @Controller
@@ -91,12 +81,9 @@ public class SASController {
 	@Autowired
 	private HttpServletResponse res;
 
-	@Autowired
+	/*@Autowired
 	private NotificationService notificationService;
-
-	@Autowired
-	private RequestMappingHandlerMapping requestMappingHandlerMapping;
-
+	 */
 	@Autowired
 	private HttpSession session;
 
@@ -116,7 +103,7 @@ public class SASController {
 	public ModelAndView helloAdmin(ModelMap model, Principal principal) {
 		LOGGER.info("helloAdmin called");
 		String requestedLang = req.getParameter("language");
-		if(requestedLang!= null && requestedLang.equals("master"))
+		if(requestedLang== null || requestedLang!= null && requestedLang.equals("master"))
 			requestedLang = "english";
 		else if (nullCheck(requestedLang).length() == 0 || requestedLang.equals("en")) {
 			requestedLang = "english";
@@ -217,12 +204,19 @@ public class SASController {
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.POST)
-	public String postAdmin(ModelMap model) {
+	/*public String postAdmin(@RequestPart(value = "file_plan_-1", required=false) MultipartFile  planFile, @RequestPart(value = "file_do_-1", required=false) MultipartFile  doFile, @RequestPart(value = "file_check_-1", required=false) MultipartFile  checkFile,
+            RedirectAttributes redirectAttributes) {*/
+	public String postAdmin(MultipartHttpServletRequest request) {
+		 Enumeration<String> en = req.getParameterNames();
+		 while(en.hasMoreElements()) {
+			 System.out.println(en.nextElement());
+		 }
+		Map<String, MultipartFile> fileMap = request.getFileMap();
 		LOGGER.info("admin post called....");
+		LOGGER.info("=============admin post called=======================");
+		saveLangData(fileMap, request);
 		String requestedLang = req.getParameter("language");
 		session.setAttribute("language", requestedLang);
-		saveLangData();
-
 		LOGGER.info("requested Lang from page is :" + requestedLang);
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
 		req.setAttribute("questions", getQuestions(requestedLang));
@@ -690,10 +684,14 @@ public class SASController {
 				while (st.hasMoreElements()) {
 					temp = st.nextToken();
 					tempst = new StringTokenizer(temp, ":");
-					stmt.setString(1, userid);
-					stmt.setString(2, tempst.nextToken());
-					stmt.setString(3, tempst.nextToken());
-					stmt.executeUpdate();
+					if(tempst.countTokens() == 2) {
+						stmt.setString(1, userid);
+						stmt.setString(2, tempst.nextToken());
+						stmt.setString(3, tempst.nextToken());
+						stmt.executeUpdate();
+					} else {
+						LOGGER.error("Improper user response token : " + temp);
+					}
 				}
 			} catch (Exception exp) {
 				LOGGER.error("cannot able to save user response :", exp);
@@ -746,10 +744,17 @@ public class SASController {
 		}
 		return list;
 	}
-
-	private void saveLangData() {
+	
+	private void saveLangData(Map<String, MultipartFile> fileMap, MultipartHttpServletRequest request) {
 		try {
-			uploadFiles();
+			for(String key: fileMap.keySet()) {
+				if(key.endsWith("-1")) { // create new images for new questions
+					MultipartFile file = fileMap.get(key);
+					if(file!=null) {
+						uploadFiles(file, request);
+					}
+				}
+			}
 			String lang = req.getParameter("lang");
 			if (lang == null) {
 				lang = (String) session.getAttribute("language");
@@ -778,29 +783,70 @@ public class SASController {
 	}
 
 	@SuppressWarnings("deprecation")
-	private void uploadFiles() {
-		try {
+	private void uploadFiles(MultipartFile file, MultipartHttpServletRequest request) {				
 
-			String UPLOAD_DIRECTORY = "support\\img\\resourceFiles\\123\\";
+			try {
+				String UPLOAD_DIRECTORY = "support\\img\\resourceFiles";
+		    	String realPath = req.getRealPath("/");
+		    	String uploadPath = realPath + File.separator + UPLOAD_DIRECTORY;
+					if (file.isEmpty()) {
+						System.out.println("=======file.isEmpty ======== ");
+		        }else{
+		        		System.out.println("======= UPLOAD_DIRECTORY ======"+uploadPath);
+		        		System.out.println("=======file.getOriginalFilename() ======== "+file.getOriginalFilename());
+		            byte[] bytes = file.getBytes();
+		            Path path = Paths.get(uploadPath + File.separator + file.getOriginalFilename());
+		            Files.write(path, bytes);
+		        }
+
+
+					// checks if the request actually contains upload file
+					if (!ServletFileUpload.isMultipartContent(request)) {
+						// if not, we stop here
+						PrintWriter writer = res.getWriter();
+						writer.println("Error: Form must has enctype=multipart/form-data.");
+						writer.flush();
+						return;
+					}
+			} catch(Exception ex) {
+				LOGGER.error("Error at file upload", ex);
+				ex.printStackTrace();
+			}
+			/*String UPLOAD_DIRECTORY = "support\\img\\resourceFiles\\123\\";
 			// configures upload settings
-			DiskFileItemFactory factory = new DiskFileItemFactory();
+			DiskFileItemFactory   factory = new DiskFileItemFactory();
 			factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
 			ServletFileUpload upload = new ServletFileUpload(factory);
+			boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+			//MultipartHttpServletRequest multipartRequest = new DefaultMultipartHttpServletRequest(req);
+			// parses the request's content to extract file data
+			@SuppressWarnings("unchecked")
+			List<FileItem> formItems = (List<FileItem>) upload.parseRequest(req);
+			LOGGER.info("formItems.....:" + formItems);
+			LOGGER.info("formItems.....:" + formItems.size());
 			String realPath = req.getRealPath("/");
 			String uploadPath = realPath + File.separator + UPLOAD_DIRECTORY;
 			File uploadDir = new File(uploadPath);
+			*/
+			//File up = new File("C:\\temp");
+			
+			
+			//MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
+			/*Iterator fileNames = multipartRequest.getFileNames();
+			if (fileNames.hasNext()) {
+			    String fileName = (String) fileNames.next();
+			    System.out.println("***** fileName = " + fileName);
+			    MultipartFile file = multipartRequest.getFile(fileName);
+			    System.out.println("***** file size : " + file.getSize());
+			}
+			
 			if (!uploadDir.exists()) {
 				uploadDir.mkdir();
 			}
-			// parses the request's content to extract file data
-			@SuppressWarnings("unchecked")
-			List<FileItem> formItems = upload.parseRequest(req);
-			LOGGER.info("formItems.....:" + formItems);
-			LOGGER.info("formItems.....:" + formItems.size());
 			if (formItems != null && formItems.size() > 0) {
 				// iterates over form's fields
 				for (FileItem item : formItems) {
-					// processes only fields that are not form fields
+					// processe s only fields that are not form fields
 					if (!item.isFormField() && !item.getName().equals("")) {
 						String fileName = new File(item.getName()).getName();
 						String filePath = uploadPath + File.separator + fileName;
@@ -814,7 +860,8 @@ public class SASController {
 
 		} catch (Exception ex) {
 			LOGGER.error("There was an error in uploading image: " + ex.getMessage());
-		}
+		}*/
+
 	}
 
 	private void updateEnglishData() {
@@ -857,12 +904,16 @@ public class SASController {
 			while (labelsToken.hasMoreElements()) {
 				st = new StringTokenizer(labelsToken.nextToken(), ":");
 				// labelKey:labelvalue
-				temp1 = st.nextToken();
-				temp2 = st.nextToken();
-				stmt.setString(1, temp2);
-				stmt.setString(2, temp1);
-				stmt.setString(3, lang);
-				stmt.executeUpdate();
+				if(st.countTokens()==2) {
+					temp1 = st.nextToken();
+					temp2 = st.nextToken();
+					stmt.setString(1, temp2);
+					stmt.setString(2, temp1);
+					stmt.setString(3, lang);
+					stmt.executeUpdate();
+				} else {
+					LOGGER.error("No value found for Lable String: " + labelsToken);
+				}
 			}
 
 			String questionInsert = "update questions set qtext = ?, qdesc = ?, imagename = ?, qsubtype = ?, qorder = ? where id = ?";
@@ -876,46 +927,45 @@ public class SASController {
 			while (qToken.hasMoreElements()) {
 				st = new StringTokenizer(qToken.nextToken(), ":");
 				// id:section:question:subsection:desc:imageName:order
-				temp1 = st.nextToken(); // id
-				temp2 = st.nextToken(); // qtype
-				temp3 = st.nextToken(); // qtext
-				temp6 = st.nextToken(); // qsubtype
-				temp4 = st.nextToken(); // qdesc
-				if (st.countTokens() > 0) {
+				if(st.countTokens()==7){
+					temp1 = st.nextToken(); // id
+					temp2 = st.nextToken(); // qtype
+					temp3 = st.nextToken(); // qtext
+					temp6 = st.nextToken(); // qsubtype
+					temp4 = st.nextToken(); // qdesc
 					temp5 = st.nextToken(); // imagename
-				} else {
-					temp5 = "plan-1.png"; // TODO
-					temp1 = null;
-				}
-				temp7 = st.nextToken(); // order
-				if (!nullCheck(temp1).equals("-1")) {
-					stmt.setString(1, temp3);
-					stmt.setString(2, temp4);
-					stmt.setString(3, temp5);
-					stmt.setString(4, temp6);
-					stmt.setString(5, temp7);
-					stmt.setString(6, temp1);
-					stmt.executeUpdate();
-					ustmt.setString(1, temp7);
-					ustmt.setString(2, temp1);
-					ustmt.executeUpdate();
-				} else {
-					pstmt.setString(1, temp2);
-					pstmt.setString(2, temp3);
-					pstmt.setString(3, temp4);
-					pstmt.setString(4, temp5);
-					pstmt.setString(5, "english");
-					pstmt.setString(6, null);
-					pstmt.setString(7, temp6);
-					pstmt.setString(8, temp7);
-					pstmt.executeUpdate();
-					eqid = getEnglishQId(temp2, temp3, temp4, temp5);
-					for (int i = 0; i < langs.size(); i++) {
-						LOGGER.info("inserting question for the language: " + langs.get(i));
-						pstmt.setString(5, langs.get(i));
-						pstmt.setString(6, eqid);
+					temp7 = st.nextToken(); // order
+					if (!nullCheck(temp1).equals("-1")) {
+						stmt.setString(1, temp3);
+						stmt.setString(2, temp4);
+						stmt.setString(3, temp5);
+						stmt.setString(4, temp6);
+						stmt.setString(5, temp7);
+						stmt.setString(6, temp1);
+						stmt.executeUpdate();
+						ustmt.setString(1, temp7);
+						ustmt.setString(2, temp1);
+						ustmt.executeUpdate();
+					} else {
+						pstmt.setString(1, temp2);
+						pstmt.setString(2, temp3);
+						pstmt.setString(3, temp4);
+						pstmt.setString(4, temp5);
+						pstmt.setString(5, "english");
+						pstmt.setString(6, null);
+						pstmt.setString(7, temp6);
+						pstmt.setString(8, temp7);
 						pstmt.executeUpdate();
+						eqid = getEnglishQId(temp2, temp3, temp4, temp5);
+						for (int i = 0; i < langs.size(); i++) {
+							LOGGER.info("inserting question for the language: " + langs.get(i));
+							pstmt.setString(5, langs.get(i));
+							pstmt.setString(6, eqid);
+							pstmt.executeUpdate();
+						}
 					}
+				} else {
+					LOGGER.error("Improper question for the token : " + qToken);
 				}
 			}
 			// deletedquestions = deletedquestions.replaceAll("|", ",");
@@ -1032,12 +1082,16 @@ public class SASController {
 			while (labelsToken.hasMoreElements()) {
 				st = new StringTokenizer(labelsToken.nextToken(), ":");
 				// labelKey:labelvalue
-				temp1 = st.nextToken();
-				temp2 = st.nextToken();
-				stmt.setString(1, temp2);
-				stmt.setString(2, temp1);
-				stmt.setString(3, lang);
-				stmt.executeUpdate();
+				if(st.countTokens()==2){
+					temp1 = st.nextToken();
+					temp2 = st.nextToken();
+					stmt.setString(1, temp2);
+					stmt.setString(2, temp1);
+					stmt.setString(3, lang);
+					stmt.executeUpdate();
+				} else {
+					LOGGER.error("Improper label for the token : " + labelsToken);
+				}
 			}
 
 			String questionInsert = "update questions set qtext = ?, qdesc = ?, imagename = ?, qsubtype = ?, qorder = ? where id = ?";
@@ -1048,20 +1102,24 @@ public class SASController {
 				LOGGER.info("st token length....:" + st.countTokens());
 				// id:section:question:desc:imageName
 				// id:section:question:subsection:desc:imageName:order
-				temp1 = st.nextToken(); // id
-				temp2 = st.nextToken(); // qtype
-				temp3 = st.nextToken(); // qtext
-				temp4 = st.nextToken(); // qsubtype
-				temp5 = st.nextToken(); // qdesc
-				temp6 = st.nextToken(); // imagename
-				temp7 = st.nextToken(); // qorder
-				stmt.setString(1, temp3);
-				stmt.setString(2, temp5);
-				stmt.setString(3, temp6);
-				stmt.setString(4, temp4);
-				stmt.setString(5, temp7);
-				stmt.setString(6, temp1);
-				stmt.executeUpdate();
+				if(st.countTokens()==7){
+					temp1 = st.nextToken(); // id
+					temp2 = st.nextToken(); // qtype
+					temp3 = st.nextToken(); // qtext
+					temp4 = st.nextToken(); // qsubtype
+					temp5 = st.nextToken(); // qdesc
+					temp6 = st.nextToken(); // imagename
+					temp7 = st.nextToken(); // qorder
+					stmt.setString(1, temp3);
+					stmt.setString(2, temp5);
+					stmt.setString(3, temp6);
+					stmt.setString(4, temp4);
+					stmt.setString(5, temp7);
+					stmt.setString(6, temp1);
+					stmt.executeUpdate();
+				} else {
+					LOGGER.error("Improper question for the token : " + qToken);
+				}
 			}
 		} catch (Exception exp) {
 			LOGGER.error("cannot able to update data from method updateData : " , exp);
@@ -1091,10 +1149,14 @@ public class SASController {
 			StringTokenizer labelsToken = new StringTokenizer(labels, "|");
 			while (labelsToken.hasMoreElements()) {
 				st = new StringTokenizer(labelsToken.nextToken(), ":");
-				stmt.setString(1, lang);
-				stmt.setString(2, st.nextToken());
-				stmt.setString(3, st.nextToken());
-				stmt.executeUpdate();
+				if(st.countTokens()==2) {
+					stmt.setString(1, lang);
+					stmt.setString(2, st.nextToken());
+					stmt.setString(3, st.nextToken());
+					stmt.executeUpdate();
+				} else {
+					LOGGER.error("Improper label for the token : " + labelsToken);
+				}
 			}
 
 			// String questionInsert = "insert into questions (qtype, qtext,
@@ -1106,17 +1168,21 @@ public class SASController {
 				st = new StringTokenizer(qToken.nextToken(), ":");
 				// id:section:question:desc:imageName
 				// id:section:question:subsection:desc:imageName:order
-				temp = st.nextToken(); // id avoid
-				stmt.setString(1, st.nextToken()); // qtype
-				stmt.setString(2, st.nextToken()); // qtext
-				stmt.setString(7, st.nextToken()); // subsection
-				stmt.setString(3, st.nextToken()); // qdesc
-				stmt.setString(4, st.nextToken()); // imagename
-				stmt.setString(5, lang);
-				stmt.setString(6, temp); // parentquestion
-				stmt.setString(8, st.nextToken());
-
-				stmt.executeUpdate();
+				if(st.countTokens()==7) {
+					temp = st.nextToken(); // id avoid
+					stmt.setString(1, st.nextToken()); // qtype
+					stmt.setString(2, st.nextToken()); // qtext
+					stmt.setString(7, st.nextToken()); // subsection
+					stmt.setString(3, st.nextToken()); // qdesc
+					stmt.setString(4, st.nextToken()); // imagename
+					stmt.setString(5, lang);
+					stmt.setString(6, temp); // parentquestion
+					stmt.setString(8, st.nextToken());
+	
+					stmt.executeUpdate();
+				} else {
+					LOGGER.error("Improper question for the token : " + qToken);
+				}
 			}
 		} catch (Exception exp) {
 			LOGGER.error("cannot able to insert data from method insertData : " , exp);
@@ -1490,7 +1556,7 @@ public class SASController {
 	}
 
 	public Map<String, String> setEloquaExtraVaues(Map<String, String> mapdataMap, String userId, final Properties properties) throws SQLException {
-		String sql = "select questions.qsubtype, count(userresponse.qresponse) totalCount, COUNT(CASE WHEN userresponse.qresponse='yes' THEN 1 END) AS totalYesCount from questions, userresponse where questions.id = userresponse.qid and userresponse.userid=? group by questions.qsubtype;";
+		//String sql = "select questions.qsubtype, count(userresponse.qresponse) totalCount, COUNT(CASE WHEN userresponse.qresponse='yes' THEN 1 END) AS totalYesCount from questions, userresponse where questions.id = userresponse.qid and userresponse.userid=? group by questions.qsubtype;";
 		con = dataSource.getConnection();
 		stmt = con.prepareStatement(
 				"select questions.qsubtype, count(userresponse.qresponse) totalCount, COUNT(CASE WHEN userresponse.qresponse='yes' THEN 1 END) AS totalYesCount from questions, userresponse where questions.id = userresponse.qid and userresponse.userid=? group by questions.qsubtype;");
@@ -1568,4 +1634,3 @@ public class SASController {
 		return translationConstantsTable;
 	}
 }
-
