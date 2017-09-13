@@ -224,7 +224,7 @@
         <input type="file" id="file%id%" class="file-input sos-input-file-%id%" name="file_%type%_%id%">\
         </td>\
         <td>\
-          <i title="Edit" class="sos-edit-icon fa fa-pencil fa-lg editItem-%id%" id="editItem-%id%" data-type="%type%" onclick="FieldView.enableFieldFields(%id%)"></i>\
+          <i title="Edit" class="sos-edit-icon fa fa-pencil fa-lg editItem-%id%" id="editItem-%id%" data-type="%type%" onclick="FieldView.enableFieldFields(%id%);FieldView.editedField(%id%)"></i>\
           <i title="Delete" class="sos-delete-icon fa fa-trash-o fa-lg" id="deleteItem-%id%" data-type="%type%" onclick="FieldView.deleteField(%id%)"></i>\
         </td>\
         <td>\
@@ -302,7 +302,17 @@
       FieldController.deleteField(id, _type);
       //render();
     }
-
+    
+    var editedField = function editedField(id) {
+  	  var editedQuestions = $('#sos-edited-questions').val(),
+            _type = $('#editItem-'+id).attr('data-type');
+  	  if($('#sos-edited-questions').val()==""){
+  		  $('#sos-edited-questions').val(id);
+  	  } else {
+  		  $('#sos-edited-questions').val(editedQuestions + "," + id);
+  	  }
+    }
+    
     var enableFieldFields = function enableFieldFields(id) {
       var _type = $('#editItem-'+id).attr('data-type');
       FieldController.enableFieldFields(id, _type);
@@ -322,7 +332,8 @@
       upField: upField,
       downField: downField,
       changeSubsectionValue: changeSubsectionValue,
-      addField: addField
+      addField: addField,
+      editedField: editedField
     };
   })();
 
