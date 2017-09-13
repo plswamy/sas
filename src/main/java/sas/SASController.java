@@ -35,9 +35,12 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import sas.bean.Question;
 import sas.bean.Answer;
@@ -744,17 +747,26 @@ public class SASController {
 		}
 		return list;
 	}
-	
+	private String getNextAutoIncrementId(String tableName) {
+		String nextAutoIncrementId = null;
+		try {
+			String sql = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME = '" + tableName + "'";
+			con = dataSource.getConnection();
+			stmt = con.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				nextAutoIncrementId = rs.getString(1);
+			}
+		} catch (Exception exp) {
+			LOGGER.error("cannot able to get next autoincrement value :", exp);
+			exp.printStackTrace();
+		} finally {
+			close();
+		}
+		return nextAutoIncrementId;
+	}
 	private void saveLangData(Map<String, MultipartFile> fileMap, MultipartHttpServletRequest request) {
 		try {
-			for(String key: fileMap.keySet()) {
-				if(key.endsWith("-1")) { // create new images for new questions
-					MultipartFile file = fileMap.get(key);
-					if(file!=null) {
-						uploadFiles(file, request);
-					}
-				}
-			}
 			String lang = req.getParameter("lang");
 			if (lang == null) {
 				lang = (String) session.getAttribute("language");
@@ -762,6 +774,33 @@ public class SASController {
 			if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
 				lang = "english";
 			}
+			String editedquestions = req.getParameter("editedquestions");
+			for(String key: fileMap.keySet()) {
+				System.out.println("key : " + key);
+				if(key.endsWith("-1")) { // create new images for new questions
+					MultipartFile file = fileMap.get(key);
+					if(file!=null) {
+						String newId = getNextAutoIncrementId("questions");
+						String fileName = key.substring(key.indexOf("_") + 1, key.lastIndexOf("_")) + "-" + lang + "-" + newId;
+						uploadFiles(file, request, false,fileName);
+					}
+				} else { // // create new images for edited questions
+					String id = key.substring(key.lastIndexOf("_") + 1);
+					if(editedquestions != null) {
+						String[] editedQuestionIds = editedquestions.split("[,]");
+						for(String edidtedQuestionId : editedQuestionIds) {
+							if(id.equals(edidtedQuestionId)) {
+								MultipartFile file = fileMap.get(key);
+								if(file!=null) {
+									String fileName = key.substring(key.indexOf("_") + 1, key.lastIndexOf("_")) + "-" + lang + "-" + id;
+									uploadFiles(file, request, true, fileName);
+								}
+							}
+						}
+					}
+				}
+			}
+			
 			if (lang.equals("english")) {
 				updateEnglishData();
 			} else {
@@ -783,8 +822,8 @@ public class SASController {
 	}
 
 	@SuppressWarnings("deprecation")
-	private void uploadFiles(MultipartFile file, MultipartHttpServletRequest request) {				
-
+	private void uploadFiles(MultipartFile file, MultipartHttpServletRequest request, boolean isEdited, String fileName) {				
+			
 			try {
 				String UPLOAD_DIRECTORY = "support" + File.separator + "img" + File.separator + "resourceFiles";
 		    	String realPath = req.getRealPath("/");
@@ -795,8 +834,13 @@ public class SASController {
 		        		System.out.println("======= UPLOAD_DIRECTORY ======"+uploadPath);
 		        		System.out.println("=======file.getOriginalFilename() ======== "+file.getOriginalFilename());
 		            byte[] bytes = file.getBytes();
-		            Path path = Paths.get(uploadPath + File.separator + file.getOriginalFilename());
-		            Files.write(path, bytes);
+		            Path path = Paths.get(uploadPath + File.separator + fileName+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")).toLowerCase());
+		            if(isEdited) {
+		            	//Files.copy(path, path, StandardCopyOption.REPLACE_EXISTING);
+		            	Files.write(path, bytes);
+		            } else {
+		            	Files.write(path, bytes);
+		            }
 		        }
 
 
@@ -868,19 +912,23 @@ public class SASController {
 		String labels = req.getParameter("labels");
 		String questions = req.getParameter("questions");
 		String userformsfields = req.getParameter("userformsfields");
+		
 		String lang = req.getParameter("lang");
 		if (lang == null) {
 			session.getAttribute("language");
 		}
-		if (nullCheck(lang).length() == 0 || lang.equals("en")) {
+		if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
 			lang = "english";
 		}
 		String deletedquestions = req.getParameter("deletedquestions");
+		String editedquestions = req.getParameter("editedquestions");
 		LOGGER.info("lang:" + lang);
 		LOGGER.info("labels:" + labels);
 		LOGGER.info("questions:" + questions);
 		LOGGER.info("deletedquestions:" + deletedquestions);
+		LOGGER.info("editedquestions:" + editedquestions);
 		LOGGER.info("userformsfields:" + userformsfields);
+		String newId = getNextAutoIncrementId("questions");
 		updateFormFields(userformsfields);
 		PreparedStatement pstmt = null;
 		PreparedStatement ustmt = null;
@@ -915,7 +963,7 @@ public class SASController {
 					LOGGER.error("No value found for Lable String: " + labelsToken);
 				}
 			}
-
+			
 			String questionInsert = "update questions set qtext = ?, qdesc = ?, imagename = ?, qsubtype = ?, qorder = ? where id = ?";
 			String questionEnglishInsert = "insert into questions (qtype, qtext, qdesc, imagename, lang, pqid, qsubtype, qorder) value (?,?,?,?,?,?,?,?)";
 			String questionUpdate = "update questions set qorder = ? where pqid= ?";
@@ -934,11 +982,13 @@ public class SASController {
 					temp6 = st.nextToken(); // qsubtype
 					temp4 = st.nextToken(); // qdesc
 					temp5 = st.nextToken(); // imagename
+					String imagetype = temp5.substring(temp5.lastIndexOf("."));
 					temp7 = st.nextToken(); // order
 					if (!nullCheck(temp1).equals("-1")) {
 						stmt.setString(1, temp3);
 						stmt.setString(2, temp4);
-						stmt.setString(3, temp5);
+						stmt.setString(3, temp2 + "-" + lang + "-"+ temp1 + imagetype);
+						System.out.println(temp2 + "-" + lang + "-"+ temp1 + imagetype);
 						stmt.setString(4, temp6);
 						stmt.setString(5, temp7);
 						stmt.setString(6, temp1);
@@ -950,7 +1000,9 @@ public class SASController {
 						pstmt.setString(1, temp2);
 						pstmt.setString(2, temp3);
 						pstmt.setString(3, temp4);
-						pstmt.setString(4, temp5);
+						//pstmt.setString(4, temp5);
+						pstmt.setString(4, temp2 + "-" + lang + "-"+ newId + imagetype);
+						System.out.println(temp2 + "-" + lang + "-"+ newId + imagetype);
 						pstmt.setString(5, "english");
 						pstmt.setString(6, null);
 						pstmt.setString(7, temp6);
@@ -1056,7 +1108,10 @@ public class SASController {
 		String questions = req.getParameter("questions");
 		String lang = req.getParameter("lang");
 		if (lang == null) {
-			lang = (String) session.getAttribute("language");
+			session.getAttribute("language");
+		}
+		if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
+			lang = "english";
 		}
 		LOGGER.info("lang:" + lang);
 		LOGGER.info("labels:" + labels);
@@ -1110,9 +1165,12 @@ public class SASController {
 					temp5 = st.nextToken(); // qdesc
 					temp6 = st.nextToken(); // imagename
 					temp7 = st.nextToken(); // qorder
+					String imagetype = temp6.substring(temp6.lastIndexOf("."));
+					System.out.println(temp2 + "-" + lang + "-"+ temp1 + imagetype);
 					stmt.setString(1, temp3);
 					stmt.setString(2, temp5);
-					stmt.setString(3, temp6);
+					//stmt.setString(3, temp6);
+					stmt.setString(3,temp2 + "-" + lang + "-"+ temp1 + imagetype);
 					stmt.setString(4, temp4);
 					stmt.setString(5, temp7);
 					stmt.setString(6, temp1);
@@ -1140,6 +1198,7 @@ public class SASController {
 		LOGGER.info("questions:" + questions);
 		String userformsfields = req.getParameter("userformsfields");
 		LOGGER.info("userformsfields:" + userformsfields);
+		String newId = getNextAutoIncrementId("questions");
 		insertFormFields(userformsfields, lang);
 		try {
 			con = dataSource.getConnection();
@@ -1161,6 +1220,7 @@ public class SASController {
 
 			// String questionInsert = "insert into questions (qtype, qtext,
 			// qdesc, imagename, pqid, lang) value (?,?,?,?,?,?)";
+			
 			String questionInsert = "insert into questions (qtype, qtext, qdesc, imagename, lang, pqid, qsubtype, qorder) value (?,?,?,?,?,?,?,?)";
 			stmt = con.prepareStatement(questionInsert);
 			StringTokenizer qToken = new StringTokenizer(questions, "|");
@@ -1170,11 +1230,16 @@ public class SASController {
 				// id:section:question:subsection:desc:imageName:order
 				if(st.countTokens()==7) {
 					temp = st.nextToken(); // id avoid
-					stmt.setString(1, st.nextToken()); // qtype
+					String qtype = st.nextToken();
+					stmt.setString(1, qtype); // qtype
 					stmt.setString(2, st.nextToken()); // qtext
 					stmt.setString(7, st.nextToken()); // subsection
 					stmt.setString(3, st.nextToken()); // qdesc
-					stmt.setString(4, st.nextToken()); // imagename
+					//stmt.setString(4, st.nextToken()); // imagename 
+					String imageName = st.nextToken();
+					String imagetype = imageName.substring(imageName.lastIndexOf("."));
+					stmt.setString(4, qtype + "-" + lang + "-"+ newId + imagetype);
+					System.out.println(qtype + "-" + lang + "-"+ newId + imagetype);
 					stmt.setString(5, lang);
 					stmt.setString(6, temp); // parentquestion
 					stmt.setString(8, st.nextToken());
