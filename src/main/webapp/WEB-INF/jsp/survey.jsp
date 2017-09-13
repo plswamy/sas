@@ -56,7 +56,7 @@
           for(int i=0; i < list.size(); i++) {
         	  q = list.get(i);
         %>
-          planSection["<%= q.getId() %>"] =  {
+          planSection["<%= q.getQorder() %>"] =  {
           "qry" : "<%= q.getText() %>",
           "subsection" : "<%= q.getSubtype() %>",
           "description": "<%= q.getDesc() %>",
@@ -74,7 +74,7 @@
           for(int i=0; i < list.size(); i++) {
         	  q = list.get(i);
         %>
-          doSection["<%= q.getId() %>"] =  {
+          doSection["<%= q.getQorder() %>"] =  {
           "qry" : "<%= q.getText() %>",
           "subsection" : "<%= q.getSubtype() %>",
           "description": "<%= q.getDesc() %>",
@@ -95,7 +95,7 @@
           for(int i=0; i < list.size(); i++) {
         	  q = list.get(i);
         %>
-          checkSection["<%= q.getId() %>"] =  {
+          checkSection["<%= q.getQorder() %>"] =  {
           "qry" : "<%= q.getText() %>",
           "subsection" : "<%= q.getSubtype() %>",
           "description": "<%= q.getDesc() %>",
