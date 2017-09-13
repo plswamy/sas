@@ -327,6 +327,7 @@
             <input type="hidden" id="sos-questions"  name="questions" value="" />
             <input type="hidden" id="sos-deleted-questions"  name="deletedquestions" value="" />
             <input type="hidden" id="sos-form-fields"  name="userformsfields" value="" />
+            <input type="hidden" id="sos-edited-questions"  name="editedquestions" value="" />
 
             <div id="item_panels">
                 <h3 class="general_section">General Labels</h3>        
@@ -349,7 +350,7 @@
                 </div>
                 </div>
 
-                <h3 class="plan_header">Plan</h3>        
+                <h3 class="plan_header">Analyse</h3>        
                 <div class="store_addr">
                     <table id="plan" class="table table-striped table-bordered table-hover">
                         <thead>
@@ -370,7 +371,7 @@
                     </div>
                 </div>
                 
-                <h3 id="2" class="do_header">Do</h3>        
+                <h3 id="2" class="do_header">Mitigate</h3>        
                 <div class="item_container">
                     <table id="do" class="table table-striped table-bordered table-hover">
                         <thead>
@@ -391,7 +392,7 @@
                     </div>
                 </div>
 
-                <h3 id="3" class="check_header">Check</h3>        
+                <h3 id="3" class="check_header">Control</h3>        
                 <div class="store_addr">
                     <table id="check" class="table table-striped table-bordered table-hover">
                         <thead>
