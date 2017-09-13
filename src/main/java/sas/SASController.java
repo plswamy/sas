@@ -780,9 +780,9 @@ public class SASController {
 				if(key.endsWith("-1")) { // create new images for new questions
 					MultipartFile file = fileMap.get(key);
 					if(file!=null) {
-						String newId = getNextAutoIncrementId("questions");
-						String fileName = key.substring(key.indexOf("_") + 1, key.lastIndexOf("_")) + "-" + lang + "-" + newId;
-						uploadFiles(file, request, false,fileName);
+						//String newId = getNextAutoIncrementId("questions");
+						//String fileName = key.substring(key.indexOf("_") + 1, key.lastIndexOf("_")) + "-" + lang + "-" + newId;
+						uploadFiles(file, request, false,null);
 					}
 				} else { // // create new images for edited questions
 					String id = key.substring(key.lastIndexOf("_") + 1);
@@ -792,8 +792,8 @@ public class SASController {
 							if(id.equals(edidtedQuestionId)) {
 								MultipartFile file = fileMap.get(key);
 								if(file!=null) {
-									String fileName = key.substring(key.indexOf("_") + 1, key.lastIndexOf("_")) + "-" + lang + "-" + id;
-									uploadFiles(file, request, true, fileName);
+									//String fileName = key.substring(key.indexOf("_") + 1, key.lastIndexOf("_")) + "-" + lang + "-" + id;
+									uploadFiles(file, request, true, null);
 								}
 							}
 						}
@@ -834,7 +834,8 @@ public class SASController {
 		        		System.out.println("======= UPLOAD_DIRECTORY ======"+uploadPath);
 		        		System.out.println("=======file.getOriginalFilename() ======== "+file.getOriginalFilename());
 		            byte[] bytes = file.getBytes();
-		            Path path = Paths.get(uploadPath + File.separator + fileName+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")).toLowerCase());
+		            //Path path = Paths.get(uploadPath + File.separator + fileName+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")).toLowerCase());
+		            Path path = Paths.get(uploadPath + File.separator + file.getOriginalFilename());
 		            if(isEdited) {
 		            	//Files.copy(path, path, StandardCopyOption.REPLACE_EXISTING);
 		            	Files.write(path, bytes);
@@ -982,13 +983,14 @@ public class SASController {
 					temp6 = st.nextToken(); // qsubtype
 					temp4 = st.nextToken(); // qdesc
 					temp5 = st.nextToken(); // imagename
-					String imagetype = temp5.substring(temp5.lastIndexOf("."));
+					//String imagetype = temp5.substring(temp5.lastIndexOf("."));
 					temp7 = st.nextToken(); // order
 					if (!nullCheck(temp1).equals("-1")) {
 						stmt.setString(1, temp3);
 						stmt.setString(2, temp4);
-						stmt.setString(3, temp2 + "-" + lang + "-"+ temp1 + imagetype);
-						System.out.println(temp2 + "-" + lang + "-"+ temp1 + imagetype);
+						//stmt.setString(3, temp2 + "-" + lang + "-"+ temp1 + imagetype);
+						//System.out.println(temp2 + "-" + lang + "-"+ temp1 + imagetype);
+						stmt.setString(3, temp5);
 						stmt.setString(4, temp6);
 						stmt.setString(5, temp7);
 						stmt.setString(6, temp1);
@@ -1001,8 +1003,9 @@ public class SASController {
 						pstmt.setString(2, temp3);
 						pstmt.setString(3, temp4);
 						//pstmt.setString(4, temp5);
-						pstmt.setString(4, temp2 + "-" + lang + "-"+ newId + imagetype);
-						System.out.println(temp2 + "-" + lang + "-"+ newId + imagetype);
+						//pstmt.setString(4, temp2 + "-" + lang + "-"+ newId + imagetype);
+						//System.out.println(temp2 + "-" + lang + "-"+ newId + imagetype);
+						pstmt.setString(4, temp5);
 						pstmt.setString(5, "english");
 						pstmt.setString(6, null);
 						pstmt.setString(7, temp6);
@@ -1165,12 +1168,12 @@ public class SASController {
 					temp5 = st.nextToken(); // qdesc
 					temp6 = st.nextToken(); // imagename
 					temp7 = st.nextToken(); // qorder
-					String imagetype = temp6.substring(temp6.lastIndexOf("."));
-					System.out.println(temp2 + "-" + lang + "-"+ temp1 + imagetype);
+					//String imagetype = temp6.substring(temp6.lastIndexOf("."));
+					//System.out.println(temp2 + "-" + lang + "-"+ temp1 + imagetype);
 					stmt.setString(1, temp3);
 					stmt.setString(2, temp5);
-					//stmt.setString(3, temp6);
-					stmt.setString(3,temp2 + "-" + lang + "-"+ temp1 + imagetype);
+					stmt.setString(3, temp6);
+					//stmt.setString(3,temp2 + "-" + lang + "-"+ temp1 + imagetype);
 					stmt.setString(4, temp4);
 					stmt.setString(5, temp7);
 					stmt.setString(6, temp1);
@@ -1235,11 +1238,11 @@ public class SASController {
 					stmt.setString(2, st.nextToken()); // qtext
 					stmt.setString(7, st.nextToken()); // subsection
 					stmt.setString(3, st.nextToken()); // qdesc
-					//stmt.setString(4, st.nextToken()); // imagename 
-					String imageName = st.nextToken();
-					String imagetype = imageName.substring(imageName.lastIndexOf("."));
-					stmt.setString(4, qtype + "-" + lang + "-"+ newId + imagetype);
-					System.out.println(qtype + "-" + lang + "-"+ newId + imagetype);
+					stmt.setString(4, st.nextToken()); // imagename 
+					//String imageName = st.nextToken();
+					//String imagetype = imageName.substring(imageName.lastIndexOf("."));
+					//stmt.setString(4, qtype + "-" + lang + "-"+ newId + imagetype);
+					//System.out.println(qtype + "-" + lang + "-"+ newId + imagetype);
 					stmt.setString(5, lang);
 					stmt.setString(6, temp); // parentquestion
 					stmt.setString(8, st.nextToken());
