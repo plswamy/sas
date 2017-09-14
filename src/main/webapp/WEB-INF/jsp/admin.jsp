@@ -272,16 +272,17 @@
 
 
                     <input class="admin-lang form-control hidden" name="language" id="language" type="text" value="<%=(lang.equals("en") || lang.equals("english") ? "master" : lang)%>" />
-                    <select id="sos-lang-select" class="selectpicker sos-admin-select" onchange="javascript: updateLocaleData();">
-						<option value="master">master</option>
+                   <select id="sos-lang-select" class="selectpicker sos-admin-select" onchange="javascript: updateLocaleData();">
+						<option value="master" <%=(lang.equals("en") || lang.equals("english") ? "selected" : "")%>>master</option>
 					<%
 						String tempLang = null;
 						for(int i = 0; i < langList.size(); i++) {
 							tempLang = (String) langList.get(i);
                             String tempLangDisplayName = tempLang.equals("en") || tempLang.equals("english") ? "master" : tempLang;
 							System.out.println("tempLang....:"+tempLang);
+                            String isSelected = lang.equals(tempLang) ? "selected" : "";
 					%>
-                        <option value="<%=tempLang%>"><%= tempLangDisplayName %></option>
+                        <option value="<%=tempLang%>" <%=isSelected%>><%= tempLangDisplayName %></option>
 					<% } %>
                     </select>  
                     <button style="display: inline-block; width: 58px; float: right;" id="sos-admin-lang-submit" class="btn btn-primary admin-lang-btn col-lg-4 col-md-6 col-sm-12 col-xs-12" onclick="javascript: return getLocaleData();">Go!</button>
