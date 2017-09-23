@@ -603,16 +603,6 @@
                       </div>
 
                       <div id="footer" class="inner img-responsive">
-                      <h3><%=firstParaHeading%></h3>
-                      <div class="diagram-area">
-                        <%--<a href="http://www.global.selfassessmenttool.com/img/diagram.png" target="_blank"><div class="diagram"></div></a>--%>
-                        <a href="http://www.global.selfassessmenttool.com/img/diagram.png" target="_blank"><img class="cover-width diagram" src="./support/img/resourceFiles/do-12.png" alt="Sections"></a>
-                        <a href="http://www.global.selfassessmenttool.com/img/diagram.png" class="marginleft" target="_blank"><%=imageClickDesc%></a>
-                      </div>
-                      <p><%=firstParagraph1%></p>
-                      <p><%=firstParagraph2%></p>
-                      <p><%=firstParagraph3 %></p>
-                      <p><%=firstParagraph4 %> <a href="http://internationalsos.com/duty-of-care" target="_blank">internationalsos.com/duty-of-care</a> </p>
                       <h3><%=lastParaHeading%></h3>
                       <p><%=lastParagraph1%><a href="http://www.internationalsos.com/" target="_blank">www.internationalsos.com</a></p>
                       <p><em><%=lastParagraph2%> <%=lastParagraph3%></em></p>
