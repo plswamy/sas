@@ -517,7 +517,7 @@
                         <%--<div class="section_header"></div>--%>
                         <div class="plan-section-header">
                           <div class="plan-section-style col-xs-12 col-sm-6 col-md-6 col-lg-7">
-                            <span class="plan-icon"></span>
+                            <!--<span class="plan-icon"></span>-->
                             <div class="plan-header-text-section">
                              <%
                               
@@ -560,7 +560,7 @@
                       <div id="do" style="display: none;">
                         <div class="do-section-header">
                           <div class="plan-section-style col-xs-12 col-sm-6 col-md-6 col-lg-7">
-                            <span class="do-icon"></span>
+                            <!--<span class="do-icon"></span>-->
                             <div class="plan-header-text-section">
                               <div class="plan-header-text"><%= secName2 %></div>
                               <div class="plan-header-desc">
@@ -583,7 +583,7 @@
                       <div id="check" style="display: none;">
                         <div class="check-section-header">
                           <div class="plan-section-style col-xs-12 col-sm-6 col-md-6 col-lg-7">
-                            <span class="check-icon"></span>
+                            <!--<span class="check-icon"></span>-->
                             <div class="plan-header-text-section">
                               <div class="plan-header-text"><%= secName3 %></div>
                               <div class="plan-header-desc">
