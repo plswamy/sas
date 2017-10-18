@@ -29,6 +29,7 @@ public class SASConstants {
 	public static final String ELOQUA_USER="eloqua.username";
 	public static final String ELOQUA_PWD="eloqua.password";
 	public static final String ELOQUA_URL_CUSTOM_OBJECT="eloqua.url.customeobject";
+	public static final String ELOQUA_URL_FORM="eloqua.url.form";
 	public static final String IMAGE_PATH="image.path";
 	public static final String UPLOAD_IMAGE_PATH="uploadimage.path";
 	
