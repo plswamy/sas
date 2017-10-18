@@ -1575,7 +1575,7 @@ public class SASController {
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
-					"select info.f6, info.f5, info.f7, info.f4, info.f1, info.f2, info.id, info.lang, response.qid, response.qresponse from registrationinfo info, userresponse response where info.id=response.userid and info.id=? ");
+					"select info.f6, info.f5, info.f7, info.f4, info.f1, info.f2, info.f3, info.id, info.lang, response.qid, response.qresponse from registrationinfo info, userresponse response where info.id=response.userid and info.id=? ");
 			// "select max(response.id), info.f6, info.f5, info.f7, info.f4,
 			// info.f1, info.f2, info.id, info.lang, response.qid,
 			// response.qresponse from registrationinfo info, userresponse
@@ -1586,12 +1586,14 @@ public class SASController {
 			int index = 0;
 			while (rs.next()) {
 				if (index == 0) {
+					LOGGER.info("site stored ::" , rs.getString("lang"));
 					String language = (String) session.getAttribute("language");
 					if (nullCheck(language).length() == 0) {
 						language = "english";
 					}
 					if(language.equals("english") || language == null)
 						language = "master";
+					LOGGER.info("LANGUAGE ::" , language);
 					map.put(properties.getProperty(SASConstants.LANGUAGE),
 							language);
 					map.put(properties.getProperty(SASConstants.BUSSINESS_INDUSTRY), rs.getString("f6"));
@@ -1600,7 +1602,7 @@ public class SASController {
 					map.put(properties.getProperty(SASConstants.EMAIL), rs.getString("f4"));
 					map.put(properties.getProperty(SASConstants.FIRST_NAME), rs.getString("f1"));
 					map.put(properties.getProperty(SASConstants.LAST_NAME), rs.getString("f2"));
-					map.put(properties.getProperty(SASConstants.TITLE), "SME");
+					map.put(properties.getProperty(SASConstants.TITLE), rs.getString("f3"));
 					map.put(properties.getProperty(SASConstants.USER_ID), rs.getString("id"));
 					map.put(properties.getProperty(SASConstants.QUESTION_ID), rs.getString("qid"));
 					map.put(properties.getProperty(SASConstants.QUESTION_RESPONSE), rs.getString("qresponse"));
