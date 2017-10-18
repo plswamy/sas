@@ -56,7 +56,7 @@
           for(int i=0; i < list.size(); i++) {
         	  q = list.get(i);
         %>
-          planSection["<%= q.getQorder() %>"] =  {
+          planSection["<%= q.getId() %>"] =  {
           "qry" : "<%= q.getText() %>",
           "subsection" : "<%= q.getSubtype() %>",
           "description": "<%= q.getDesc() %>",
@@ -74,7 +74,7 @@
           for(int i=0; i < list.size(); i++) {
         	  q = list.get(i);
         %>
-          doSection["<%= q.getQorder() %>"] =  {
+          doSection["<%= q.getId() %>"] =  {
           "qry" : "<%= q.getText() %>",
           "subsection" : "<%= q.getSubtype() %>",
           "description": "<%= q.getDesc() %>",
@@ -95,7 +95,7 @@
           for(int i=0; i < list.size(); i++) {
         	  q = list.get(i);
         %>
-          checkSection["<%= q.getQorder() %>"] =  {
+          checkSection["<%= q.getId() %>"] =  {
           "qry" : "<%= q.getText() %>",
           "subsection" : "<%= q.getSubtype() %>",
           "description": "<%= q.getDesc() %>",
@@ -300,7 +300,7 @@
                         <div id="progressBarWrap">
                           <h4><%=progress%>:</h4>
                           <div id="progressBarOuter" class="stripe_progress progress">
-                            <%--<div id="progressBarInner" class="progress-bar" width="0%">​</div>--%>
+                            <%--<div id="progressBarInner" class="progress-bar" width="0%">â</div>--%>
                             <div id="progressBarInner" class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" width="0%" style="width: 14.29%;">
                               <span class="sr-only">14.29% Complete</span>
                             </div>
