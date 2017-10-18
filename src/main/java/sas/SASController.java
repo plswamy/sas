@@ -49,6 +49,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Enumeration;
@@ -1585,11 +1586,14 @@ public class SASController {
 			int index = 0;
 			while (rs.next()) {
 				if (index == 0) {
-					String satOrigin = rs.getString("lang");
-					if(satOrigin.equals("english") || satOrigin == null)
-						satOrigin = "master";
+					String language = (String) session.getAttribute("language");
+					if (nullCheck(language).length() == 0) {
+						language = "english";
+					}
+					if(language.equals("english") || language == null)
+						language = "master";
 					map.put(properties.getProperty(SASConstants.LANGUAGE),
-							satOrigin);
+							language);
 					map.put(properties.getProperty(SASConstants.BUSSINESS_INDUSTRY), rs.getString("f6"));
 					map.put(properties.getProperty(SASConstants.COMPANY), rs.getString("f5"));
 					map.put(properties.getProperty(SASConstants.COUNTRY), rs.getString("f7"));
@@ -1664,8 +1668,10 @@ public class SASController {
 	}
 	
 	private String getPercentageValue(String toatalYesCount, String toatlQuestionCount) {
+		DecimalFormat decimalFormat = new DecimalFormat("#.##");
 		double percentage = Double.parseDouble(toatalYesCount)/Double.parseDouble(toatlQuestionCount);
-		return percentage + "";
+		String percentageStr= decimalFormat.format(percentage);
+		return percentageStr;
 	}
 	
 	public String generateJson(Properties properties, Map<String, String> hs) {
