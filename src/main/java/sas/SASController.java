@@ -1547,10 +1547,12 @@ public class SASController {
 					+ properties.getProperty(SASConstants.ELOQUA_PWD);
 			byte[] encodedBytes = Base64.encodeBase64(token.getBytes());
 			String encodedToken = "Basic " + new String(encodedBytes);
-			String eloquaUrl = properties.getProperty(SASConstants.ELOQUA_URL_CUSTOM_OBJECT);
+			//String eloquaUrl = properties.getProperty(SASConstants.ELOQUA_URL_CUSTOM_OBJECT);
+			String eloquaUrl = properties.getProperty(SASConstants.ELOQUA_URL_FORM);
 			String jsonStr = getData4Eloqua(properties, userId, pdfFilePath);
 			LOGGER.info("eloqua json = " + jsonStr);
-			LOGGER.info("eloqua url = https://secure.p06.eloqua.com/api/REST/2.0/data/customObject/34/instance");
+			//LOGGER.info("eloqua url = https://secure.p06.eloqua.com/api/REST/2.0/data/customObject/34/instance");
+			LOGGER.info("eloqua url = " + SASConstants.ELOQUA_URL_FORM);
 			LOGGER.info("eloqua json = " + jsonStr);
 			com.mashape.unirest.http.HttpResponse<String> response = Unirest.post(eloquaUrl)
 					.header("authorization", encodedToken).header("content-type", "application/json")
@@ -1612,7 +1614,8 @@ public class SASController {
 				index++;
 			}
 			map = setEloquaExtraVaues(map,userId,properties);
-			jsonStr = generateJson(properties, map);
+			//jsonStr = generateJson(properties, map);
+			jsonStr = generateJsonNew(properties, map);
 
 		} catch (Exception exp) {
 			LOGGER.error("cannot able to get data for eloqua from  method getData4Eloqua : " , exp);
@@ -1682,7 +1685,36 @@ public class SASController {
 
 		return dataset.toString();
 	}
+	
+	public String generateJsonNew(Properties properties, Map<String, String> hs) {
+		JSONObject dataset = new JSONObject();
+		JSONArray fieldset = new JSONArray();
+		for (String key : hs.keySet()) {
+			JSONObject field = new JSONObject();
+			field.put("type", "FieldValue");
+			field.put("id", key);
+			field.put("value", hs.get(key));
+			field.put("iref", properties.getProperty(getProperty(properties, key) + ".ref"));
+			fieldset.put(field);
+		}
+		dataset.put("fieldValues", fieldset);
 
+		LOGGER.info(JSONObject.quote(dataset.toString()));
+
+		return dataset.toString();
+	}
+
+	private String getProperty(Properties properties, String value) {
+		String key="";
+		Enumeration<Object> keys = properties.keys();
+		while(keys.hasMoreElements()) {
+			key = keys.nextElement().toString();
+			if(properties.getProperty(key).equals(value)) {
+				break;
+			}
+		}
+		return key;
+	}
 	public Hashtable<String, String> getTranslationConstants(String language) {
 		Hashtable<String, String> translationConstantsTable = new Hashtable<String, String>();
 		try {
