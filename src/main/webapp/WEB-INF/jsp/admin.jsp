@@ -323,7 +323,7 @@
         </form>
         <form name="localeForm1" id="localeForm1" method="post" enctype="multipart/form-data" action="admin" class='sos-admin-primary-wrapper<%=(lang.equals("en") || lang.equals("english") || lang.equals("master") ? "master" : "")%>' onsubmit="javascript: gatherInfo();" >
             
-            <input type="hidden" id="sos-lang" name="lang" value="<%= lang %>" />
+            <input type="hidden" id="sos-lang" name="language" value="<%= lang %>" />
             <input type="hidden" id="sos-labels"  name="labels" value="" />
             <input type="hidden" id="sos-questions"  name="questions" value="" />
             <input type="hidden" id="sos-deleted-questions"  name="deletedquestions" value="" />
