@@ -459,7 +459,7 @@ public class SASController {
 		List<String> langs = getLangs();
 		String requestedLanguage = req.getServletPath().substring(1);
 		for (String language : langs) {
-			if (requestedLanguage.equals(language) || requestedLanguage.equals("english")) {
+			if (requestedLanguage.equalsIgnoreCase(language) || requestedLanguage.equalsIgnoreCase("english")) {
 				session.setAttribute("language", requestedLanguage);
 				req.setAttribute("language", requestedLanguage);
 			}
@@ -768,7 +768,7 @@ public class SASController {
 	}
 	private void saveLangData(Map<String, MultipartFile> fileMap, MultipartHttpServletRequest request) {
 		try {
-			String lang = req.getParameter("lang");
+			String lang = req.getParameter("language");
 			if (lang == null) {
 				lang = (String) session.getAttribute("language");
 			}
@@ -915,7 +915,7 @@ public class SASController {
 		String questions = req.getParameter("questions");
 		String userformsfields = req.getParameter("userformsfields");
 		
-		String lang = req.getParameter("lang");
+		String lang = req.getParameter("language");
 		if (lang == null) {
 			session.getAttribute("language");
 		}
@@ -1110,7 +1110,7 @@ public class SASController {
 	private void updateData() {
 		String labels = req.getParameter("labels");
 		String questions = req.getParameter("questions");
-		String lang = req.getParameter("lang");
+		String lang = req.getParameter("language");
 		if (lang == null) {
 			session.getAttribute("language");
 		}
@@ -1193,7 +1193,7 @@ public class SASController {
 		String temp = null;
 		String labels = req.getParameter("labels");
 		String questions = req.getParameter("questions");
-		String lang = req.getParameter("lang");
+		String lang = req.getParameter("language");
 		if (lang == null) {
 			lang = (String) session.getAttribute("language");
 		}
