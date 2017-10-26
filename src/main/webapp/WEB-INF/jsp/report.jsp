@@ -12,7 +12,7 @@
       <%
         String webContext = "";
         String userid = (String) request.getAttribute("userid");
-
+	String lang = (String) request.getAttribute("language");
 
         /* begin: assuming below inputs are coming from report link from pdf */
 
@@ -363,6 +363,7 @@
                           var uploadImageName = 'img' + dateTime + '.jpg'
                           $("#sos-graph").prop("src", imgSrc);
                           $("#scoreinfo").val(scoreVal + '|' + timgSrc + '|<%=userid%>|' + userSession.f4 + '|' + userSession.f5 + '|' + uploadImageName + '|' + userSession.f1 + '|' + userSession.f2);
+			  var lang = '<%=lang%>';	      
                           var convertToBase64 = function(url, imagetype, callback){
                         	  var spiderwebImagSrc = "./support/img/spiderweb.png"
   								var doctype = '<?xml version="1.0" standalone="no"?>'
@@ -440,6 +441,7 @@
   						var formData = new FormData();
   						formData.append('scoreinfo', $("#scoreinfo").val());
   						formData.append('filename', uploadImageName);
+						formData.append('language', lang);
 						formData.append('picture', data);
 						$("#btnPrintPDF").hide();
   								$.ajax({
