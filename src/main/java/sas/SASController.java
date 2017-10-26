@@ -463,13 +463,22 @@ public class SASController {
 		// }
 		List<String> langs = getLangs();
 		String requestedLanguage = req.getServletPath().substring(1);
+		boolean noLanguage = true;
 		for (String language : langs) {
 			if (requestedLanguage.equalsIgnoreCase(language) || requestedLanguage.equalsIgnoreCase("english")) {
+				noLanguage = false;
 				session.setAttribute("language", requestedLanguage);
 				req.setAttribute("language", requestedLanguage);
 			}
 		}
+		if(noLanguage) {
+			session.setAttribute("language", "english");
+			req.setAttribute("language", "english");
+		}
 		loadData();
+		if(noLanguage) {
+			return "redirect:/";
+		}
 		return "index";
 	}
 	// @RequestMapping(value = "/404", method = RequestMethod.GET)
