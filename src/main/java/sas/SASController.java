@@ -186,6 +186,7 @@ public class SASController {
 		if (lang == null)
 			lang = req.getParameter("language");
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
+		req.setAttribute("language",lang);
 		// postEloqua();
 		return "report";
 	}
@@ -282,6 +283,10 @@ public class SASController {
 		String pdfFileName = null;
 		String picture = req.getParameter("picture");
 		String fileName = req.getParameter("filename");
+		String language = req.getParameter("language");
+		if (nullCheck(language).length() == 0) {
+			language = "english";
+		}
 		if (picture != null) {
 			String base64 = picture.split("[,]")[1];
 			byte[] aByteArray = Base64.decodeBase64(base64.getBytes());
@@ -295,7 +300,7 @@ public class SASController {
 				ImageIO.write(newBufferedImage, "jpg", new File(realPath + "support/img/uploadedImages/" + fileName));
 
 				LOGGER.info(fileName + " image saved");
-				pdfFileName = generatePDF();
+				pdfFileName = generatePDF(language);
 				String scoreInfo = req.getParameter("scoreinfo");
 				StringTokenizer st = new StringTokenizer(scoreInfo, "|");
 				String score = st.nextToken();
@@ -311,7 +316,7 @@ public class SASController {
 						LOGGER.error("can not able to send mail.", e);
 						e.printStackTrace();
 					}
-					postEloqua(user, pdfFileName);
+					postEloqua(user, pdfFileName,language);
 				}
 
 			} catch (IOException e) {
@@ -341,7 +346,7 @@ public class SASController {
 	}
 
 	@SuppressWarnings("deprecation")
-	private String generatePDF() {
+	private String generatePDF(String language) {
 		String pdfFilePath = null;
 		try {
 			LOGGER.info("begin");
@@ -374,7 +379,7 @@ public class SASController {
 			String xmlFileName = realPath + "/xsl/travel.xml";
 			String imagePath = realPath + properties.getProperty(SASConstants.IMAGE_PATH);
 			String uploadImagePath = realPath + properties.getProperty(SASConstants.UPLOAD_IMAGE_PATH);
-			String language = (String) session.getAttribute("language");
+			//String language = (String) session.getAttribute("language");
 			if (nullCheck(language).length() == 0) {
 				language = "english";
 			}
@@ -1537,7 +1542,7 @@ public class SASController {
 		}
 	}
 
-	public void postEloqua(String userId, String pdfFilePath) throws IOException {
+	public void postEloqua(String userId, String pdfFilePath, String language) throws IOException {
 
 		try {
 
@@ -1550,7 +1555,7 @@ public class SASController {
 			String encodedToken = "Basic " + new String(encodedBytes);
 			//String eloquaUrl = properties.getProperty(SASConstants.ELOQUA_URL_CUSTOM_OBJECT);
 			String eloquaUrl = properties.getProperty(SASConstants.ELOQUA_URL_FORM);
-			String jsonStr = getData4Eloqua(properties, userId, pdfFilePath);
+			String jsonStr = getData4Eloqua(properties, userId, pdfFilePath, language);
 			LOGGER.info("eloqua json = " + jsonStr);
 			//LOGGER.info("eloqua url = https://secure.p06.eloqua.com/api/REST/2.0/data/customObject/34/instance");
 			LOGGER.info("eloqua url = " + SASConstants.ELOQUA_URL_FORM);
@@ -1567,7 +1572,7 @@ public class SASController {
 		}
 	}
 
-	public String getData4Eloqua(Properties properties, String userId, String pdfFilePath) {
+	public String getData4Eloqua(Properties properties, String userId, String pdfFilePath, String language) {
 		String jsonStr = null;
 		// String userId = (String) req.getAttribute("userid");
 		LOGGER.info(pdfFilePath);
@@ -1586,14 +1591,15 @@ public class SASController {
 			int index = 0;
 			while (rs.next()) {
 				if (index == 0) {
-					LOGGER.info("site stored ::" , rs.getString("lang"));
+					LOGGER.info("site stored ::" + language);
+					/*LOGGER.info("site stored ::" , rs.getString("lang"));
 					String language = (String) session.getAttribute("language");
 					if (nullCheck(language).length() == 0) {
 						language = "english";
 					}
 					if(language.equals("english") || language == null)
-						language = "master";
-					LOGGER.info("LANGUAGE ::" , language);
+						language = "master";*/
+					LOGGER.info("LANGUAGE ::" + language);
 					map.put(properties.getProperty(SASConstants.LANGUAGE),
 							language);
 					map.put(properties.getProperty(SASConstants.BUSSINESS_INDUSTRY), rs.getString("f6"));
