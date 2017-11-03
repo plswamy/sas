@@ -358,21 +358,20 @@
             });
         
             $(".sos-index-select").each(function() {
-                var sortFrmFields = function sortFrmFields(a,b) {
-                      if(a.value === '') {
-                          return -1;
-                      }
-                      if (a.text > b.text) return 1;
-                        else if (a.text < b.text) return -1;
-                        else return 0;
-                    },
-                     opts = $(this.options).sort(sortFrmFields);                    
-        
-                $(this).empty();
-                var that = this;
-                $(opts).each(function(){
-                    $(that).append("<option value='" + this.value + "'>" + this.text + "</option>");
-                });
+	            var my_options = $(this).find('option');
+	            var selected = $(this).val();
+	
+	            my_options.sort(function(a,b) {
+	            	if(a.value === '') {
+                        return -1;
+                    }
+	                if (a.value > b.value) return 1;
+	                if (a.value < b.value) return -1;
+	                return 0
+	            })
+	
+	            $(this).empty().append( my_options );
+	            $(this).val(selected);
             });
         
             $(".sos-index-select").selectpicker();
