@@ -468,7 +468,7 @@
 							})
 							 .done(
 									function(pdfFileName) {
-										$('#pdfFilePath').val(pdfFileName);
+										//$('#pdfFilePath').val(pdfFileName);
 									});
  								
 								$("#btnPrintPDF").delay(8000).show(0);
