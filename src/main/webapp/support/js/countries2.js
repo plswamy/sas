@@ -252,6 +252,10 @@ countryArr[249] = "ESH|Western Sahara";
 countryArr[250] = "YEM|Yemen";
 countryArr[251] = "ZMB|Zambia";
 countryArr[252] = "ZWE|Zimbabwe";
+countryArr[253] = "NIRL|Northern Ireland";
+countryArr[254] = "NOCOUNTRY|No Specific Country";
+countryArr[255] = "SCO|Scotland";
+countryArr[256] = "WAL|Wales";
 
 var statesArr = new Array();
 statesArr[0] = "|Choose country first...";
@@ -507,6 +511,10 @@ statesArr[249] = "|Please select...|NA|NA";
 statesArr[250] = "|Please select...|NA|NA";
 statesArr[251] = "|Please select...|NA|NA";
 statesArr[252] = "|Please select...|NA|NA";
+statesArr[253] = "|Please select...|NA|NA";
+statesArr[254] = "|Please select...|NA|NA";
+statesArr[255] = "|Please select...|NA|NA";
+statesArr[256] = "|Please select...|NA|NA";
 
 function load_countries(countryListID) {
   // given the <select> tag as function argument, it inserts <option> tags
