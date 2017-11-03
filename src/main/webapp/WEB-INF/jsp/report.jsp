@@ -13,7 +13,6 @@
         String webContext = "";
         String userid = (String) request.getAttribute("userid");
 	String lang = (String) request.getAttribute("language");
-
         /* begin: assuming below inputs are coming from report link from pdf */
 
         if(request.getAttribute("userdata") != null) {
@@ -363,35 +362,39 @@
                           var uploadImageName = 'img' + dateTime + '.jpg'
                           $("#sos-graph").prop("src", imgSrc);
                           $("#scoreinfo").val(scoreVal + '|' + timgSrc + '|<%=userid%>|' + userSession.f4 + '|' + userSession.f5 + '|' + uploadImageName + '|' + userSession.f1 + '|' + userSession.f2);
-			  var lang = '<%=lang%>';	      
+			  			  var lang = '<%=lang%>';	      
                           var convertToBase64 = function(url, imagetype, callback){
-                        	  var spiderwebImagSrc = "./support/img/spiderweb.png"
-  								var doctype = '<?xml version="1.0" standalone="no"?>'
+                          var spiderwebImagSrc = "./support/img/spiderweb.png"
+  						  var doctype = '<?xml version="1.0" standalone="no"?>'
   									  + '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
-  								var svgDiv = document.getElementById("chart");
-  								var source = (new XMLSerializer()).serializeToString(d3.select('svg').node());
-  								//document.write("source =" + source)
-  								var blob = new Blob([ doctype + source], { type: 'image/svg+xml;charset=utf-8' });
-  								var url = window.URL.createObjectURL(blob);
-  								var img = d3.select('body').append('img')
-  								 .attr('width', 400)
-  								 .attr('height', 500)
-  								 .node();
-  								img.onload = function(){
-  									var chartArea = svgDiv.getElementsByTagName('svg')[0].parentNode;
-  								    var svgNode = d3.select('svg').node();//chartArea.innerHTML;//
-  								   // var svgInnerHTML = svg..innerHTML + "<style>/* <![CDATA[ */.radar-chart .level{stroke:grey;stroke-width:.5}.radar-chart .axis line{stroke:grey;stroke-width:1}.radar-chart .axis .legend{font-family:sans-serif;font-size:10px}.radar-chart .axis .legend.top{dy:1em}.radar-chart .axis .legend.left{text-anchor:start}.radar-chart .axis .legend.middle{text-anchor:middle}.radar-chart .axis .legend.right{text-anchor:end}.radar-chart .tooltip{font-family:sans-serif;font-size:13px;transition:opacity 200ms;opacity:0}.radar-chart .tooltip.visible{opacity:1}.radar-chart .area{stroke-width:2;fill-opacity:.5}.radar-chart.focus .area{fill-opacity:.1}.radar-chart.focus .area.focused{fill-opacity:.7}.radar-chart .circle{fill-opacity:.9}.radar-chart .area,.radar-chart .circle{transition:opacity 300ms,fill-opacity 200ms;opacity:1}.radar-chart .d3-enter,.radar-chart .d3-exit{opacity:0}/* ]]> */</style>";
-  								 <%--  var linkElm = document.createElementNS("http://www.w3.org/1999/xhtml", "link");
-  								linkElm.setAttribute("href", "<%=webContext%>support/lib/chart/radar-chart.min.css");
-  								linkElm.setAttribute("type", "text/css");
-  								linkElm.setAttribute("rel", "stylesheet"); --%>
+  						  var svgDiv = document.getElementById("chart");
+							//var source = (new XMLSerializer()).serializeToString(d3.select('svg').node());
+						var source = (new XMLSerializer()).serializeToString(document.getElementsByTagName('svg')[0]);
+						//document.write("source =" + source)
+						var blob = new Blob([ doctype + source], { type: 'image/svg+xml;charset=utf-8' });
+						var url = window.URL.createObjectURL(blob);
+						var img = d3.select('body').append('img')
+						 .attr('width', 400)
+						 .attr('height', 500)
+						 .node();
+						img.onload = function(){
+							var chartArea = svgDiv.getElementsByTagName('svg')[0].parentNode;
+						    //var svgNode = d3.select('svg').node();//chartArea.innerHTML;//
+						     var svgNode = (new XMLSerializer()).serializeToString(document.getElementsByTagName('svg')[0]);
+						  
+						   // var svgInnerHTML = svg..innerHTML + "<style>/* <![CDATA[ */.radar-chart .level{stroke:grey;stroke-width:.5}.radar-chart .axis line{stroke:grey;stroke-width:1}.radar-chart .axis .legend{font-family:sans-serif;font-size:10px}.radar-chart .axis .legend.top{dy:1em}.radar-chart .axis .legend.left{text-anchor:start}.radar-chart .axis .legend.middle{text-anchor:middle}.radar-chart .axis .legend.right{text-anchor:end}.radar-chart .tooltip{font-family:sans-serif;font-size:13px;transition:opacity 200ms;opacity:0}.radar-chart .tooltip.visible{opacity:1}.radar-chart .area{stroke-width:2;fill-opacity:.5}.radar-chart.focus .area{fill-opacity:.1}.radar-chart.focus .area.focused{fill-opacity:.7}.radar-chart .circle{fill-opacity:.9}.radar-chart .area,.radar-chart .circle{transition:opacity 300ms,fill-opacity 200ms;opacity:1}.radar-chart .d3-enter,.radar-chart .d3-exit{opacity:0}/* ]]> */</style>";
+						 <%--  var linkElm = document.createElementNS("http://www.w3.org/1999/xhtml", "link");
+						linkElm.setAttribute("href", "<%=webContext%>support/lib/chart/radar-chart.min.css");
+						linkElm.setAttribute("type", "text/css");
+						linkElm.setAttribute("rel", "stylesheet"); --%>
   								  	var style = document.createElement("style");
   								    style.setAttribute("type", "text/css");
   								  	var styleData = document.createTextNode(".radar-chart .level{stroke:grey;stroke-width:.5}.radar-chart .axis line{stroke:grey;stroke-width:1}.radar-chart .axis .legend{font-family:sans-serif;font-size:10px}.radar-chart .axis .legend.top{dy:1em}.radar-chart .axis .legend.left{text-anchor:start}.radar-chart .axis .legend.middle{text-anchor:middle}.radar-chart .axis .legend.right{text-anchor:end}.radar-chart .tooltip{font-family:sans-serif;font-size:13px;transition:opacity 200ms;opacity:0}.radar-chart .tooltip.visible{opacity:1}.radar-chart .area{stroke-width:2;fill-opacity:.5}.radar-chart.focus .area{fill-opacity:.1}.radar-chart.focus .area.focused{fill-opacity:.7}.radar-chart .circle{fill-opacity:.9}.radar-chart .area,.radar-chart .circle{transition:opacity 300ms,fill-opacity 200ms;opacity:1}.radar-chart .d3-enter,.radar-chart .d3-exit{opacity:0}");
   								  	style.appendChild(styleData);
   							    	//style.appendChild(document.createTextNode("@import url('radar-chart.min.css')"));
+  							    	svgNode = svgNode.substr(0, svgNode.indexOf(">")+1) + style.outerHTML + svgNode.substr(svgNode.indexOf(">")+1);
   							    	//svgNode.appendChild(style);
-  							    	svgNode.insertBefore(style,svgNode.firstChild);
+  							    	//svgNode.insertBefore(style,svgNode.firstChild);
   							    	//document.write(svgNode.outerHTML);
   								  //svg.append("style").text("<style>.radar-chart .level{stroke:grey;stroke-width:.5}.radar-chart .axis line{stroke:grey;stroke-width:1}.radar-chart .axis .legend{font-family:sans-serif;font-size:10px}.radar-chart .axis .legend.top{dy:1em}.radar-chart .axis .legend.left{text-anchor:start}.radar-chart .axis .legend.middle{text-anchor:middle}.radar-chart .axis .legend.right{text-anchor:end}.radar-chart .tooltip{font-family:sans-serif;font-size:13px;transition:opacity 200ms;opacity:0}.radar-chart .tooltip.visible{opacity:1}.radar-chart .area{stroke-width:2;fill-opacity:.5}.radar-chart.focus .area{fill-opacity:.1}.radar-chart.focus .area.focused{fill-opacity:.7}.radar-chart .circle{fill-opacity:.9}.radar-chart .area,.radar-chart .circle{transition:opacity 300ms,fill-opacity 200ms;opacity:1}.radar-chart .d3-enter,.radar-chart .d3-exit{opacity:0}</style>");
   								  var canvas = d3.select('body').append('canvas').node();
@@ -409,8 +412,11 @@
 //   								  var serializer = new XMLSerializer();
 //   								  var svgString = serializer.serializeToString(svg);
   								  //d3.select('svg').node().outerHTML.trim().replace('&nbsp;',' ')
-  								 
-  								  canvg(canvas,svgNode.outerHTML,{ ignoreMouse: true, ignoreAnimation: true });
+  								  //alert(svgNode);
+  								  //alert(svgNode.indexOf("points="));
+  								  //alert(canvas.outerHTML);
+  								  //document.write(svgNode);
+  								  canvg(canvas,svgNode,{ ignoreMouse: true, ignoreAnimation: true });
   								  var data1 = ctx.getImageData(0, 0, canvas.width, canvas.height);
   								  var compositeOperation = ctx.globalCompositeOperation;
   								  ctx.globalCompositeOperation = "destination-over";
@@ -421,66 +427,70 @@
   								  ctx.putImageData(data1, 0,0);
   								  ctx.globalCompositeOperation = compositeOperation; 
   									//document.write(data);
+  								  //alert(data);
   	                              callback(data);
   								  var canvasUrl = canvas.toDataURL("image/png");
   								  var img2 = d3.select('body').append('img')
   								    .attr('width', 300)
   								    .attr('height', 300)
   								    .node();
-  								 
   								  img2.src = canvasUrl; 
-  								  canvas.remove();
-  								  img2.remove();
+  								  canvas.style.visibility = 'hidden';
+  								img2.style.visibility = 'hidden';
+  								  //canvas.remove();
+  								  //img2.remove();
   								}
   								//
   								img.src = url;
-  								img.remove();
+  								img.style.visibility = 'hidden';
+  								//img.remove();
                     	 };
                     	convertToBase64("<%=webContext%>/support/img/spiderweb.png", "image/png", function(data){
-  						//document.write("\ndata=" + data);      
-  						var formData = new FormData();
-  						formData.append('scoreinfo', $("#scoreinfo").val());
-  						formData.append('filename', uploadImageName);
-						formData.append('language', lang);
-						formData.append('picture', data);
-						$("#btnPrintPDF").hide();
-  								$.ajax({
-                            	    //async : false,
-  									url: "<%=webContext%>/image",
-									type : "POST",
-									cache : false,
-									contentType : false,
-									processData : false,
-									data : formData,
-									success: function(pdfFileName) {
-										//alert(pdfFileName);
+					//document.write("\ndata=" + data);      
+					var formData = new FormData();
+					formData.append('scoreinfo', $("#scoreinfo").val());
+					formData.append('filename', uploadImageName);
+					formData.append('language', lang);
+					formData.append('picture', data);
+					$("#btnPrintPDF").hide();
+ 								$.ajax({
+                           	    //async : false,
+ 									url: "<%=webContext%>/image",
+								type : "POST",
+								cache : false,
+								contentType : false,
+								processData : false,
+								data : formData,
+								success: function(pdfFileName) {
+									//alert(pdfFileName);
+									$('#pdfFilePath').val(pdfFileName);
+								}
+							})
+							 .done(
+									function(pdfFileName) {
 										$('#pdfFilePath').val(pdfFileName);
-									}
-								})
-								 .done(
-										function(pdfFileName) {
-											//alert(pdfFileName);
-										});
-								$("#btnPrintPDF").delay(5000).show(0);
-								//$('#spiderWeb').val(data);
+									});
+ 								
+								$("#btnPrintPDF").delay(8000).show(0);
+							//$('#spiderWeb').val(data);
 
-							});
-							//                   	 		function SVG2PNG(svg, callback) {
-							// 								  var canvas = document.createElement('canvas'); // Create a Canvas element.
-							// 								  var ctx = canvas.getContext('2d'); // For Canvas returns 2D graphic.
-							// 								  var data = svg.outerHTML; // Get SVG element as HTML code.
-							// 								  canvg(canvas, data); // Render SVG on Canvas.
-							// 								  callback(canvas); // Execute callback function.
-							// 								}
-
-							// 								 	var svgDiv =$("#chart");
-							// 									var svg = svgDiv[0].outerHTML;
-							// 									SVG2PNG(svg, function(canvas) { // Arguments: SVG element, callback function.
-							// 									    var base64 = canvas.toDataURL("image/png"); // toDataURL return DataURI as Base64 format.
-							// 									    $('#spiderWeb').val(base64);
-							// 									  });
 						});
-			      			localStorage.clear();
+						//                   	 		function SVG2PNG(svg, callback) {
+						// 								  var canvas = document.createElement('canvas'); // Create a Canvas element.
+						// 								  var ctx = canvas.getContext('2d'); // For Canvas returns 2D graphic.
+						// 								  var data = svg.outerHTML; // Get SVG element as HTML code.
+						// 								  canvg(canvas, data); // Render SVG on Canvas.
+						// 								  callback(canvas); // Execute callback function.
+						// 								}
+
+						// 								 	var svgDiv =$("#chart");
+						// 									var svg = svgDiv[0].outerHTML;
+						// 									SVG2PNG(svg, function(canvas) { // Arguments: SVG element, callback function.
+						// 									    var base64 = canvas.toDataURL("image/png"); // toDataURL return DataURI as Base64 format.
+						// 									    $('#spiderWeb').val(base64);
+						// 									  });
+					});
+		      			localStorage.clear();
 									</script>
 									<input type="hidden" id="scoreinfo" name="scoreinfo" value="" />
 									<input type="hidden" id="pdfFilePath" name="pdfFilePath" value="" />
