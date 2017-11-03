@@ -368,8 +368,14 @@
   						  var doctype = '<?xml version="1.0" standalone="no"?>'
   									  + '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
   						  var svgDiv = document.getElementById("chart");
-							//var source = (new XMLSerializer()).serializeToString(d3.select('svg').node());
-						var source = (new XMLSerializer()).serializeToString(document.getElementsByTagName('svg')[0]);
+  						  var source = "";
+  						  var isIE="false";
+						  source = (new XMLSerializer()).serializeToString(d3.select('svg').node());
+						  if(source === "") {
+							  isIE = "true";
+							  source = (new XMLSerializer()).serializeToString(document.getElementsByTagName('svg')[0]);
+						  }
+						//alert(isIE);
 						//document.write("source =" + source)
 						var blob = new Blob([ doctype + source], { type: 'image/svg+xml;charset=utf-8' });
 						var url = window.URL.createObjectURL(blob);
@@ -378,21 +384,28 @@
 						 .attr('height', 500)
 						 .node();
 						img.onload = function(){
-							var chartArea = svgDiv.getElementsByTagName('svg')[0].parentNode;
-						    //var svgNode = d3.select('svg').node();//chartArea.innerHTML;//
-						     var svgNode = (new XMLSerializer()).serializeToString(document.getElementsByTagName('svg')[0]);
+						var chartArea = svgDiv.getElementsByTagName('svg')[0].parentNode;
+					    var svgNode = d3.select('svg').node();//chartArea.innerHTML;//
+					    if(isIE === "true") {
+					    	svgNode = (new XMLSerializer()).serializeToString(document.getElementsByTagName('svg')[0]);
+					    }
+					    
 						  
 						   // var svgInnerHTML = svg..innerHTML + "<style>/* <![CDATA[ */.radar-chart .level{stroke:grey;stroke-width:.5}.radar-chart .axis line{stroke:grey;stroke-width:1}.radar-chart .axis .legend{font-family:sans-serif;font-size:10px}.radar-chart .axis .legend.top{dy:1em}.radar-chart .axis .legend.left{text-anchor:start}.radar-chart .axis .legend.middle{text-anchor:middle}.radar-chart .axis .legend.right{text-anchor:end}.radar-chart .tooltip{font-family:sans-serif;font-size:13px;transition:opacity 200ms;opacity:0}.radar-chart .tooltip.visible{opacity:1}.radar-chart .area{stroke-width:2;fill-opacity:.5}.radar-chart.focus .area{fill-opacity:.1}.radar-chart.focus .area.focused{fill-opacity:.7}.radar-chart .circle{fill-opacity:.9}.radar-chart .area,.radar-chart .circle{transition:opacity 300ms,fill-opacity 200ms;opacity:1}.radar-chart .d3-enter,.radar-chart .d3-exit{opacity:0}/* ]]> */</style>";
 						 <%--  var linkElm = document.createElementNS("http://www.w3.org/1999/xhtml", "link");
 						linkElm.setAttribute("href", "<%=webContext%>support/lib/chart/radar-chart.min.css");
 						linkElm.setAttribute("type", "text/css");
 						linkElm.setAttribute("rel", "stylesheet"); --%>
-  								  	var style = document.createElement("style");
-  								    style.setAttribute("type", "text/css");
-  								  	var styleData = document.createTextNode(".radar-chart .level{stroke:grey;stroke-width:.5}.radar-chart .axis line{stroke:grey;stroke-width:1}.radar-chart .axis .legend{font-family:sans-serif;font-size:10px}.radar-chart .axis .legend.top{dy:1em}.radar-chart .axis .legend.left{text-anchor:start}.radar-chart .axis .legend.middle{text-anchor:middle}.radar-chart .axis .legend.right{text-anchor:end}.radar-chart .tooltip{font-family:sans-serif;font-size:13px;transition:opacity 200ms;opacity:0}.radar-chart .tooltip.visible{opacity:1}.radar-chart .area{stroke-width:2;fill-opacity:.5}.radar-chart.focus .area{fill-opacity:.1}.radar-chart.focus .area.focused{fill-opacity:.7}.radar-chart .circle{fill-opacity:.9}.radar-chart .area,.radar-chart .circle{transition:opacity 300ms,fill-opacity 200ms;opacity:1}.radar-chart .d3-enter,.radar-chart .d3-exit{opacity:0}");
-  								  	style.appendChild(styleData);
-  							    	//style.appendChild(document.createTextNode("@import url('radar-chart.min.css')"));
-  							    	svgNode = svgNode.substr(0, svgNode.indexOf(">")+1) + style.outerHTML + svgNode.substr(svgNode.indexOf(">")+1);
+					  	var style = document.createElement("style");
+					    style.setAttribute("type", "text/css");
+					  	var styleData = document.createTextNode(".radar-chart .level{stroke:grey;stroke-width:.5}.radar-chart .axis line{stroke:grey;stroke-width:1}.radar-chart .axis .legend{font-family:sans-serif;font-size:10px}.radar-chart .axis .legend.top{dy:1em}.radar-chart .axis .legend.left{text-anchor:start}.radar-chart .axis .legend.middle{text-anchor:middle}.radar-chart .axis .legend.right{text-anchor:end}.radar-chart .tooltip{font-family:sans-serif;font-size:13px;transition:opacity 200ms;opacity:0}.radar-chart .tooltip.visible{opacity:1}.radar-chart .area{stroke-width:2;fill-opacity:.5}.radar-chart.focus .area{fill-opacity:.1}.radar-chart.focus .area.focused{fill-opacity:.7}.radar-chart .circle{fill-opacity:.9}.radar-chart .area,.radar-chart .circle{transition:opacity 300ms,fill-opacity 200ms;opacity:1}.radar-chart .d3-enter,.radar-chart .d3-exit{opacity:0}");
+					  	style.appendChild(styleData);
+				    	//style.appendChild(document.createTextNode("@import url('radar-chart.min.css')"));
+				    	 if(isIE === "true") {
+				    		svgNode = svgNode.substr(0, svgNode.indexOf(">")+1) + style.outerHTML + svgNode.substr(svgNode.indexOf(">")+1);
+				    	 } else {
+				    		svgNode.insertBefore(style,svgNode.firstChild);
+				    	 }
   							    	//svgNode.appendChild(style);
   							    	//svgNode.insertBefore(style,svgNode.firstChild);
   							    	//document.write(svgNode.outerHTML);
@@ -416,7 +429,11 @@
   								  //alert(svgNode.indexOf("points="));
   								  //alert(canvas.outerHTML);
   								  //document.write(svgNode);
-  								  canvg(canvas,svgNode,{ ignoreMouse: true, ignoreAnimation: true });
+  								  if(isIE === "true") {
+  								  	canvg(canvas,svgNode,{ ignoreMouse: true, ignoreAnimation: true });
+  								  } else {
+  									canvg(canvas,svgNode.outerHTML,{ ignoreMouse: true, ignoreAnimation: true });
+  								  }
   								  var data1 = ctx.getImageData(0, 0, canvas.width, canvas.height);
   								  var compositeOperation = ctx.globalCompositeOperation;
   								  ctx.globalCompositeOperation = "destination-over";
