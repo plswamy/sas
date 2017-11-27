@@ -1602,15 +1602,13 @@ public class SASController {
 				if (index == 0) {
 					LOGGER.info("site stored ::" + language);
 					LOGGER.info("site stored ::" , rs.getString("lang"));
-					String language = (String) session.getAttribute("language");
 					if (nullCheck(language).length() == 0) {
 						language = "english";
 					}
-					if(language.equals("english") || language == null)
+					if(language == null || language.equals("english") || language.equals("null"))
 						language = "master";
 					LOGGER.info("LANGUAGE ::" + language);
-					map.put(properties.getProperty(SASConstants.LANGUAGE),
-							language);
+					map.put(properties.getProperty(SASConstants.LANGUAGE), language);
 					map.put(properties.getProperty(SASConstants.BUSSINESS_INDUSTRY), rs.getString("f6"));
 					map.put(properties.getProperty(SASConstants.COMPANY), rs.getString("f5"));
 					map.put(properties.getProperty(SASConstants.COUNTRY), rs.getString("f7"));
