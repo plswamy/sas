@@ -1616,7 +1616,7 @@ public class SASController {
 					map.put(properties.getProperty(SASConstants.FIRST_NAME), rs.getString("f1"));
 					map.put(properties.getProperty(SASConstants.LAST_NAME), rs.getString("f2"));
 					map.put(properties.getProperty(SASConstants.TITLE), rs.getString("f3"));
-					map.put(properties.getProperty(SASConstants.USER_ID), rs.getString("id"));
+					map.put(properties.getProperty(SASConstants.USER_ID), "XY"+ rs.getString("id"));
 					map.put(properties.getProperty(SASConstants.QUESTION_ID), rs.getString("qid"));
 					map.put(properties.getProperty(SASConstants.QUESTION_RESPONSE), rs.getString("qresponse"));
 					map.put(properties.getProperty(SASConstants.REPORT_PDF_NAME), pdfFilePath);
