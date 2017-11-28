@@ -263,11 +263,18 @@
                                                                     <%
                                                                         if(opts != null && opts.size() > 0) {
                                                                             Enumeration<String> okeys = opts.keys();
+                                                                            ArrayList<String> opList = new ArrayList<String>();
                                                                             while (okeys.hasMoreElements()) {
-                                                                                String tokenVal = okeys.nextElement();
-                                                                                String tokenVal1 = opts.get(tokenVal);                                                                    
+                                                                            	opList.add(okeys.nextElement());
+                                                                            }
+                                                                            Collections.sort(opList);
+                                                                           for(String opKey : opList) 
+                                                                           {
+                                                                                //String tokenVal = okeys.nextElement();
+                                                                                String tokenVal1 = opts.get(opKey); 
+                                                                               	System.out.println(tokenVal1 + "\n");
                                                                     %>
-                                                                                <option value="<%=tokenVal%>"><%=tokenVal1%></option>
+                                                                                <option value="<%=opKey%>"><%=tokenVal1%></option>
                                                                     <%
                                                                             }
                                                                         }
