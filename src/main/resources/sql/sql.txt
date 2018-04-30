@@ -1,5 +1,5 @@
 drop table registrationfields;
-Create table registrationfields(id integer PRIMARY KEY AUTO_INCREMENT, fieldname varchar(100), fielddispname varchar(100), fieldtype varchar(100),showflag varchar(10),options varchar(300), forder integer, lang varchar(10));
+Create table registrationfields(id integer PRIMARY KEY AUTO_INCREMENT, fieldname varchar(100), fielddispname varchar(100), fieldtype varchar(100),showflag varchar(10),options varchar(300), forder integer, lang varchar(20));
 
 
 insert into registrationfields values(1, 'f1', 'First Name', 'text', 'true', null, 1, 'english');
@@ -21,11 +21,11 @@ insert into registrationfields values(16, 'f16', 'Contact Number', 'text', 'true
 
 
 drop table registrationinfo;
-Create table registrationinfo(id integer PRIMARY KEY AUTO_INCREMENT, f1 varchar(256), f2 varchar(256), f3 varchar(256), f4 varchar(256), f5 varchar(256), f6 varchar(256), f7 varchar(256), f8 varchar(256), f9 varchar(256), f10 varchar(256), f11 varchar(256), f12 varchar(256), f13 varchar(256), f14 varchar(256), f15 varchar(256), f16 varchar(256), lang varchar(10));
+Create table registrationinfo(id integer PRIMARY KEY AUTO_INCREMENT, f1 varchar(256), f2 varchar(256), f3 varchar(256), f4 varchar(256), f5 varchar(256), f6 varchar(256), f7 varchar(256), f8 varchar(256), f9 varchar(256), f10 varchar(256), f11 varchar(256), f12 varchar(256), f13 varchar(256), f14 varchar(256), f15 varchar(256), f16 varchar(256), lang varchar(20));
 ALTER TABLE registrationinfo AUTO_INCREMENT = 1000001;
 
 drop table questions;
-Create table questions(id integer PRIMARY KEY AUTO_INCREMENT, qtype varchar(70),imagename varchar(100),qtext varchar(1000), qdesc varchar(1000), pqid varchar(100), qsubtype varchar(50), qorder integer, lang varchar(10));
+Create table questions(id integer PRIMARY KEY AUTO_INCREMENT, qtype varchar(70),imagename varchar(100),qtext varchar(1000), qdesc varchar(1000), pqid varchar(100), qsubtype varchar(50), qorder integer, lang varchar(20));
 Insert into questions values(1, 'plan', 'plan-1.png','Can you locate all your mobile workers?','locate all your mobile workers description goes', null, 'Assess risks', 1, 'english');
 Insert into questions values(2, 'plan','plan-2.png','Do you assess the risks to your people in locations they work in?','Employees risk accessibilty description goes', null, 'Assess risks', 2, 'english');
 Insert into questions values(3, 'plan','plan-3.png','Do you monitor the type and quantity of incidents your people have been involved in over the last 2-3 years?','Type and quantity of incidents description goes',null,'Assess risks', 3, 'english'); 
@@ -53,7 +53,7 @@ Insert into questions values(23, 'check','check-23.png', 'Do you have a system i
 
 
 drop table answers;
-Create table answers(id integer PRIMARY KEY, lang varchar(10), answertype varchar(10), answertypevalue varchar(100));
+Create table answers(id integer PRIMARY KEY, lang varchar(20), answertype varchar(10), answertypevalue varchar(100));
 Insert into answers values(1, 'english', 'yes', 'Yes');                                      
 Insert into answers values(2, 'english', 'no', 'No');
 Insert into answers values(3, 'english', 'notsure', 'Not Sure');
@@ -61,7 +61,7 @@ Insert into answers values(3, 'english', 'notsure', 'Not Sure');
 
 
 drop table labels;
-Create table labels(id integer PRIMARY KEY AUTO_INCREMENT, lang varchar(10), labelkey varchar(100) , labelvalue varchar(1000));
+Create table labels(id integer PRIMARY KEY AUTO_INCREMENT, lang varchar(20), labelkey varchar(100) , labelvalue varchar(1000));
 Insert into labels values(1, 'english', 'welcomeHeader', 'Welcome to the travel risk mitigation self-assessment tool.');                                      
 Insert into labels values(2, 'english', 'welcomeDesc', 'This best practice travel risk mitigation tool is based on our Duty of Care Plan-Do-Check approach. At the end of this assessment you will receive a report outlining:');
 Insert into labels values(3, 'english', 'welcomeFooter', 'It should take you approximately 5 minutes to complete the review.');
@@ -90,7 +90,7 @@ Insert into labels values(23, 'english', 'secName3', 'Control');
 
 
 drop table businessindustry;
-Create table businessindustry(id integer PRIMARY KEY, lang varchar(10), optkey varchar(1000), optvalue varchar(1000));
+Create table businessindustry(id integer PRIMARY KEY, lang varchar(20), optkey varchar(1000), optvalue varchar(1000));
 insert into businessindustry value (1, 'english', 'Agent/Broker', 'Agent/Broker');
 insert into businessindustry value (2, 'english', 'Automobile,Aerospace and Defence Industry', 'Automobile,Aerospace and Defence Industry');
 insert into businessindustry value (3, 'english', 'Aviation: BGA', 'Aviation: BGA');
@@ -134,7 +134,7 @@ insert into businessindustry value (40, 'english', 'Travel, Tourism and Hospital
 insert into businessindustry value (41, 'english', 'Mining', 'Mining');
 
 drop table country;
-Create table country(id integer PRIMARY KEY ,lang varchar(10),optkey varchar(1000), optvalue varchar(1000));
+Create table country(id integer PRIMARY KEY ,lang varchar(20),optkey varchar(1000), optvalue varchar(1000));
 INSERT INTO country VALUES ('1', 'english', 'Afghanistan', 'Afghanistan');
 INSERT INTO country VALUES ('2', 'english', 'Aland Islands', 'Aland Islands');
 INSERT INTO country VALUES ('3', 'english', 'Albania', 'Albania');
@@ -393,7 +393,7 @@ INSERT INTO country VALUES ('255', 'english', 'Zambia', 'Zambia');
 INSERT INTO country VALUES ('256', 'english', 'Zimbabwe', 'Zimbabwe');
 
 drop table state;
-Create table state(id integer PRIMARY KEY ,statetype varchar(20), lang varchar(10));
+Create table state(id integer PRIMARY KEY ,statetype varchar(20), lang varchar(20));
 
 
 
@@ -402,13 +402,13 @@ Create table userresponse(id integer PRIMARY KEY AUTO_INCREMENT, userid integer,
 
 
 drop table gender;
-Create table gender(id integer PRIMARY KEY, lang varchar(10), optkey varchar(1000), optvalue varchar(1000));
+Create table gender(id integer PRIMARY KEY, lang varchar(20), optkey varchar(1000), optvalue varchar(1000));
 insert into gender value (1, 'english', 'male', 'Male');
 insert into gender value (2, 'english', 'female', 'Female');
 
 
 drop table qualifications;
-Create table qualifications(id integer PRIMARY KEY, lang varchar(10), optkey varchar(1000), optvalue varchar(1000));
+Create table qualifications(id integer PRIMARY KEY, lang varchar(20), optkey varchar(1000), optvalue varchar(1000));
 insert into qualifications value (1, 'english', 'phd', 'Phd');
 insert into qualifications value (2, 'english', 'pg', 'Post Graduation');
 insert into qualifications value (3, 'english', 'degree', 'Graduation');
@@ -417,7 +417,7 @@ insert into qualifications value (5, 'english', 'ssc', 'SSC');
 
 
 drop table expertise;
-Create table expertise(id integer PRIMARY KEY, lang varchar(10), optkey varchar(1000), optvalue varchar(1000));
+Create table expertise(id integer PRIMARY KEY, lang varchar(20), optkey varchar(1000), optvalue varchar(1000));
 insert into expertise value (1, 'english', 'accounts', 'Accounts');
 insert into expertise value (2, 'english', 'sales', 'Sales');
 insert into expertise value (3, 'english', 'it', 'IT');
@@ -425,7 +425,7 @@ insert into expertise value (4, 'english', 'hardware', 'Hardware');
 
 
 drop table domain;
-Create table domain(id integer PRIMARY KEY, lang varchar(10), optkey varchar(1000), optvalue varchar(1000));
+Create table domain(id integer PRIMARY KEY, lang varchar(20), optkey varchar(1000), optvalue varchar(1000));
 insert into domain value (1, 'english', 'banking', 'Banking');
 insert into domain value (2, 'english', 'finance', 'Finance');
 insert into domain value (3, 'english', 'software', 'Software');
