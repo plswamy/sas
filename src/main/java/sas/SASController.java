@@ -1,6 +1,10 @@
 package sas;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
@@ -187,6 +191,7 @@ public class SASController {
 			lang = req.getParameter("language");
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		req.setAttribute("language",lang);
+		req.setAttribute("responseavg",getResponseAverage(lang));
 		// postEloqua();
 		return "report";
 	}
@@ -202,6 +207,7 @@ public class SASController {
 			req.setAttribute("questions", getQuestions(null));
 			req.setAttribute("answers", getAnswers(userId));
 			req.setAttribute("userdata", getUserInfo(userId));
+			//req.setAttribute("responseavg",getResponseAverage(lang));
 		}
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		return "report";
@@ -213,9 +219,9 @@ public class SASController {
             RedirectAttributes redirectAttributes) {*/
 	public String postAdmin(MultipartHttpServletRequest request) {
 		 Enumeration<String> en = req.getParameterNames();
-		 while(en.hasMoreElements()) {
+		 /*while(en.hasMoreElements()) {
 			 System.out.println(en.nextElement());
-		 }
+		 }*/
 		Map<String, MultipartFile> fileMap = request.getFileMap();
 		LOGGER.info("admin post called....");
 		LOGGER.info("=============admin post called=======================");
@@ -297,8 +303,18 @@ public class SASController {
 						BufferedImage.TYPE_INT_RGB);
 				newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
 				String realPath = req.getRealPath("/");
-				ImageIO.write(newBufferedImage, "jpg", new File(realPath + "support/img/uploadedImages/" + fileName));
+				//ImageIO.write(newBufferedImage, "jpg", new File(realPath + "support/img/uploadedImages/" + fileName));
+				
+				ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
+				ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
+				jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+				jpgWriteParam.setCompressionQuality(1.0f);
 
+				jpgWriter.setOutput(ImageIO.createImageOutputStream(new File(realPath + "support/img/uploadedImages/" + fileName)));
+				IIOImage outputImage = new IIOImage(newBufferedImage, null, null);
+				jpgWriter.write(null, outputImage, jpgWriteParam);
+				jpgWriter.dispose();
+				
 				LOGGER.info(fileName + " image saved");
 				pdfFileName = generatePDF(language);
 				String scoreInfo = req.getParameter("scoreinfo");
@@ -396,6 +412,28 @@ public class SASController {
 					.setText(translationConstants.get(SASConstants.PDF_SUB_HEADING));
 			document.getRootElement().getChild("data").getChild("main").getChild("pdf_score_text")
 					.setText(translationConstants.get(SASConstants.PDF_SCORE_HEADING));
+			if(translationConstants.containsKey(SASConstants.PDF_SECTION_SUB_HEADING)) {
+				String subHeading = translationConstants.get(SASConstants.PDF_SECTION_SUB_HEADING);
+				String redColoredString = translationConstants.get(SASConstants.PDF_SECTION_SUB_HEADING_REDTOKEN);
+				if(redColoredString !=null && subHeading.indexOf(redColoredString)>-1) {
+					String frontPart = subHeading.substring(0, subHeading.indexOf(redColoredString));
+					String rearPart = subHeading.substring(subHeading.indexOf(redColoredString)+redColoredString.length());
+					document.getRootElement().getChild("data").getChild("main").getChild("pdf_section_sub_heading1")
+					.setText(frontPart);
+					document.getRootElement().getChild("data").getChild("main").getChild("pdf_section_sub_heading2")
+					.setText(redColoredString);
+					document.getRootElement().getChild("data").getChild("main").getChild("pdf_section_sub_heading3")
+					.setText(rearPart);
+				} else {
+					document.getRootElement().getChild("data").getChild("main").getChild("pdf_section_sub_heading1")
+					.setText(subHeading);
+					document.getRootElement().getChild("data").getChild("main").getChild("pdf_section_sub_heading2")
+					.setText("");
+					document.getRootElement().getChild("data").getChild("main").getChild("pdf_section_sub_heading3")
+					.setText("");
+				}
+				
+			}
 			document.getRootElement().getChild("data").getChild("main").getChild("score").setText(score + "%");
 			document.getRootElement().getChild("data").getChild("main").getChild("range").setText(img);
 			document.getRootElement().getChild("data").getChild("main").getChild("user").setText(user);
@@ -411,7 +449,7 @@ public class SASController {
 			document.getRootElement().getChild("data").getChild("main").getChild("desc34")
 					.setText(translationConstants.get(SASConstants.PDF_LAST_PARA3));
 			Element main = document.getRootElement().getChild("data").getChild("main");
-			getQuestionElement(userid, main, translationConstants);
+			getQuestionElement(userid, main, translationConstants,language);
 			LOGGER.info(
 					"root element" + document.getRootElement().getChild("data").getChild("main").getChildText("score"));
 			XMLOutputter xmOut = new XMLOutputter(); 
@@ -578,7 +616,37 @@ public class SASController {
 		}
 		return hs;
 	}
-
+	
+	public Hashtable<String, List<String>> getResponseAverage(String lang) {
+		if (nullCheck(lang).length() == 0 || lang.equals("en")) {
+			lang = "english";
+		}
+		LOGGER.info("getResponseAverage for lang : " + lang);
+		Hashtable<String, List<String>> hs = new Hashtable<String, List<String>>();
+		ArrayList<String> avgResponse;
+		try {
+			con = dataSource.getConnection();
+			stmt = con.prepareStatement("select qid, avg(qresponse='yes') as yesAvg,avg(qresponse='no') as noAvg,avg(qresponse='notsure') as notSureAvg " + 
+										"from sas.userresponse, sas.questions " +
+										"where sas.questions.id = sas.userresponse.qid and sas.questions.lang=? "+
+										"group by qid;");
+			stmt.setString(1, lang);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				avgResponse = new ArrayList<String>();
+				avgResponse.add(rs.getString("yesAvg"));
+				avgResponse.add(rs.getString("noAvg"));
+				avgResponse.add(rs.getString("notSureAvg"));
+				hs.put(rs.getString("qid"),avgResponse);
+			}
+		} catch (Exception exp) {
+			LOGGER.error("cannot get response average :", exp);
+			exp.printStackTrace();
+		} finally {
+			close();
+		}
+		return hs;
+	}
 	/*
 	 * public List<Question> getQuestionsAsList() { List<Question> list = new
 	 * ArrayList<Question>(); Question q = null; try { con =
@@ -791,7 +859,7 @@ public class SASController {
 			}
 			String editedquestions = req.getParameter("editedquestions");
 			for(String key: fileMap.keySet()) {
-				System.out.println("key : " + key);
+				//System.out.println("key : " + key);
 				if(key.endsWith("-1")) { // create new images for new questions
 					MultipartFile file = fileMap.get(key);
 					if(file!=null) {
@@ -1469,14 +1537,21 @@ public class SASController {
 		}
 	}
 
-	private void getQuestionElement(String userid, Element main, Hashtable<String, String> translationConstants) {
-		LinkedHashMap<String, List<Question>> hs = new LinkedHashMap<String, List<Question>>();
+	private void getQuestionElement(String userid, Element main, Hashtable<String, String> translationConstants, String language) {
+		LinkedHashMap<String, LinkedHashMap<String, List<Question>>> hs = new LinkedHashMap<String, LinkedHashMap<String, List<Question>>>();
+		LinkedHashMap<String, List<Question>> hsSubType;// = new LinkedHashMap<String, List<Question>>();
+		if (language == null || language.equals("null")|| nullCheck(language).length() == 0 || language.equals("en")) {
+			language = "english";
+		}
 		try {
-			String sql = "select * from questions where id in (select qid from userresponse where qresponse != ? and userid=? order by qid)";
+			//String sql = "select * from questions where id in (select qid from userresponse where qresponse != ? and userid=? order by qid)";
+			String sql = "select * from questions where lang = ? order by id, qsubtype";
+			
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1, "yes");
-			stmt.setString(2, userid);
+			stmt.setString(1, language);
+			//stmt.setString(1, "yes");
+			//stmt.setString(2, userid);
 			ResultSet rs = stmt.executeQuery();
 			Question q = null;
 			List<Question> list = null;
@@ -1490,12 +1565,18 @@ public class SASController {
 				q.setLang(rs.getString("lang"));
 				q.setQorder(rs.getString("qorder"));
 				q.setSubtype(rs.getString("qsubtype"));
-				list = hs.get(q.getType());
+				//list = hs.get(q.getType());
+				hsSubType = hs.get(q.getType());
+				if (hsSubType == null) {
+					hsSubType = new LinkedHashMap<String, List<Question>>();
+				}
+				list = hsSubType.get(q.getSubtype());
 				if (list == null) {
 					list = new ArrayList<Question>();
 				}
 				list.add(q);
-				hs.put(q.getType(), list);
+				hsSubType.put(q.getSubtype(), list);
+				hs.put(q.getType(), hsSubType);
 			}
 		} catch (Exception exp) {
 			LOGGER.error("cannot able to get questions from method getQuestionElement : " , exp);
@@ -1503,7 +1584,22 @@ public class SASController {
 		} finally {
 			close();
 		}
-
+		LinkedHashMap<String, String> responseMap = new LinkedHashMap<String, String>();
+		try {
+			String sql = "SELECT qid, qresponse FROM userresponse where userid = ? order by id";
+			con = dataSource.getConnection();
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, userid);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				responseMap.put(rs.getString("qid"),rs.getString("qresponse"));
+			}
+		} catch (Exception exp) {
+			LOGGER.error("cannot able to get questions from method getQuestionElement : " , exp);
+			exp.printStackTrace();
+		} finally {
+			close();
+		}
 		try {
 			Iterator<String> keys = hs.keySet().iterator();
 			List<Question> list = null;
@@ -1527,22 +1623,44 @@ public class SASController {
 				title.setAttribute(attribute);
 				LOGGER.info("key...." + key);
 				planElement.addContent(title);
-				list = hs.get(key);
-				for (int i = 0; i < list.size(); i++) {
-					q = list.get(i);
-					qElem = new Element("question");
-					temp = new Element("title");
-					temp.setText("Q" + q.getQorder());
-					qElem.addContent(temp);
-					temp = new Element("value");
-					temp.setText(q.getText());
-					qElem.addContent(temp);
-					temp = new Element("answer");
-					temp.setText(q.getDesc());
-					qElem.addContent(temp);
-					planElement.addContent(qElem);
+				
+				LinkedHashMap<String, List<Question>> hsSubType1 = hs.get(key);
+				Element subSectionElement = null;
+				Iterator<String> subSectionKeys = hsSubType1.keySet().iterator();
+				while (subSectionKeys.hasNext()) {
+					String subSectionName = subSectionKeys.next();
+					subSectionElement = new Element("subsection");
+					Element subSectionTitle = new Element("title");
+					subSectionTitle.setText(subSectionName);
+					subSectionElement.addContent(subSectionTitle);
+					list = hsSubType1.get(subSectionName);
+					for (int i = 0; i < list.size(); i++) {
+						q = list.get(i);
+						qElem = new Element("question");
+						temp = new Element("title");
+						temp.setText("Q" + q.getQorder());
+						qElem.addContent(temp);
+						temp = new Element("response");
+						if(responseMap.containsKey(q.getId()) && responseMap.get(q.getId()).equals("yes")) {
+							temp.setText("true");
+						} else {
+							temp.setText("false");
+						} 
+						qElem.addContent(temp);
+						temp = new Element("value");
+						temp.setText(q.getText());
+						qElem.addContent(temp);
+						temp = new Element("answer");
+						temp.setText(q.getDesc());
+						qElem.addContent(temp);
+						subSectionElement.addContent(qElem);
+					}
+					planElement.addContent(subSectionElement);
 				}
+				
 				main.addContent(planElement);
+				XMLOutputter xmOut = new XMLOutputter(); 
+				LOGGER.info("----" + xmOut.outputString(main.getDocument()));
 				index++;
 			}
 		} catch (Exception exp) {
