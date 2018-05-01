@@ -19,7 +19,7 @@
 			<fo:page-sequence master-reference="all">
 				<fo:static-content flow-name="xsl-region-before">
 					<fo:block text-align="right">
-						<fo:external-graphic width="4.28cm" height="2.07cm">
+						<fo:external-graphic width="3.30cm" height="2.11cm">
 							<xsl:attribute name="src">
 							<xsl:text>'</xsl:text>
 							<xsl:value-of select="data/main/imgPath" /><xsl:text>/</xsl:text>
@@ -91,8 +91,8 @@
 						</fo:external-graphic>
 					</fo:block>
 					<fo:block background-color="#f2f2f2" text-align="center"
-						padding-top="5mm">
-						<fo:external-graphic width="11.9cm" height="15.28cm">
+						padding-top="5mm" page-break-after="always">
+						<fo:external-graphic width="21.1cm" height="18.52cm">
 							<xsl:attribute name="src">
 								<xsl:text>'</xsl:text><xsl:value-of
 								select="data/main/spiderwebImgPath" /><xsl:text>/</xsl:text>
@@ -100,10 +100,13 @@
 							</xsl:attribute>
 						</fo:external-graphic>
 					</fo:block>
+					<fo:table break-after="page">
+					</fo:table>
 					<fo:block text-align="start">
 						<fo:table>
-							<fo:table-column column-width="9mm" />
-							<fo:table-column column-width="17.1cm" />
+							<fo:table-column column-width="1.5cm" />
+							<fo:table-column column-width="1cm" />
+							<fo:table-column column-width="15.5cm" />
 							<fo:table-body>
 								<xsl:for-each select="data/main/plan">
 									<xsl:variable name="titleColor">
@@ -120,9 +123,31 @@
 										</xsl:choose>
 									</xsl:variable>
 									<fo:table-row>
-										<fo:table-cell number-columns-spanned="2">
+										<fo:table-cell number-columns-spanned="3">
 											<fo:block font-family="sans-serif" color="{$titleColor}"
 												font-size="20pt" wrap-option="wrap" space-before="5mm"
+												font-variant="small-caps" font-weight="bold">
+												<xsl:value-of select="title" />
+												<xsl:text>  </xsl:text>
+											</fo:block>
+										</fo:table-cell>
+									</fo:table-row>
+									<fo:table-row>
+										<fo:table-cell number-columns-spanned="3">
+											<fo:block font-family="sans-serif" color="{$titleColor}"
+												font-size="12pt" font-weight="bold" wrap-option="wrap" space-before="5mm"
+												font-variant="small-caps">
+												<fo:inline color="#232762"><xsl:value-of select="../pdf_section_sub_heading1" /> </fo:inline>
+												<fo:inline color="#FF0000"><xsl:value-of select="../pdf_section_sub_heading2" /> </fo:inline>
+												<fo:inline color="#232762"><xsl:value-of select="../pdf_section_sub_heading3" />: </fo:inline>
+											</fo:block>
+										</fo:table-cell>
+									</fo:table-row>
+									<xsl:for-each select="subsection">
+									<fo:table-row>
+										<fo:table-cell number-columns-spanned="3">
+											<fo:block font-family="sans-serif" color="{$titleColor}"
+												font-size="12pt" font-weight="bold" wrap-option="wrap" space-before="5mm"
 												font-variant="small-caps">
 												<xsl:value-of select="title" />
 												<xsl:text>  </xsl:text>
@@ -132,33 +157,49 @@
 									<xsl:for-each select="question">
 										<fo:table-row background-color="#f2f2f2"
 											padding-top="5mm">
+											<fo:table-cell padding="3mm">
+												<fo:external-graphic width="1.16cm" height="1cm">
+													<xsl:attribute name="src">
+														<xsl:choose>
+															<xsl:when test="response = 'true'">
+																<xsl:text>'</xsl:text>
+																<xsl:value-of select="../../../imgPath" /><xsl:text>/</xsl:text>
+																<xsl:value-of select="../../../correctAnswer" /><xsl:text>'</xsl:text>
+															</xsl:when>
+															<xsl:otherwise>
+																<xsl:text>'</xsl:text>
+																<xsl:value-of select="../../../imgPath" /><xsl:text>/</xsl:text>
+																<xsl:value-of select="../../../wrongAnswer" /><xsl:text>'</xsl:text>
+															</xsl:otherwise>
+														</xsl:choose>
+													</xsl:attribute>
+												</fo:external-graphic>
+											</fo:table-cell>
 											<fo:table-cell>
 												<fo:block font-family="sans-serif" font-size="10pt"
-													color="{$titleColor}" wrap-option="wrap" font-weight="bold"
-													space-before="5mm" margin="1cm">
+													color="{$titleColor}" wrap-option="wrap" font-weight="bold" space-before="3mm">
 													<xsl:value-of select="title" />
 													<xsl:text> </xsl:text>
 												</fo:block>
 											</fo:table-cell>
 											<fo:table-cell>
 												<fo:block font-family="sans-serif" color="black"
-													font-size="10pt" wrap-option="wrap" font-weight="bold"
-													space-before="5mm" margin="1cm">
+													font-size="10pt" wrap-option="wrap" font-weight="bold" space-before="3mm">
 													<xsl:value-of select="value" />
 													<xsl:text> </xsl:text>
 												</fo:block>
 											</fo:table-cell>
 										</fo:table-row>
 										<fo:table-row background-color="#f2f2f2">
-											<fo:table-cell number-columns-spanned="2">
+											<fo:table-cell number-columns-spanned="3">
 												<fo:block font-family="sans-serif" color="black"
-													font-size="9pt" wrap-option="wrap" space-before="5mm"
-													margin="19mm">
+													font-size="9pt" wrap-option="wrap" margin-left="2.5cm">
 													<xsl:value-of select="answer" />
 													<xsl:text> </xsl:text>
 												</fo:block>
 											</fo:table-cell>
 										</fo:table-row>
+										</xsl:for-each>
 									</xsl:for-each>
 								</xsl:for-each>
 							</fo:table-body>
