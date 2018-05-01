@@ -36,6 +36,8 @@ public class SASConstants {
 	
 	public static final String PDF_HEADING = "pdf_heading";
 	public static final String PDF_SUB_HEADING = "pdf_sub_heading";
+	public static final String PDF_SECTION_SUB_HEADING = "pdf_section_sub_header";
+	public static final String PDF_SECTION_SUB_HEADING_REDTOKEN = "pdf_section_sub_header_red_token";
 	public static final String PDF_SCORE_HEADING = "pdf_you_scored";
 	public static final String PDF_PLAN_SUB_HEADING = "pdf_plan";
 	public static final String PDF_DO_SUB_HEADING = "pdf_do";
