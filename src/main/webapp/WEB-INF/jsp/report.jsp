@@ -337,10 +337,10 @@
                                 	isColorBlue = !isColorBlue;
                                     qcount = qcount + totalCount;
                                     
-                                  	console.log("Q" + spotOnQ);
-                                  	console.log("Cal value :" + calValue);
-                                  	console.log("total count :" + totalCount);
-                                  	console.log("title : " + ss);
+                                  	//console.log("Q" + spotOnQ);
+                                  	//console.log("Cal value :" + calValue);
+                                  	//console.log("total count :" + totalCount);
+                                  	//console.log("title : " + ss);
                                     //dummyObj = {
                                     //    axis: ss,
                                     //    value: (calValue + 0.15)
@@ -391,7 +391,7 @@
 						  //}
 						  chartData.push(questionData);
                           chartData.push(responseAvgData);
-                          console.log("color qs :"+blueColorQuestions.toString());
+                          //console.log("color qs :"+blueColorQuestions.toString());
                           //chartData.push(scoreData);
                           //chartData.push(indusStandards);
                           
@@ -611,7 +611,7 @@
 	  					  svgsetviewbox.setAttribute("preserveAspectRatio","xMinYMin meet");
 	  					  var eTextArray = $('.axis').find("text");
 	  					  var qNoArray = $('.axis').find("text").text().substr(1).split("Q");
-	  					  console.log(qNoArray);
+	  					  //console.log(qNoArray);
 	  					  var icursor = 0;
 	  					  var isBlueColor = false;
 	  					  function wrap(text, width) {
@@ -659,7 +659,7 @@
 	  					  		  if(eTextArray[textNode].textContent == ("Q"+ qNoArray[qLocation])) {
 	  					  			  x = eTextArray[textNode].x.baseVal[0].value;
 	  					  			  y = y + eTextArray[textNode].y.baseVal[0].value;
-	  					  			  console.log("X=" + x + " and Y =" + y);
+	  					  			  //console.log("X=" + x + " and Y =" + y);
 				  					  	if(eTextArray[textNode].className.baseVal == "legend right") {
 				  					  			textG.append("text")
 				  	                            .attr("class", "label1")
@@ -733,7 +733,7 @@
   							    	//svgNode.insertBefore(style,svgNode.firstChild);
   							    	//document.write(svgNode.outerHTML);
   								  //svg.append("style").text("<style>.radar-chart .level{stroke:grey;stroke-width:.5}.radar-chart .axis line{stroke:grey;stroke-width:1}.radar-chart .axis .legend{font-family:sans-serif;font-size:10px}.radar-chart .axis .legend.top{dy:1em}.radar-chart .axis .legend.left{text-anchor:start}.radar-chart .axis .legend.middle{text-anchor:middle}.radar-chart .axis .legend.right{text-anchor:end}.radar-chart .tooltip{font-family:sans-serif;font-size:13px;transition:opacity 200ms;opacity:0}.radar-chart .tooltip.visible{opacity:1}.radar-chart .area{stroke-width:2;fill-opacity:.5}.radar-chart.focus .area{fill-opacity:.1}.radar-chart.focus .area.focused{fill-opacity:.7}.radar-chart .circle{fill-opacity:.9}.radar-chart .area,.radar-chart .circle{transition:opacity 300ms,fill-opacity 200ms;opacity:1}.radar-chart .d3-enter,.radar-chart .d3-exit{opacity:0}</style>");
-  								  console.log(chartArea.offsetWidth);
+  								  //console.log(chartArea.offsetWidth);
   								  var canvas = d3.select('body').append('canvas').node();
   								canvas.setAttribute('width', chartArea.offsetWidth);
   							    canvas.setAttribute('height', chartArea.offsetHeight);
@@ -776,9 +776,9 @@
   								  ctx.globalCompositeOperation = "destination-over";
 	   						      ctx.fillStyle = '#f2f2f2';
 	 							  ctx.fillRect(0, 0, canvas.width, canvas.height);
-	 							  console.log("canvas height",canvas.height);
-	 							  console.log(canvas);
-	 							  console.log(svgNode);
+	 							  //console.log("canvas height",canvas.height);
+	 							  //console.log(canvas);
+	 							  //console.log(svgNode);
   								  data = canvas.toDataURL("image/png");
   								  ctx.clearRect (0,0,canvas.width, canvas.height);
   								  ctx.putImageData(data1, 0,0);
@@ -848,7 +848,7 @@
 						// 									    $('#spiderWeb').val(base64);
 						// 									  });
 					});
-		      			//localStorage.clear();
+		      			localStorage.clear();
 									</script>
 									<input type="hidden" id="scoreinfo" name="scoreinfo" value="" />
 									<input type="hidden" id="pdfFilePath" name="pdfFilePath" value="" />
