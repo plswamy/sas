@@ -33,8 +33,8 @@
          String secName3 = hLabels.get("secName3");
          String spiderLegend1 = "Your travel risk management self-assessment results";
          String spiderLegend2 = "Industry benchmark";
-         if(hLabels.containsKey("spider_legend_1")) spiderLegend1 = org.apache.commons.lang.StringEscapeUtils.escapeJavaScript(hLabels.get("spider_legend_1")) ;
-         if(hLabels.containsKey("spider_legend_2")) spiderLegend2 = org.apache.commons.lang.StringEscapeUtils.escapeJavaScript(hLabels.get("spider_legend_2")) ;
+         if(hLabels.containsKey("spider_legend_1")) spiderLegend1 = hLabels.get("spider_legend_1") ;
+         if(hLabels.containsKey("spider_legend_2")) spiderLegend2 = hLabels.get("spider_legend_2") ;
         if(request.getAttribute("userdata") != null) {
 
             %>
