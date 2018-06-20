@@ -277,7 +277,7 @@
                                   if(showQuestion === 'notsure') {
                                       totalNotsure++;
                                   }
-                                  if(showQuestion !== 'yes') {
+                                  //if(showQuestion !== 'yes') {
                                     var tmpl = $('.question_template').clone(true);
                                     tmpl.find('.question_id').id = qid;
                                     tmpl.find('.question_number')[0].innerText = "Q" + qNum;
@@ -285,7 +285,7 @@
                                     tmpl.find('.question_desc')[0].innerText = this.description;
                                     tmpl.show();
                                     $("." + sectionName + "_section")[0].appendChild(tmpl[0]);
-                                  }
+                                  //}
                                 });
                                 totalQuestions += qNum;
                                 if(qNum > 0) {
@@ -353,6 +353,7 @@
 						  //for(var questionNo = 1; questionNo <= totalQuestions; questionNo++) {
 							//$.each(answers,function()) {
 							  //console.log("Question" + questionNo + "=" + this.val);
+							  var qNumber = 1;
 							  for (var ansSection in answers) {
 								    if (answers.hasOwnProperty(ansSection)) {
 								    	//if(answers[ansSection].hasOwnProperty(questionNo)) {
@@ -361,30 +362,33 @@
 								    		var questionNo = subQArray[qIndex];
 								    		if(answers[ansSection].hasOwnProperty(questionNo)) {
 									    		obj = {
-				                                        axis: "Q"+questionNo,
+				                                        axis: "Q"+qNumber,
 				                                        value: answers[ansSection][questionNo].val=="yes"?1:answers[ansSection][questionNo].val=="notsure"?0.5:0
 				                                    };
 									    		questionData.push(obj);
 									    		if(answers[ansSection][questionNo].val=="yes") {
 									    			obj = {
-					                                        axis: "Q"+questionNo,
+					                                        axis: "Q"+qNumber,
 					                                        value: responseAvg[questionNo]["yesAvg"]
 					                                    };
 									    			responseAvgData.push(obj);
 									    		} else if(answers[ansSection][questionNo].val=="no") {
 									    			obj = {
-					                                        axis: "Q"+questionNo,
+					                                        axis: "Q"+qNumber,
 					                                        value: responseAvg[questionNo]["noAvg"]
 					                                    };
 									    			responseAvgData.push(obj);
 									    		} else if(answers[ansSection][questionNo].val=="notsure") {
 									    			obj = {
-					                                        axis: "Q"+questionNo,
+					                                        axis: "Q"+qNumber,
 					                                        value: responseAvg[questionNo]["notSureAvg"]
 					                                    };
 									    			responseAvgData.push(obj);
 									    		}
 								    		}
+								    		//console.log("qNumber - questionNo - obj " + qNumber + " - " + questionNo + " --");
+								    		//console.log(obj);
+								    		qNumber = qNumber + 1;
 								    	}
 								    }
 								}
