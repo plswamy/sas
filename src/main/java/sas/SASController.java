@@ -711,7 +711,7 @@ public class SASController {
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
-					"insert into registrationinfo (f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, lang) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+					"insert into registrationinfo (f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, lang) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			// LOGGER.info("email
 			// ============================================== : " +
 			// req.getParameter("f4"));
@@ -731,7 +731,9 @@ public class SASController {
 			stmt.setString(14, nullCheck(req.getParameter("f14")));
 			stmt.setString(15, nullCheck(req.getParameter("f15")));
 			stmt.setString(16, nullCheck(req.getParameter("f16")));
-			stmt.setString(17, "english");
+			stmt.setString(17, nullCheck(req.getParameter("f17")));
+			stmt.setString(18, nullCheck(req.getParameter("f18")));
+			stmt.setString(19, "english");
 			stmt.executeUpdate();
 		} catch (Exception exp) {
 			LOGGER.error("cannot able to save user :", exp);
@@ -1707,7 +1709,7 @@ public class SASController {
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
-					"select info.f6, info.f5, info.f7, info.f4, info.f1, info.f2, info.f3, info.id, info.lang, response.qid, response.qresponse from registrationinfo info, userresponse response where info.id=response.userid and info.id=? ");
+					"select info.f18,info.f17,info.f6, info.f5, info.f7, info.f4, info.f1, info.f2, info.f3, info.id, info.lang, response.qid, response.qresponse from registrationinfo info, userresponse response where info.id=response.userid and info.id=? ");
 			// "select max(response.id), info.f6, info.f5, info.f7, info.f4,
 			// info.f1, info.f2, info.id, info.lang, response.qid,
 			// response.qresponse from registrationinfo info, userresponse
@@ -1727,6 +1729,8 @@ public class SASController {
 						language = "master";
 					LOGGER.info("LANGUAGE ::" + language);
 					map.put(properties.getProperty(SASConstants.LANGUAGE), language);
+					map.put(properties.getProperty(SASConstants.TNC_ACCEPTANCE), rs.getString("f18"));
+					map.put(properties.getProperty(SASConstants.COMMS_ACCEPTANCE), rs.getString("f17"));
 					map.put(properties.getProperty(SASConstants.BUSSINESS_INDUSTRY), rs.getString("f6"));
 					map.put(properties.getProperty(SASConstants.COMPANY), rs.getString("f5"));
 					map.put(properties.getProperty(SASConstants.COUNTRY), rs.getString("f7"));
