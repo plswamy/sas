@@ -100,7 +100,7 @@
                     flabel = st.nextToken();
                     frequired = st.nextToken();                      
                     fchecked = frequired.equals("true") ? "checked" : "";
-                    if(!ftype.equals("text")) {
+                    if(!ftype.equals("text")&&!ftype.equals("check")) {
                         foptions = st.nextToken();
                     }
             %>
