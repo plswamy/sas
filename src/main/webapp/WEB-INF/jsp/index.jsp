@@ -90,7 +90,12 @@
                     var userInfo = {};
                 
                     $.each(userFormFields, function(fid) {
-                        userInfo[this.fkey] = $(".user-form-field-" + this.fkey).val();
+                        if(this.ftype=="check"){
+                        	userInfo[this.fkey] = $(".user-form-field-" + this.fkey).val() == "true" ? 1 : 0;
+                        }
+                        else
+                        	 userInfo[this.fkey] = $(".user-form-field-" + this.fkey).val();
+                            
                     });
 
                     userInfo["lang"] = '<%= request.getAttribute("language") %>';
@@ -151,7 +156,7 @@
                         }
                         frequired = stok.nextToken();                      
                         fchecked = frequired.equals("true") ? "checked" : "";
-                        if(!ftype.equals("text")) {
+                        if(ftype.equals("select")) {
                             foptions = stok.nextToken();
                             Hashtable<String, String> opts = (Hashtable<String, String>) request.getAttribute(fid);
                     
@@ -246,7 +251,7 @@
                                                     frequired = stok.nextToken();                      
                                                     fchecked = frequired.equals("true") ? "checked" : "";
                                                     Hashtable<String, String> opts = null;
-                                                    if(!ftype.equals("text")) {
+                                                    if(ftype.equals("select")) {
                                                         foptions = stok.nextToken();
                                                         opts = (Hashtable<String, String>) request.getAttribute(fid);
                                                     }
@@ -254,11 +259,15 @@
         
                                                     if(frequired.equals("true")) {
                                             %>
+													 <%-- <div class="form-group form-field-<%=fid%> col-xs-12 col-sm-6 col-md-6 col-lg-6" data-forder="<%=forder%>" > --%>
+                                                        <%
+                                                        	if(!ftype.equals("check")){
+                                                        %>													   
                                                         <div class="form-group form-field-<%=fid%> col-xs-12 col-sm-6 col-md-6 col-lg-6" data-forder="<%=forder%>" >
                                                             <label for="ctl00_ContentPlaceHolder1_<%=fid%>" class="required" id="ctl00_ContentPlaceHolder1_<%=fid%>"><%= fdisplayname %></label>
-                                                            <% if(ftype.equals("text")) { %>
+                                                            <% }if(ftype.equals("text")) { %>
                                                             <input class="form-control user-form-field-<%=fid%>" name="ctl00$ContentPlaceHolder1$tbx<%=fid%>" type="text" maxlength="40" id="ctl00_ContentPlaceHolder1_tbx<%=fid%>" value="" placeholder="<%=enterLabel%><%= fdisplayname.toLowerCase() %>">
-                                                            <% } else { %>
+                                                            <% } else if(ftype.equals("select")){ %>
                                                                 <select class="form-control sos-index-select ddl<%=fid%> user-form-field-<%=fid%>" data-ddl="ddl<%=fid%>" name="ctl00$ContentPlaceHolder1$ddl<%=fid%>" id="ctl00_ContentPlaceHolder1_ddl<%=fid%>" <% if(fid.equals("f7")) { %> onchange="load_states(&#39;ctl00_ContentPlaceHolder1_ddlf8&#39;,this.selectedIndex);" <% } %>>
                                                                     <%
                                                                         if(opts != null && opts.size() > 0) {
@@ -272,7 +281,7 @@
                                                                            {
                                                                                 //String tokenVal = okeys.nextElement();
                                                                                 String tokenVal1 = opts.get(opKey); 
-                                                                               	System.out.println(tokenVal1 + "\n");
+                                                                               	//System.out.println(tokenVal1 + "\n");
                                                                     %>
                                                                                 <option value="<%=opKey%>"><%=tokenVal1%></option>
                                                                     <%
@@ -281,7 +290,13 @@
                                                                     %>
                                                                 </select>
                                                             <%
-                                                            }
+                                                            } else {
+                                                            %>
+                                                            <div class="form-group form-field-<%=fid%> col-xs-12 checkbox" data-forder="<%=forder%>" >
+                                                           <%--  <input class=" user-form-field-<%=fid%>" name="ctl00$ContentPlaceHolder1$tbx<%=fid%>" type="checkbox" id="ctl00_ContentPlaceHolder1_tbx<%=fid%>"><%=fdisplayname%></input> --%>
+                                                            <label><input class="user-form-field-<%=fid%>" name="ctl00$ContentPlaceHolder1$tbx<%=fid%>" type="checkbox" id="checkBoxOne" ><%=fdisplayname%></label>
+                                                             <%
+                                                            } 
                                                             %>
                                                             <div id="ctl00_ContentPlaceHolder1_req_<%=fid%>" style="color:Red;display:none;"></div>
                                                             <% if (fid.equals("f4")) { %>
@@ -332,7 +347,16 @@
     </body>
     <script language="javascript">
         $(document).ready(function () {
-        
+        	$("[id^='checkBox']").click(function() {
+				//console.log("check box value==============="+this.value);
+				if(this.checked==true){
+					this.value=true;
+				}
+				else{
+					this.value=false;
+				}
+				//console.log("check box value==============="+this.value);
+			});
             $('#ctl00_ContentPlaceHolder1_btnRegister').html(
             "Start <span class='arrow'></span>");
             //alert("country =" +  document.getElementById('ctl00_ContentPlaceHolder1_ddlf7') + "\n State = " + document.getElementById('ctl00_ContentPlaceHolder1_ddlf8'));
@@ -396,7 +420,7 @@
         
         $.each(userFormFields, function(fid) {
             var key = this.fkey,
-                postFix = this.ftype === "text" ? "tbx" : "ddl",
+                postFix = this.ftype === "text" || this.ftype === "check" ? "tbx" : "ddl",
                 formEle = document.getElementById("ctl00_ContentPlaceHolder1_req_" + key);
         
             if(!!this.frequired) {
