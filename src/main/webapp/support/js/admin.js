@@ -391,6 +391,7 @@
 			<select class="form-control sos-form-field-input sos-form-field-input-select sos-ftype-%fid%" onchange="FrmFieldView.updateFoptions();">\
 				<option class="form-control sos-form-field-input sos-form-field-input-option" value="text">Text Field</option>\
 				<option class="form-control sos-form-field-input sos-form-field-input-option" value="select">Select Field</option>\
+    			<option class="form-control sos-form-field-input sos-form-field-input-option" value="check">Checkbox Field</option>\
 			</select>\
         </td>\
         <td>\
