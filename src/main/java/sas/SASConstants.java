@@ -7,6 +7,7 @@ public class SASConstants {
 	public static final String CUSTOM_OBJECT_ID = "customobject.id";
 	public static final String TNC_ACCEPTANCE = "registrationinfo.f18";
 	public static final String COMMS_ACCEPTANCE = "registrationinfo.f17";
+	public static final String BUSSINESS_PHONE = "registrationinfo.f16";
  	public static final String BUSSINESS_INDUSTRY = "registrationinfo.f6";
 	public static final String COMPANY = "registrationinfo.f5";
 	public static final String COUNTRY = "registrationinfo.f7";
