@@ -184,11 +184,11 @@ public class SASController {
 	public String postReport(ModelMap model) throws IOException {
 		LOGGER.info("report post called....");
 		LOGGER.info("email ....:" + req.getParameter("f4"));
-		saveUser();
-		saveUserResponse();
 		String lang = (String) session.getAttribute("language");
 		if (lang == null)
 			lang = req.getParameter("language");
+		saveUser(lang);
+		saveUserResponse();
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		req.setAttribute("language",lang);
 		req.setAttribute("responseavg",getResponseAverage(lang));
@@ -706,7 +706,7 @@ public class SASController {
 		return hs;
 	}
 
-	private void saveUser() {
+	private void saveUser(String lang) {
 		LOGGER.info("save user called");
 		try {
 			con = dataSource.getConnection();
@@ -733,7 +733,7 @@ public class SASController {
 			stmt.setString(16, nullCheck(req.getParameter("f16")));
 			stmt.setString(17, nullCheck(req.getParameter("f17")));
 			stmt.setString(18, nullCheck(req.getParameter("f18")));
-			stmt.setString(19, "english");
+			stmt.setString(19, lang);
 			stmt.executeUpdate();
 		} catch (Exception exp) {
 			LOGGER.error("cannot able to save user :", exp);
