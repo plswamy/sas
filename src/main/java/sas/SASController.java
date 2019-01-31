@@ -187,6 +187,9 @@ public class SASController {
 		String lang = (String) session.getAttribute("language");
 		if (lang == null)
 			lang = req.getParameter("language");
+		if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
+			lang = "english";
+		}
 		saveUser(lang);
 		saveUserResponse();
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
