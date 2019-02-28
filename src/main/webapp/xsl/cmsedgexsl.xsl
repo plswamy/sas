@@ -8,7 +8,7 @@
 					page-height="11.69in" page-width="8.27in" margin-top="10mm"
 					margin-bottom="1mm" margin-left="0.6in" margin-right="0.6in">
 					<fo:region-body region-name="xsl-region-body"
-						margin-top="4.7cm" margin-bottom="2.5cm" />
+						margin-top="5.7cm" margin-bottom="2.5cm" />
 					<fo:region-before region-name="xsl-region-before"
 						extent="5in" />
 					<fo:region-after region-name="xsl-region-after"
@@ -35,19 +35,21 @@
 					</fo:block>
 					<fo:block>
 						<fo:block font-family="sans-serif" font-size="19pt"
-							color="black" wrap-option="no-wrap" padding-bottom="2mm"
-							border-bottom-style="solid" border-bottom-width="2pt">
+							color="black" wrap-option="no-wrap" padding-bottom="2mm">
 							<xsl:value-of select="data/main/pdf_sub_haading" />
 							<xsl:text> - </xsl:text>
 							<fo:inline font-size="19pt">
 								<xsl:value-of select="data/main/user" />
 								<xsl:text></xsl:text>
 							</fo:inline>
-							<xsl:text> - </xsl:text>
-							<fo:inline font-size="19pt">
+						</fo:block>
+					</fo:block>
+					<fo:block>
+						<fo:block font-family="sans-serif" font-size="19pt"
+							color="black" wrap-option="no-wrap" padding-bottom="2mm"
+							border-bottom-style="solid" border-bottom-width="2pt">
 								<xsl:value-of select="data/main/companyname" />
 								<xsl:text></xsl:text>
-							</fo:inline>
 						</fo:block>
 					</fo:block>
 				</fo:static-content>
@@ -92,7 +94,7 @@
 					</fo:block>
 					<fo:block background-color="#f2f2f2" text-align="center"
 						padding-top="5mm" page-break-after="always">
-						<fo:external-graphic width="21.1cm" height="18.52cm">
+						<fo:external-graphic width="21.1cm" height="17.52cm">
 							<xsl:attribute name="src">
 								<xsl:text>'</xsl:text><xsl:value-of
 								select="data/main/spiderwebImgPath" /><xsl:text>/</xsl:text>
