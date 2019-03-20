@@ -95,8 +95,8 @@ public class SASController {
 	@Autowired
 	private HttpSession session;
 
-	Connection con = null;
-	PreparedStatement stmt = null;
+	//Connection con = null;
+	//PreparedStatement stmt = null;
 
 	@RequestMapping("/helloworld")
 	public ModelAndView hello(ModelMap model, Principal principal) {
@@ -549,6 +549,8 @@ public class SASController {
 
 	public Hashtable<String, List<Question>> getQuestions(String lang) {
 		LOGGER.info("getQuestions method called with lang: " + lang);
+		Connection con = null;
+		PreparedStatement stmt = null;
 		Hashtable<String, List<Question>> hs = new Hashtable<String, List<Question>>();
 		List<Question> list = null;
 		Question q = null;
@@ -584,13 +586,15 @@ public class SASController {
 			LOGGER.error("error getting question :", exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		return hs;
 	}
 
 	public Hashtable<String, String> getAnswers(String userid) {
 		LOGGER.info("getAnswers for userid : " + userid);
+		Connection con = null;
+		PreparedStatement stmt = null;
 		Hashtable<String, String> hs = new Hashtable<String, String>();
 		Answer q = null;
 		try {
@@ -615,7 +619,7 @@ public class SASController {
 			LOGGER.error("cannot get answers :", exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		return hs;
 	}
@@ -625,6 +629,8 @@ public class SASController {
 			lang = "english";
 		}
 		LOGGER.info("getResponseAverage for lang : " + lang);
+		Connection con = null;
+		PreparedStatement stmt = null;
 		Hashtable<String, List<String>> hs = new Hashtable<String, List<String>>();
 		ArrayList<String> avgResponse;
 		try {
@@ -646,7 +652,7 @@ public class SASController {
 			LOGGER.error("cannot get response average :", exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		return hs;
 	}
@@ -660,7 +666,7 @@ public class SASController {
 	 * q.setImageName(rs.getString("imagename"));
 	 * q.setText(rs.getString("qtext")); q.setDesc(rs.getString("qdesc"));
 	 * q.setLang(rs.getString("lang")); list.add(q); } } catch(Exception exp) {
-	 * exp.printStackTrace(); } finally { close(); } return list; }
+	 * exp.printStackTrace(); } finally { close(stmt, con); } return list; }
 	 */
 
 	private void loadData() {
@@ -686,6 +692,8 @@ public class SASController {
 	public Hashtable<String, String> getData(String table, String cKey, String cValue, String lang) {
 		LOGGER.info("getData called with lang:" + lang);
 		Hashtable<String, String> hs = new Hashtable<String, String>();
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement("select * from " + table + " where lang = ? order by id");
@@ -704,13 +712,15 @@ public class SASController {
 			LOGGER.error("cannot get data from table " + table + " :", exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		return hs;
 	}
 
 	private void saveUser(String lang) {
 		LOGGER.info("save user called");
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
@@ -742,11 +752,11 @@ public class SASController {
 			LOGGER.error("cannot able to save user :", exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 	}
 
-	private void close() {
+	private void close(PreparedStatement stmt, Connection con) {
 		try {
 			if (stmt != null)
 				stmt.close();
@@ -760,6 +770,8 @@ public class SASController {
 
 	private void saveUserResponse() {
 		LOGGER.info("save user response called");
+		Connection con = null;
+		PreparedStatement stmt = null;
 		String userid = getUserId(nullCheck(req.getParameter("f4")));
 		req.setAttribute("userid", userid);
 		/* List<Question> list = getQuestionsAsList(); */
@@ -788,13 +800,15 @@ public class SASController {
 				LOGGER.error("cannot able to save user response :", exp);
 				exp.printStackTrace();
 			} finally {
-				close();
+				close(stmt, con);
 			}
 		}
 	}
 
 	private String getUserId(String key) {
 		String id = null;
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement("select id from registrationinfo where f4='" + key + "' order by id desc");
@@ -806,7 +820,7 @@ public class SASController {
 			LOGGER.error("cannot able to get user id for mailid " + key +" :", exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		return id;
 	}
@@ -814,6 +828,8 @@ public class SASController {
 	private List<String> getUserInfo(String userId) {
 		List<String> list = new ArrayList<String>();
 		String temp = null;
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			String sql = "select f1, f2, f4 from registrationinfo where id=" + userId;
 			con = dataSource.getConnection();
@@ -831,12 +847,14 @@ public class SASController {
 			LOGGER.error("cannot able to get user information :", exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		return list;
 	}
 	private String getNextAutoIncrementId(String tableName) {
 		String nextAutoIncrementId = null;
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			String sql = "SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME = '" + tableName + "'";
 			con = dataSource.getConnection();
@@ -849,7 +867,7 @@ public class SASController {
 			LOGGER.error("cannot able to get next autoincrement value :", exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		return nextAutoIncrementId;
 	}
@@ -905,7 +923,7 @@ public class SASController {
 			LOGGER.error("cannot able to save language data :", exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			//close();
 		}
 	}
 
@@ -1019,6 +1037,8 @@ public class SASController {
 		LOGGER.info("userformsfields:" + userformsfields);
 		String newId = getNextAutoIncrementId("questions");
 		updateFormFields(userformsfields);
+		Connection con = null;
+		PreparedStatement stmt = null;
 		PreparedStatement pstmt = null;
 		PreparedStatement ustmt = null;
 		try {
@@ -1124,7 +1144,7 @@ public class SASController {
 			LOGGER.error("cannot able to update english data: " , exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 			try {
 				if (pstmt != null)
 					pstmt.close();
@@ -1138,6 +1158,8 @@ public class SASController {
 
 	private String getEnglishQId(String qtype, String qtext, String qdesc, String imagename) {
 		String returnValue = null;
+		Connection con = null;
+		PreparedStatement stmt = null;
 		Connection con1 = null;
 		PreparedStatement pstmt1 = null;
 		try {
@@ -1173,6 +1195,8 @@ public class SASController {
 	private List<String> getLangs() {
 		List<String> list = new ArrayList<String>();
 		String temp = null;
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			String sql = "select distinct(lang) from questions;";
 			con = dataSource.getConnection();
@@ -1189,7 +1213,7 @@ public class SASController {
 			LOGGER.error("cannot able to get languages in getLangs methods : " , exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		return list;
 	}
@@ -1210,6 +1234,8 @@ public class SASController {
 		String userformsfields = req.getParameter("userformsfields");
 		LOGGER.info("userformsfields:" + userformsfields);
 		updateFormFields(userformsfields);
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			String temp1 = null;
 			String temp2 = null;
@@ -1291,6 +1317,8 @@ public class SASController {
 		LOGGER.info("userformsfields:" + userformsfields);
 		String newId = getNextAutoIncrementId("questions");
 		insertFormFields(userformsfields, lang);
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			con = dataSource.getConnection();
 			StringTokenizer st = null;
@@ -1356,6 +1384,8 @@ public class SASController {
 
 	private boolean getData(String lang) {
 		boolean value = false;
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement("select * from labels where lang = ?");
@@ -1368,7 +1398,7 @@ public class SASController {
 			LOGGER.error("cannot able to get labels from method getData : " , exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		return value;
 	}
@@ -1376,6 +1406,8 @@ public class SASController {
 	public Hashtable<String, String> getFormFields(String lang) {
 		Hashtable<String, String> hs = new Hashtable<String, String>();
 		LOGGER.info("getFormFields method called with lang: " + lang);
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement("select * from registrationfields where lang = ?");
@@ -1407,7 +1439,7 @@ public class SASController {
 			LOGGER.error("cannot able to get labels from method getData : " , exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 
 		return hs;
@@ -1415,7 +1447,8 @@ public class SASController {
 
 	private void insertFormFields(String data, String lang) {
 		LOGGER.info("data in insertFormFields....:" + data);
-
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
@@ -1444,13 +1477,14 @@ public class SASController {
 			LOGGER.error("cannot able to get registration fields from method registrationfields : " , exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 	}
 
 	private void updateFormFields(String data) {
 		LOGGER.info("data in updateformfields....:" + data);
-
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
@@ -1480,13 +1514,15 @@ public class SASController {
 			LOGGER.error("cannot able to update registration fields from method updateFormFields : " , exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 	}
 
 	private void loadUserSelectionData(String lang) {
 		LOGGER.info("loadUserSelectionData called with lang:" + lang);
 		Hashtable<String, String> hs = new Hashtable<String, String>();
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
@@ -1507,11 +1543,13 @@ public class SASController {
 			LOGGER.error("cannot able to get registration fields from method loadUserSelectionData : " , exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 	}
 
 	private void getOptionsData(Hashtable<String, String> hs) {
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			Enumeration<String> keys = hs.keys();
 			String key = null;
@@ -1538,7 +1576,7 @@ public class SASController {
 			LOGGER.error("cannot able to get options data from method getOptionsData : " , exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 	}
 
@@ -1548,6 +1586,8 @@ public class SASController {
 		if (language == null || language.equals("null")|| nullCheck(language).length() == 0 || language.equals("en")) {
 			language = "english";
 		}
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			//String sql = "select * from questions where id in (select qid from userresponse where qresponse != ? and userid=? order by qid)";
 			String sql = "select * from questions where lang = ? order by id, qsubtype";
@@ -1587,7 +1627,7 @@ public class SASController {
 			LOGGER.error("cannot able to get questions from method getQuestionElement : " , exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		LinkedHashMap<String, String> responseMap = new LinkedHashMap<String, String>();
 		try {
@@ -1603,7 +1643,7 @@ public class SASController {
 			LOGGER.error("cannot able to get questions from method getQuestionElement : " , exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		try {
 			Iterator<String> keys = hs.keySet().iterator();
@@ -1709,6 +1749,8 @@ public class SASController {
 		// String userId = (String) req.getAttribute("userid");
 		LOGGER.info(pdfFilePath);
 		Map<String, String> map = new HashMap<String, String>();
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
@@ -1766,13 +1808,15 @@ public class SASController {
 			LOGGER.error("cannot able to get data for eloqua from  method getData4Eloqua : " , exp);
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		return jsonStr;
 	}
 
 	public Map<String, String> setEloquaExtraVaues(Map<String, String> mapdataMap, String userId, final Properties properties) throws SQLException {
 		//String sql = "select questions.qsubtype, count(userresponse.qresponse) totalCount, COUNT(CASE WHEN userresponse.qresponse='yes' THEN 1 END) AS totalYesCount from questions, userresponse where questions.id = userresponse.qid and userresponse.userid=? group by questions.qsubtype;";
+		Connection con = null;
+		PreparedStatement stmt = null;
 		con = dataSource.getConnection();
 		stmt = con.prepareStatement(
 				"select questions.qsubtype, count(userresponse.qresponse) totalCount, COUNT(CASE WHEN userresponse.qresponse='yes' THEN 1 END) AS totalYesCount from questions, userresponse where questions.id = userresponse.qid and userresponse.userid=? group by questions.qsubtype;");
@@ -1864,6 +1908,8 @@ public class SASController {
 	}
 	public Hashtable<String, String> getTranslationConstants(String language) {
 		Hashtable<String, String> translationConstantsTable = new Hashtable<String, String>();
+		Connection con = null;
+		PreparedStatement stmt = null;
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement(
@@ -1876,7 +1922,7 @@ public class SASController {
 		} catch (Exception exp) {
 			exp.printStackTrace();
 		} finally {
-			close();
+			close(stmt, con);
 		}
 		return translationConstantsTable;
 	}
