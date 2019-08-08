@@ -412,6 +412,10 @@
             $.each(userFormFields, function(fid) {
                 $(".form-field-" + this.fkey).appendTo($(".sos-form-fields-wrapper"))
             });
+            
+            if($(".user-form-field-f18").length){
+                $(".user-form-field-f18").parent().html("<input class='user-form-field-f18' name='ctl00$ContentPlaceHolder1$tbxf18' type='checkbox' id='checkBoxOne'><span>By submitting, I agree to International SOS <a href='https://www.internationalsos.com/terms-and-conditions'>Terms & Conditions</a> and <a href='https://www.internationalsos.com/privacy'>Privacy Policy</a>. Read more about our Privacy & Cookies policy and our GDPR Statement, do not hesitate to contact us  should you have any questions or would like your contact information and activities to be completely removed from our database.</span>");
+            }
         });
     </script>
     <script type="text/javascript">
