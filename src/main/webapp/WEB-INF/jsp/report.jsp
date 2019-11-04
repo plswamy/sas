@@ -194,8 +194,9 @@
 <script src="<%=webContext%>/support/lib/jquery-3.2.0.js"></script>
 <script src="<%=webContext%>support/lib/bootstrap.min.js"></script>
 <script src="<%=webContext%>support/lib/chart/d3.v3.min.js"></script>
-<script src="<%=webContext%>support/lib/chart/rgbcolor.js"></script>
-<script src="<%=webContext%>support/lib/chart/canvg.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.4/rgbcolor.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stackblur-canvas/1.4.1/stackblur.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvg/dist/browser/canvg.min.js"></script>
 <!-- <script type="text/javascript" src="//canvg.googlecode.com/svn/trunk/rgbcolor.js"></script>  -->
 <!-- <script type="text/javascript" src="//canvg.googlecode.com/svn/trunk/canvg.js"></script> -->
 <script src="<%=webContext%>support/lib/chart/radar-chart.min.js"></script>
