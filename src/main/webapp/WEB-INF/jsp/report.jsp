@@ -424,7 +424,10 @@
                             .selectAll('svg')
                             .append('svg')
                             .attr("width", w+300)
-                            .attr("height", h+100);
+                            .attr("height", h+100)
+                            .attr("xmlns", "http://www.w3.org/2000/svg")
+                            .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
+                            .attr("version", "1.1");
 							
                             //Create the title for the legend
                            
@@ -661,8 +664,22 @@
 	  					  	  var colorText = isBlueColor ? "#2F4696" : "#232862";
 	  					  	  for (var textNode in eTextArray) {
 	  					  		  if(eTextArray[textNode].textContent == ("Q"+ qNoArray[qLocation])) {
-	  					  			  x = eTextArray[textNode].x.baseVal[0].value;
-	  					  			  y = y + eTextArray[textNode].y.baseVal[0].value;
+	  					  			if(eTextArray[textNode].x.baseVal[0] == undefined) {
+	  					  				  x = eTextArray[textNode].x.baseVal.getItem(0).value;
+	  					  				  //console.log("x=" +eTextArray[textNode].x.baseVal.getItem(0).value);
+	  					  				  //console.log("X=" + x);
+		  					  			  
+	  					  			  } else {
+	  					  				  x = eTextArray[textNode].x.baseVal[0].value;
+		  					  			  
+	  					  			  }
+	  					  			  if(eTextArray[textNode].y.baseVal[0] == undefined) {
+	  					  				y = y + eTextArray[textNode].y.baseVal.getItem(0).value;
+	  					  			    //console.log("y=" +eTextArray[textNode].y.baseVal.getItem(0).value);
+	  					  			    //console.log("y=" + y);
+	  					  			  } else {
+	  					  				y = y + eTextArray[textNode].y.baseVal[0].value;
+	  					  			  }
 	  					  			  //console.log("X=" + x + " and Y =" + y);
 				  					  	if(eTextArray[textNode].className.baseVal == "legend right") {
 				  					  			textG.append("text")
@@ -852,7 +869,7 @@
 						// 									    $('#spiderWeb').val(base64);
 						// 									  });
 					});
-		      			localStorage.clear();
+		      			//localStorage.clear();
 									</script>
 									<input type="hidden" id="scoreinfo" name="scoreinfo" value="" />
 									<input type="hidden" id="pdfFilePath" name="pdfFilePath" value="" />
