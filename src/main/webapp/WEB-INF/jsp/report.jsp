@@ -872,7 +872,7 @@
 						// 									    $('#spiderWeb').val(base64);
 						// 									  });
 					});
-		      			//localStorage.clear();
+		      			localStorage.clear();
 									</script>
 									<input type="hidden" id="scoreinfo" name="scoreinfo" value="" />
 									<input type="hidden" id="pdfFilePath" name="pdfFilePath" value="" />
