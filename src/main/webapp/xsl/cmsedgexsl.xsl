@@ -21,7 +21,7 @@
 					<fo:block text-align="right">
 						<fo:external-graphic width="3.30cm" height="2.11cm" content-width="scale-down-to-fit" content-height="scale-down-to-fit" scaling="non-uniform">
 							<xsl:attribute name="src">
-							<xsl:text>url('file:///</xsl:text>
+							<xsl:text>url('</xsl:text>
 							<xsl:value-of select="data/main/imgPath" /><xsl:text>/</xsl:text>
 							<xsl:value-of select="data/main/Company_Logo" /><xsl:text>')</xsl:text>
 						</xsl:attribute>
@@ -60,7 +60,7 @@
 						<fo:block text-align="center">
 							<fo:external-graphic height="0.9cm" width="8.4cm" content-width="scale-down-to-fit" content-height="scale-down-to-fit" scaling="non-uniform">
 								<xsl:attribute name="src">
-									<xsl:text>url('file:///</xsl:text>
+									<xsl:text>url('</xsl:text>
 									<xsl:value-of select="data/main/imgPath" /><xsl:text>/</xsl:text>
 									<xsl:value-of select="data/main/strapline" /><xsl:text>')</xsl:text>
 								</xsl:attribute>
@@ -87,7 +87,7 @@
 						<fo:external-graphic padding-right="0.5cm"
 							width="17.7cm" height="3.0cm" content-width="scale-down-to-fit" content-height="scale-down-to-fit" scaling="non-uniform">
 							<xsl:attribute name="src">
-								<xsl:text>url('file:///</xsl:text><xsl:value-of select="data/main/imgPath" /><xsl:text>/</xsl:text>
+								<xsl:text>url('</xsl:text><xsl:value-of select="data/main/imgPath" /><xsl:text>/</xsl:text>
 								<xsl:value-of select="data/main/range" /><xsl:text>')</xsl:text>
 							</xsl:attribute>
 						</fo:external-graphic>
@@ -96,7 +96,7 @@
 						padding-top="5mm" page-break-after="always">
 						<fo:external-graphic width="17.7cm" height="14cm" content-width="scale-down-to-fit" content-height="scale-down-to-fit" scaling="non-uniform">
 							<xsl:attribute name="src">
-								<xsl:text>url('file:///</xsl:text><xsl:value-of
+								<xsl:text>url('</xsl:text><xsl:value-of
 								select="data/main/spiderwebImgPath" /><xsl:text>/</xsl:text>
 								<xsl:value-of select="data/main/spiderwebFileName" /><xsl:text>')</xsl:text>
 							</xsl:attribute>
@@ -163,12 +163,12 @@
 														<xsl:attribute name="src">
 															<xsl:choose>
 																<xsl:when test="response = 'true'">
-																	<xsl:text>url('file:///</xsl:text>
+																	<xsl:text>url('</xsl:text>
 																	<xsl:value-of select="../../../imgPath" /><xsl:text>/</xsl:text>
 																	<xsl:value-of select="../../../correctAnswer" /><xsl:text>')</xsl:text>
 																</xsl:when>
 																<xsl:otherwise>
-																	<xsl:text>url('file:///</xsl:text>
+																	<xsl:text>url('</xsl:text>
 																	<xsl:value-of select="../../../imgPath" /><xsl:text>/</xsl:text>
 																	<xsl:value-of select="../../../wrongAnswer" /><xsl:text>')</xsl:text>
 																</xsl:otherwise>
