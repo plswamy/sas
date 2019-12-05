@@ -317,13 +317,12 @@
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                             <% String requiredFields=hs.get("requiredFields");
-                                            	String startButton = hs.get("startbutton");
                                                 %>
                                             <span class="required-text pull-left">* <%=requiredFields%></span>
                                             <span class="pull-right">
                                             <a id="ctl00_ContentPlaceHolder1_btnRegister" class="btn btn-success" href="javascript:WebForm_DoPostBackWithOptions(new
                                                 WebForm_PostBackOptions(&quot;ctl00$ContentPlaceHolder1$btnRegister&quot;, &quot;&quot;, true,
-                                                &quot;&quot;, &quot;&quot;, false, true))"><%=startButton%>
+                                                &quot;&quot;, &quot;&quot;, false, true))">Start
                                             <span class="arrow"></span></a>
                                             </span>
                                         </div>

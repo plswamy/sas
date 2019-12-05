@@ -47,7 +47,7 @@
           String secName1 = lhs.get("secName1");
           String secName2 = lhs.get("secName2");
           String secName3 = lhs.get("secName3");
-          String questionlabel = lhs.get("questionlabel");
+
           Hashtable<String, List<Question>> hs = (Hashtable<String, List<Question>>) request.getAttribute("questions");  
           List<Question> list = hs.get("plan");
           int totalQuestions = 0;
@@ -277,7 +277,7 @@
                     <div class="question clearfix" data-section-id="1" data-question-id="1" style="">
                       <div class="left col-xs-12 col-sm-12 col-md-6 col-lg-5">
                         <div class="question_count_wrap">
-                          <div class="question_count_heading"><%=questionlabel%></div>
+                          <div class="question_count_heading">Question</div>
                           <div class="question_count">1</div>
                         </div>
                         <%--<div class="question_image"></div><!-- TODO: replace images-->--%>

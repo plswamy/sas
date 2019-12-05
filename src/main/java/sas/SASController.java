@@ -636,8 +636,8 @@ public class SASController {
 		try {
 			con = dataSource.getConnection();
 			stmt = con.prepareStatement("select qid, avg(qresponse='yes') as yesAvg,avg(qresponse='no') as noAvg,avg(qresponse='notsure') as notSureAvg " + 
-										"from userresponse, questions " +
-										"where questions.id = userresponse.qid and questions.lang=? "+
+										"from sas.userresponse, sas.questions " +
+										"where sas.questions.id = sas.userresponse.qid and sas.questions.lang=? "+
 										"group by qid;");
 			stmt.setString(1, lang);
 			ResultSet rs = stmt.executeQuery();
@@ -1082,7 +1082,7 @@ public class SASController {
 			StringTokenizer qToken = new StringTokenizer(questions, "|");
 			String eqid = null;
 			while (qToken.hasMoreElements()) {
-				st = new StringTokenizer(qToken.nextToken(), "~");
+				st = new StringTokenizer(qToken.nextToken(), ":");
 				// id:section:question:subsection:desc:imageName:order
 				if(st.countTokens()==7){
 					temp1 = st.nextToken(); // id
@@ -1270,7 +1270,7 @@ public class SASController {
 			stmt = con.prepareStatement(questionInsert);
 			StringTokenizer qToken = new StringTokenizer(questions, "|");
 			while (qToken.hasMoreElements()) {
-				st = new StringTokenizer(qToken.nextToken(), "~");
+				st = new StringTokenizer(qToken.nextToken(), ":");
 				LOGGER.info("st token length....:" + st.countTokens());
 				// id:section:question:desc:imageName
 				// id:section:question:subsection:desc:imageName:order
@@ -1344,7 +1344,7 @@ public class SASController {
 			stmt = con.prepareStatement(questionInsert);
 			StringTokenizer qToken = new StringTokenizer(questions, "|");
 			while (qToken.hasMoreElements()) {
-				st = new StringTokenizer(qToken.nextToken(), "~");
+				st = new StringTokenizer(qToken.nextToken(), ":");
 				// id:section:question:desc:imageName
 				// id:section:question:subsection:desc:imageName:order
 				if(st.countTokens()==7) {
