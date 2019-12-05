@@ -31,7 +31,7 @@ public class CustomPDFRendererConfigurator extends PDFRendererConfigurator {
         try {
             //FontUris fontUris = new FontUris(Thread.currentThread().getContextClassLoader().getResource("D:\\myprojects\\InternatinalSOS\\master\\assessmyrisk\\sas\\src\\main\\resources\\simhei.ttf").toURI(), null);
         	//FontUris fontUris = new FontUris(new File("D:\\myprojects\\InternatinalSOS\\master\\assessmyrisk\\sas\\src\\main\\resources\\simhei.ttf").toURI(), null);
-        	FontUris fontUris = new FontUris(new File("src\\main\\resources\\simhei.ttf").toURI(), null);
+        	FontUris fontUris = new FontUris(new File("src/main/resources/simhei.ttf").toURI(), null);
         	List<FontTriplet> triplets = new ArrayList<FontTriplet>();
             triplets.add(new FontTriplet("SimHei", Font.STYLE_NORMAL, Font.WEIGHT_NORMAL));
             EmbedFontInfo fontInfo = new EmbedFontInfo(fontUris, false, false, triplets, null, EncodingMode.AUTO, EmbeddingMode.AUTO, false, false);
