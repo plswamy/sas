@@ -31,6 +31,8 @@
          String secName1 = hLabels.get("secName1");
          String secName2 = hLabels.get("secName2");
          String secName3 = hLabels.get("secName3");
+         String actionlabel = hLabels.get("actionlabel");
+         String youScoredLabel = hLabels.get("youscoredlabel");
          String spiderLegend1 = "Your travel risk management self-assessment results";
          String spiderLegend2 = "Industry benchmark";
          if(hLabels.containsKey("spider_legend_1")) spiderLegend1 = hLabels.get("spider_legend_1") ;
@@ -225,7 +227,7 @@
 							</div>
 							<div class="content">
 								<div class="results_h2_wrap stripe">
-									<h2><%=scoreLable%>
+									<h2><%=youScoredLabel%>
 										<span id="score"></span>%
 									</h2>
 								</div>
@@ -919,7 +921,7 @@
                             </div>
                           </div>
                           <div class="plan-section-style hidden-xs col-sm-6 col-md-6 col-lg-5">
-                            <div class="plan-header-text">&nbsp;Actions</div>
+                            <div class="plan-header-text">&nbsp;<%=actionlabel%></div>
                           </div>
                         </div>
                         <div class="section_questions stripe">
@@ -942,7 +944,7 @@
                             </div>
                           </div>
                           <div class="plan-section-style hidden-xs col-sm-6 col-md-6 col-lg-5">
-                            <div class="plan-header-text">&nbsp;Actions</div>
+                            <div class="plan-header-text">&nbsp;<%=actionlabel%></div>
                           </div>
                         </div>
                         <div class="section_questions stripe">
@@ -964,7 +966,7 @@
                             </div>
                           </div>
                           <div class="plan-section-style hidden-xs col-sm-6 col-md-6 col-lg-5">
-                            <div class="plan-header-text">&nbsp;Actions</div>
+                            <div class="plan-header-text">&nbsp;<%=actionlabel%></div>
                           </div>
                         </div>
                         <div class="section_questions stripe">

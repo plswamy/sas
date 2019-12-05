@@ -19,22 +19,22 @@
 			<fo:page-sequence master-reference="all">
 				<fo:static-content flow-name="xsl-region-before">
 					<fo:block text-align="right">
-						<fo:external-graphic width="3.30cm" height="2.11cm">
+						<fo:external-graphic width="3.30cm" height="2.11cm" content-width="scale-down-to-fit" content-height="scale-down-to-fit" scaling="non-uniform">
 							<xsl:attribute name="src">
-							<xsl:text>'</xsl:text>
+							<xsl:text>url('file:///</xsl:text>
 							<xsl:value-of select="data/main/imgPath" /><xsl:text>/</xsl:text>
-							<xsl:value-of select="data/main/Company_Logo" /><xsl:text>'</xsl:text>
+							<xsl:value-of select="data/main/Company_Logo" /><xsl:text>')</xsl:text>
 						</xsl:attribute>
 						</fo:external-graphic>
 					</fo:block>
 					<fo:block padding-top="5mm">
-						<fo:block font-family="sans-serif" font-weight="bold"
+						<fo:block font-family="sans-serif, SimHei" font-weight="bold"
 							color="#2f4696" font-size="20pt" wrap-option="no-wrap">
 							<xsl:value-of select="data/main/pdf_heading" />
 						</fo:block>
 					</fo:block>
 					<fo:block>
-						<fo:block font-family="sans-serif" font-size="19pt"
+						<fo:block font-family="sans-serif, SimHei" font-size="19pt"
 							color="black" wrap-option="no-wrap" padding-bottom="2mm">
 							<xsl:value-of select="data/main/pdf_sub_haading" />
 							<xsl:text> - </xsl:text>
@@ -45,7 +45,7 @@
 						</fo:block>
 					</fo:block>
 					<fo:block>
-						<fo:block font-family="sans-serif" font-size="19pt"
+						<fo:block font-family="sans-serif, SimHei" font-size="19pt"
 							color="black" wrap-option="no-wrap" padding-bottom="2mm"
 							border-bottom-style="solid" border-bottom-width="2pt">
 								<xsl:value-of select="data/main/companyname" />
@@ -58,11 +58,11 @@
 				<fo:static-content flow-name="xsl-region-after">
 					<fo:block>
 						<fo:block text-align="center">
-							<fo:external-graphic height="0.9cm" width="8.4cm">
+							<fo:external-graphic height="0.9cm" width="8.4cm" content-width="scale-down-to-fit" content-height="scale-down-to-fit" scaling="non-uniform">
 								<xsl:attribute name="src">
-									<xsl:text>'</xsl:text>
+									<xsl:text>url('file:///</xsl:text>
 									<xsl:value-of select="data/main/imgPath" /><xsl:text>/</xsl:text>
-									<xsl:value-of select="data/main/strapline" /><xsl:text>'</xsl:text>
+									<xsl:value-of select="data/main/strapline" /><xsl:text>')</xsl:text>
 								</xsl:attribute>
 							</fo:external-graphic>
 						</fo:block>
@@ -73,7 +73,7 @@
 				<fo:flow flow-name="xsl-region-body">
 					<xsl:apply-templates select="data" />
 					<fo:block text-align="center">
-						<fo:block font-family="sans-serif" font-weight="bold"
+						<fo:block font-family="sans-serif, SimHei" font-weight="bold"
 							color="#2f4696" font-size="23pt" wrap-option="no-wrap"
 							text-align="center" border-bottom-style="solid"
 							border-bottom-width="2pt">
@@ -85,25 +85,24 @@
 					<fo:block text-align="start" padding-top="5mm"
 						padding-bottom="5mm">
 						<fo:external-graphic padding-right="0.5cm"
-							width="23.23cm" height="3.38cm">
+							width="17.7cm" height="3.0cm" content-width="scale-down-to-fit" content-height="scale-down-to-fit" scaling="non-uniform">
 							<xsl:attribute name="src">
-								<xsl:text>'</xsl:text><xsl:value-of select="data/main/imgPath" /><xsl:text>/</xsl:text>
-								<xsl:value-of select="data/main/range" /><xsl:text>'</xsl:text>
+								<xsl:text>url('file:///</xsl:text><xsl:value-of select="data/main/imgPath" /><xsl:text>/</xsl:text>
+								<xsl:value-of select="data/main/range" /><xsl:text>')</xsl:text>
 							</xsl:attribute>
 						</fo:external-graphic>
 					</fo:block>
 					<fo:block background-color="#f2f2f2" text-align="center"
 						padding-top="5mm" page-break-after="always">
-						<fo:external-graphic width="21.1cm" height="17.52cm">
+						<fo:external-graphic width="17.7cm" height="14cm" content-width="scale-down-to-fit" content-height="scale-down-to-fit" scaling="non-uniform">
 							<xsl:attribute name="src">
-								<xsl:text>'</xsl:text><xsl:value-of
+								<xsl:text>url('file:///</xsl:text><xsl:value-of
 								select="data/main/spiderwebImgPath" /><xsl:text>/</xsl:text>
-								<xsl:value-of select="data/main/spiderwebFileName" /><xsl:text>'</xsl:text>
+								<xsl:value-of select="data/main/spiderwebFileName" /><xsl:text>')</xsl:text>
 							</xsl:attribute>
 						</fo:external-graphic>
 					</fo:block>
-					<fo:table break-after="page">
-					</fo:table>
+					
 					<fo:block text-align="start">
 						<fo:table>
 							<fo:table-column column-width="1.5cm" />
@@ -126,7 +125,7 @@
 									</xsl:variable>
 									<fo:table-row>
 										<fo:table-cell number-columns-spanned="3">
-											<fo:block font-family="sans-serif" color="{$titleColor}"
+											<fo:block font-family="sans-serif, SimHei" color="{$titleColor}"
 												font-size="20pt" wrap-option="wrap" space-before="5mm"
 												font-variant="small-caps" font-weight="bold">
 												<xsl:value-of select="title" />
@@ -136,7 +135,7 @@
 									</fo:table-row>
 									<fo:table-row>
 										<fo:table-cell number-columns-spanned="3">
-											<fo:block font-family="sans-serif" color="{$titleColor}"
+											<fo:block font-family="sans-serif, SimHei " color="{$titleColor}"
 												font-size="12pt" font-weight="bold" wrap-option="wrap" space-before="5mm"
 												font-variant="small-caps">
 												<fo:inline color="#232762"><xsl:value-of select="../pdf_section_sub_heading1" /> </fo:inline>
@@ -148,7 +147,7 @@
 									<xsl:for-each select="subsection">
 									<fo:table-row>
 										<fo:table-cell number-columns-spanned="3">
-											<fo:block font-family="sans-serif" color="{$titleColor}"
+											<fo:block font-family="sans-serif, SimHei" color="{$titleColor}"
 												font-size="12pt" font-weight="bold" wrap-option="wrap" space-before="5mm"
 												font-variant="small-caps">
 												<xsl:value-of select="title" />
@@ -157,35 +156,36 @@
 										</fo:table-cell>
 									</fo:table-row>
 									<xsl:for-each select="question">
-										<fo:table-row background-color="#f2f2f2"
-											padding-top="5mm">
-											<fo:table-cell padding="3mm">
-												<fo:external-graphic width="1.16cm" height="1cm">
-													<xsl:attribute name="src">
-														<xsl:choose>
-															<xsl:when test="response = 'true'">
-																<xsl:text>'</xsl:text>
-																<xsl:value-of select="../../../imgPath" /><xsl:text>/</xsl:text>
-																<xsl:value-of select="../../../correctAnswer" /><xsl:text>'</xsl:text>
-															</xsl:when>
-															<xsl:otherwise>
-																<xsl:text>'</xsl:text>
-																<xsl:value-of select="../../../imgPath" /><xsl:text>/</xsl:text>
-																<xsl:value-of select="../../../wrongAnswer" /><xsl:text>'</xsl:text>
-															</xsl:otherwise>
-														</xsl:choose>
-													</xsl:attribute>
-												</fo:external-graphic>
+										<fo:table-row background-color="#f2f2f2">
+											<fo:table-cell>
+												<fo:block padding-top="5mm" padding="3mm">
+													<fo:external-graphic width="1cm" height="0.8cm" content-width="scale-down-to-fit" content-height="scale-down-to-fit" scaling="non-uniform">
+														<xsl:attribute name="src">
+															<xsl:choose>
+																<xsl:when test="response = 'true'">
+																	<xsl:text>url('file:///</xsl:text>
+																	<xsl:value-of select="../../../imgPath" /><xsl:text>/</xsl:text>
+																	<xsl:value-of select="../../../correctAnswer" /><xsl:text>')</xsl:text>
+																</xsl:when>
+																<xsl:otherwise>
+																	<xsl:text>url('file:///</xsl:text>
+																	<xsl:value-of select="../../../imgPath" /><xsl:text>/</xsl:text>
+																	<xsl:value-of select="../../../wrongAnswer" /><xsl:text>')</xsl:text>
+																</xsl:otherwise>
+															</xsl:choose>
+														</xsl:attribute>
+													</fo:external-graphic>
+												</fo:block>
 											</fo:table-cell>
 											<fo:table-cell>
-												<fo:block font-family="sans-serif" font-size="10pt"
+												<fo:block font-family="sans-serif, SimHei" font-size="10pt"
 													color="{$titleColor}" wrap-option="wrap" font-weight="bold" space-before="3mm">
 													<xsl:value-of select="title" />
 													<xsl:text> </xsl:text>
 												</fo:block>
 											</fo:table-cell>
 											<fo:table-cell>
-												<fo:block font-family="sans-serif" color="black"
+												<fo:block font-family="sans-serif, SimHei" color="black"
 													font-size="10pt" wrap-option="wrap" font-weight="bold" space-before="3mm">
 													<xsl:value-of select="value" />
 													<xsl:text> </xsl:text>
@@ -194,7 +194,7 @@
 										</fo:table-row>
 										<fo:table-row background-color="#f2f2f2">
 											<fo:table-cell number-columns-spanned="3">
-												<fo:block font-family="sans-serif" color="black"
+												<fo:block font-family="sans-serif, SimHei" color="black"
 													font-size="9pt" wrap-option="wrap" margin-left="2.5cm">
 													<xsl:value-of select="answer" />
 													<xsl:text> </xsl:text>
@@ -213,12 +213,12 @@
 							<fo:table-body>
 								<fo:table-row>
 									<fo:table-cell>
-										<fo:block font-family="sans-serif" color="black"
+										<fo:block font-family="sans-serif, SimHei" color="black"
 											font-size="13pt" wrap-option="no-wrap" padding-top="5mm">
 											<xsl:value-of select="data/main/desc31" />
 											<xsl:text></xsl:text>
 										</fo:block>
-										<fo:block text-align="left" font-family="sans-serif"
+										<fo:block text-align="left" font-family="sans-serif, SimHei"
 											color="black" font-size="8pt" wrap-option="no-wrap" padding-top="5mm">
 											<xsl:value-of select="data/main/desc32" />
 											<xsl:text></xsl:text>
@@ -231,7 +231,7 @@
 											</fo:basic-link>
 										</fo:block>
 
-										<fo:block text-align="left" font-family="sans-serif"
+										<fo:block text-align="left" font-family="sans-serif, SimHei"
 											color="black" font-size="8pt" wrap-option="wrap" padding-top="5mm">
 											<xsl:value-of select="data/main/desc33" />
 											<xsl:text> </xsl:text>
