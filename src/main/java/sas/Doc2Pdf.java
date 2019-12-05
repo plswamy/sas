@@ -52,7 +52,7 @@ public class Doc2Pdf {
         //Construct driver
         //Driver driver = new Driver();
         // create an instance of fop factory
-        FopFactory fopFactory = new FopFactoryBuilder(new File(".").toURI()).build();
+        FopFactory fopFactory = new FopFactoryBuilder(new File("/").toURI()).build();
 
         RendererFactory rendererFactory = fopFactory.getRendererFactory();
         rendererFactory.addDocumentHandlerMaker(new CustomPDFDocumentHandlerMaker());
