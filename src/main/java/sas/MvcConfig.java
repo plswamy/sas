@@ -27,7 +27,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
   	public DriverManagerDataSource dataSource() {
   	    DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
   	    driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
-  	    driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/sas");
+  	    driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/sas?useUnicode=true&characterEncoding=utf-8");
   	    driverManagerDataSource.setUsername("root");
   	    driverManagerDataSource.setPassword("password");
   	    return driverManagerDataSource;
@@ -55,5 +55,4 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         filterRegistrationBean.addInitParameter("multipartResolverBeanName", "commonsMultipartResolver");
         return filterRegistrationBean;
     }
-
 }

@@ -148,7 +148,7 @@
                 });
                 sectionFields.each(function(cur) {
                     var objId = $(this).data('id');
-                    allSections +=  objId + ":" + $(this).data('section') + ":" + $(this).val() +":" + $(".sos-subsection-" + objId).val() +":"+ $(".sos-input-desc-" + objId).val() + ":";
+                    allSections +=  objId + "~" + $(this).data('section') + "~" + $(this).val() +"~" + $(".sos-subsection-" + objId).val() +"~"+ $(".sos-input-desc-" + objId).val() + "~";
                     var imgName = "";
                     var currImg = $("#file" + objId).val();
                     if(!!currImg) {
@@ -158,7 +158,7 @@
                         imgName = currImg.substring(currImg.lastIndexOf("/") + 1, currImg.length);
                     }
                     //console.log("imgName : " + imgName);
-                    allSections += imgName + ":" + $(".sos-qorder-" + objId).val() + "|";
+                    allSections += imgName + "~" + $(".sos-qorder-" + objId).val() + "|";
                 });
                 //    fieldid:   order:type:displayname:required:<<options>>     <<options>> exists only for select types
                 allFieldsInfo.each(function(cur) {

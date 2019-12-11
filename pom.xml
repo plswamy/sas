@@ -51,55 +51,25 @@
         </dependency>
 
 <dependency>
-    <groupId>batik</groupId>
-	<artifactId>com.batik</artifactId>
-    <version>1.0</version>
-    <scope>system</scope>
-    <systemPath>${basedir}/src/main/resources/lib/batik.jar</systemPath>
+    <groupId>org.apache.xmlgraphics</groupId>
+    <artifactId>fop</artifactId>
+    <version>2.3</version>
 </dependency>
-<dependency>
-    <groupId>avalon-framework-cvs-20020806</groupId>
-	<artifactId>com.avalon</artifactId>
-    <version>1.0</version>
-    <scope>system</scope>
-    <systemPath>${basedir}/src/main/resources/lib/avalon-framework-cvs-20020806.jar</systemPath>
-</dependency>
-<dependency>
-    <groupId>fop</groupId>
-	<artifactId>com.fop</artifactId>
-    <version>1.0</version>
-    <scope>system</scope>
-    <systemPath>${basedir}/src/main/resources/lib/fop.jar</systemPath>
-</dependency>
-<dependency>
-    <groupId>jdom-1.0</groupId>
-	<artifactId>com.jdom</artifactId>
-    <version>1.0</version>
-    <scope>system</scope>
-    <systemPath>${basedir}/src/main/resources/lib/jdom-1.0.jar</systemPath>
-</dependency>
-<dependency>
-    <groupId>xalan</groupId>
-	<artifactId>com.xalan</artifactId>
-    <version>1.0</version>
-    <scope>system</scope>
-    <systemPath>${basedir}/src/main/resources/lib/xalan.jar</systemPath>
-</dependency>
-<dependency>
-    <groupId>commons-io</groupId>
-	<artifactId>org.apache</artifactId>
-    <version>2.2</version>
-    <scope>system</scope>
-    <systemPath>${basedir}/src/main/resources/lib/commons-io-2.2.jar</systemPath>
-</dependency>
-<dependency>
-    <groupId>commons-fileupload</groupId>
-	<artifactId>com.fileupload</artifactId>
-    <version>1.2.2</version>
-    <scope>system</scope>
-    <systemPath>${basedir}/src/main/resources/lib/commons-fileupload-1.2.2.jar</systemPath>
-</dependency>
-<dependency>
+		<dependency>
+    		<groupId>jdom-1.0</groupId>
+				<artifactId>com.jdom</artifactId>
+	 		   <version>1.0</version>
+ 		   	<scope>system</scope>
+		    	<systemPath>${basedir}/src/main/resources/lib/jdom-1.0.jar</systemPath>
+		</dependency>
+		<dependency>
+   		 <groupId>commons-fileupload</groupId>
+			<artifactId>com.fileupload</artifactId>
+ 		   	<version>1.2.2</version>
+   		 	<scope>system</scope>
+  		 	 <systemPath>${basedir}/src/main/resources/lib/commons-fileupload-1.2.2.jar</systemPath>
+		</dependency>
+		<dependency>
 			<groupId>unirest-java</groupId>
 			<artifactId>unirest-java</artifactId>
 			<version>1.4.9</version>

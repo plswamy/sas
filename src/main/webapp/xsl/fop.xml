@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+ <fop>
+   <renderers>
+    <renderer mime="application/pdf">
+     <font kerning="yes" embed-url="simhei.ttf" embedding-mode="subset">
+		<font-triplet name="SimHei" style="normal" weight="normal"/>
+	  </font>
+    </renderer>
+  </renderers>
+ </fop>

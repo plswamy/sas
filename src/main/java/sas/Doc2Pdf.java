@@ -2,8 +2,14 @@ package sas;
 
 import org.jdom.Document;
 import org.jdom.transform.JDOMSource;
-import org.apache.fop.apps.Driver;
-import org.apache.fop.messaging.MessageHandler;
+//import org.apache.fop.apps.Driver;
+import org.apache.fop.apps.FOUserAgent;
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.FopFactoryBuilder;
+import org.apache.fop.apps.MimeConstants;
+//import org.apache.fop.messaging.MessageHandler;
+import org.apache.fop.render.RendererFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +24,6 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.OutputStream;
 
-import javax.xml.parsers.SAXParser;
 //import embedding.model.*;
 
 
@@ -45,7 +50,15 @@ public class Doc2Pdf {
         logger.debug("convertDocument2PDF(Document doc, File xslt, File pdf)");
 
         //Construct driver
-        Driver driver = new Driver();
+        //Driver driver = new Driver();
+        // create an instance of fop factory
+        FopFactory fopFactory = new FopFactoryBuilder(new File("/app/sasTest/src/main/webapp/xsl/fop.xml").toURI()).build();
+
+        RendererFactory rendererFactory = fopFactory.getRendererFactory();
+        rendererFactory.addDocumentHandlerMaker(new CustomPDFDocumentHandlerMaker());
+
+        // a user agent is needed for transformation
+        FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
         logger.debug("Before setting logger ");
 
         //Setup logger
@@ -54,7 +67,7 @@ public class Doc2Pdf {
         logger.debug("before setup renderer ");
 
         //Setup Renderer (output format)
-        driver.setRenderer(Driver.RENDER_PDF);
+        //driver.setRenderer(Driver.RENDER_PDF);
         logger.debug("before setting output :"+pdf);
 
         //Setup output
@@ -63,9 +76,10 @@ public class Doc2Pdf {
 
         try {
 
-            driver.setOutputStream(out);
-            logger.debug("after driver output is set");
-            
+            //driver.setOutputStream(out);
+            //logger.debug("after driver output is set");
+        	 // Construct fop with desired output format
+            Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
             System.setProperty ("javax.xml.transform.TransformerFactory", "org.apache.xalan.processor.TransformerFactoryImpl"); 
 
             //Setup XSLT
@@ -77,9 +91,11 @@ public class Doc2Pdf {
             Source src = new JDOMSource(doc);
             logger.debug("after source read ");
 
-            Result res = new SAXResult(driver.getContentHandler());
-            logger.debug("after result ");
-
+            //Result res = new SAXResult(driver.getContentHandler());
+            //logger.debug("after result ");
+            // Resulting SAX events (the generated FO) must be piped through to
+            // FOP
+            Result res = new SAXResult(fop.getDefaultHandler());
             transformer.transform(src, res);
             logger.debug("after trasform");
         }
