@@ -33,7 +33,7 @@
                         id: '<%= q.getId() %>',
                         text: "<%= q.getText() %>",
                         subsection: "<%= q.getSubtype() %>",
-                        description: "<%= q.getDesc() %>",
+                        description: `<%= q.getDesc() %>`,
                         imagePath: "support/img/resourceFiles/<%= q.getImageName() %>",
                         type: 'plan'
                     };
@@ -54,7 +54,7 @@
                         id: '<%= q.getId() %>',
                         text: "<%= q.getText() %>",
                         subsection: "<%= q.getSubtype() %>",
-                        description: "<%= q.getDesc() %>",
+                        description: `<%= q.getDesc() %>`,
                         imagePath: "support/img/resourceFiles/<%= q.getImageName() %>",
                         type: 'do'
                     };
@@ -75,7 +75,7 @@
                         id: '<%= q.getId() %>',
                         text: "<%= q.getText() %>",
                         subsection: "<%= q.getSubtype() %>",
-                        description: "<%= q.getDesc() %>",
+                        description: `<%= q.getDesc() %>`,
                         imagePath: "support/img/resourceFiles/<%= q.getImageName() %>",
                         type: 'check'
                     };

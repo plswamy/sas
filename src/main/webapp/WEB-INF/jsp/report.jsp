@@ -13,6 +13,12 @@
         String webContext = "";
         String userid = (String) request.getAttribute("userid");
 		String lang = (String) request.getAttribute("language");
+		boolean isCustomLang = false;
+		if(lang != null && lang.equals("return-to-campus")) {
+			isCustomLang = true;
+		} else {
+			isCustomLang = false;
+		}
         /* begin: assuming below inputs are coming from report link from pdf */
         Hashtable<String, String> hLabels = (Hashtable<String, String>) request.getAttribute("labels");  
          String planHeaderDesc = hLabels.get("plan_header_desc");
@@ -43,7 +49,7 @@
                 <script>
                     var planSection = {}, doSection = {}, checkSection = {}, allSections = {}, surPro = {}, fullD = {},
                         surveyProgress = {'plan': {}, 'do': {}, 'check': {}}, fullData = {};
-            <%
+                    <%
                     List<String> userList = (List<String>) request.getAttribute("userdata");
                     for(int i=0; i < userList.size(); i++) {
                         %>
@@ -250,6 +256,14 @@
                               totalNo = 0,
                               totalNotsure = 0,
                                     subSec = {}
+                        	var isCusomLanguage = false;
+	            			<%
+			            		if(isCustomLang) {
+			            			%>
+			            			isCusomLanguage = true;
+			            			<%
+			            		}
+	                        %>
                               generateForm = function (sectionName){
                                 var qNum = 0;
 
@@ -283,6 +297,13 @@
                                   //if(showQuestion !== 'yes') {
                                     var tmpl = $('.question_template').clone(true);
                                     tmpl.find('.question_id').id = qid;
+                                    if(isCusomLanguage) {
+	                                    if(showQuestion === 'yes') {
+                                    		tmpl.find('.question_response')[0].innerHTML = "<img src=\"support/img/correct_answer.jpg\" height=\"20\" width=\"20\"/>";
+	                                    } else {
+	                                    	tmpl.find('.question_response')[0].innerHTML = "<img src=\"support/img/wrong_answer.jpg\" height=\"20\" width=\"20\"/>";
+	                                    }
+                                    }
                                     tmpl.find('.question_number')[0].innerText = "Q" + qNum;
                                     tmpl.find('.question_text')[0].innerText = this.qry;
                                     tmpl.find('.question_desc')[0].innerText = this.description;
@@ -587,18 +608,27 @@
                             .text(function(d) { return d; })
                             ;
                           /*****************************************************************************************/
-
-                        
+						   
                            var scoreVal = Math.round((totalYes / totalQuestions) * 100);
                           $("#score").html(scoreVal);
                           var imgSrc = './support/img/notsure.png';
+                          if(isCusomLanguage) imgSrc = './support/img/notsure_custom.png';
 						  var timgSrc = 'notsure.png';
+						  if(isCusomLanguage) timgSrc = 'notsure_custom.png';
                           if(scoreVal >= 71) {
                               imgSrc = './support/img/yes.png';
 							  timgSrc = 'yes.png';
+							  if(isCusomLanguage) {
+								  imgSrc = './support/img/yes_custom.png';
+								  timgSrc = 'yes_custom.png';
+							  }
                           } else  if(scoreVal <= 40) {
                               imgSrc = './support/img/no.png';
 							  timgSrc = 'no.png';
+							  if(isCusomLanguage) {
+								  imgSrc = './support/img/no_custom.png';
+								  timgSrc = 'no_custom.png';
+							  }
                           }
                           
                           /**********************************image upload****************************************/
@@ -883,6 +913,7 @@
 										<div class="question_id" style="display: block;">
 											<div class="left col-xs-12 col-sm-6 col-md-6 col-lg-7">
 												<div class="padding">
+													<span class="question_response"></span>
 													<span class="question_number"></span>
 													<p class="question_text"></p>
 												</div>

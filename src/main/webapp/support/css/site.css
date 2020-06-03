@@ -562,6 +562,10 @@ body {
   text-align: right;
 }
 
+#results .question_response {
+  float: left;
+  padding: 4px;
+}
 #results #plan .question_number {
   color: #232762;
 }
