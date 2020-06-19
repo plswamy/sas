@@ -14,7 +14,7 @@
         String userid = (String) request.getAttribute("userid");
 		String lang = (String) request.getAttribute("language");
 		boolean isCustomLang = false;
-		if(lang != null && lang.equals("return-to-campus")) {
+		if(lang != null && (lang.equals("return-to-campus") || lang.equals("return-to-campus") )) {
 			isCustomLang = true;
 		} else {
 			isCustomLang = false;
