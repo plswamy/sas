@@ -62,6 +62,7 @@
                 <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="">
                 <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE"
                     value="/wEPDwULLTE1NzU4NDMxNDVkZJROh77NiIhAB9hkc8bVlwvhv/8Z">
+                <input type="hidden" name="language" id = "language" value="<%= request.getAttribute("language") %>">
             </div>
             <script type="text/javascript">
                 //<![CDATA[

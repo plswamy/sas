@@ -92,8 +92,8 @@ public class SASController {
 	/*@Autowired
 	private NotificationService notificationService;
 	 */
-	@Autowired
-	private HttpSession session;
+//	@Autowired
+//	private HttpSession session;
 
 	//Connection con = null;
 	//PreparedStatement stmt = null;
@@ -110,13 +110,15 @@ public class SASController {
 	@RequestMapping("/admin")
 	public ModelAndView helloAdmin(ModelMap model, Principal principal) {
 		LOGGER.info("helloAdmin called");
-		String requestedLang = req.getParameter("language");
-		if(requestedLang== null || requestedLang!= null && requestedLang.equals("master"))
-			requestedLang = "english";
-		else if (nullCheck(requestedLang).length() == 0 || requestedLang.equals("en")) {
-			requestedLang = "english";
-		}
-		session.setAttribute("language", requestedLang);
+		
+		String requestedLang = setLanguage();
+//		String requestedLang = req.getParameter("language");
+//		if(requestedLang== null || requestedLang!= null && requestedLang.equals("master"))
+//			requestedLang = "english";
+//		else if (nullCheck(requestedLang).length() == 0 || requestedLang.equals("en")) {
+//			requestedLang = "english";
+//		}
+		//session.setAttribute("language", requestedLang);
 		LOGGER.info("requested Lang from page is :" + requestedLang);
 		String loggedInUserName = principal.getName();
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
@@ -150,33 +152,37 @@ public class SASController {
 
 	}
 
-	@RequestMapping(value = "/survey", method = RequestMethod.GET)
-	public String surveyGet(ModelMap model) {
-		String lang = (String) session.getAttribute("language");
-		if (lang == null)
-			lang = req.getParameter("language");
-		LOGGER.info("survey get called....:" + lang);
+//	@RequestMapping(value = "/survey", method = RequestMethod.GET)
+//	public String surveyGet(ModelMap model) {
+//		String lang = setLanguage();
+////		String lang = (String) session.getAttribute("language");
+////		if (lang == null)
+////			lang = req.getParameter("language");
+////		LOGGER.info("survey get called....:" + lang);
+//		req.setAttribute("language", lang);
+//		req.setAttribute("questions", getQuestions(lang));
+//		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
+//		// req.setAttribute("answertypes", getData("answers", "answertype",
+//		// "answertypevalue"));
+//		return "survey";
+//	}
+
+	@RequestMapping(value = "/survey", method = RequestMethod.POST)
+	public String survey(ModelMap model, HttpServletRequest request) {
+		LOGGER.info("survey post called....");
+		LOGGER.info(
+				"ctl00$ContentPlaceHolder1$tbxLastName ===" + model.get("ctl00$ContentPlaceHolder1$tbxLastName"));
+		LOGGER.info("request getParameter ====" + request.getParameter("ctl00$ContentPlaceHolder1$tbxLastName"));
+		String lang = setLanguage();
+//		String lang = (String) session.getAttribute("language");
+//		if (lang == null)
+//			lang = req.getParameter("language");
+		req.setAttribute("language", lang);
 		req.setAttribute("questions", getQuestions(lang));
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		// req.setAttribute("answertypes", getData("answers", "answertype",
 		// "answertypevalue"));
 		return "survey";
-	}
-
-	@RequestMapping(value = "/survey", method = RequestMethod.POST)
-	public String survey(ModelMap model, HttpSession session, HttpServletRequest request) {
-		LOGGER.info("survey post called....");
-		LOGGER.info(
-				"ctl00$ContentPlaceHolder1$tbxLastName ===" + model.get("ctl00$ContentPlaceHolder1$tbxLastName"));
-		LOGGER.info("request getParameter ====" + request.getParameter("ctl00$ContentPlaceHolder1$tbxLastName"));
-		String lang = (String) session.getAttribute("language");
-		if (lang == null)
-			lang = req.getParameter("language");
-		req.setAttribute("questions", getQuestions(lang));
-		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
-		// req.setAttribute("answertypes", getData("answers", "answertype",
-		// "answertypevalue"));
-		return "report";
 
 	}
 
@@ -184,12 +190,13 @@ public class SASController {
 	public String postReport(ModelMap model) throws IOException {
 		LOGGER.info("report post called....");
 		LOGGER.info("email ....:" + req.getParameter("f4"));
-		String lang = (String) session.getAttribute("language");
-		if (lang == null)
-			lang = req.getParameter("language");
-		if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
-			lang = "english";
-		}
+		String lang = setLanguage();
+//		String lang = (String) session.getAttribute("language");
+//		if (lang == null)
+//			lang = req.getParameter("language");
+//		if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
+//			lang = "english";
+//		}
 		saveUser(lang);
 		saveUserResponse();
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
@@ -202,9 +209,11 @@ public class SASController {
 	@RequestMapping(value = "/report", method = RequestMethod.GET)
 	public String getReport(ModelMap model) {
 		LOGGER.info("report get called....");
-		String lang = (String) session.getAttribute("language");
-		if (lang == null)
-			lang = req.getParameter("language");
+		String lang = setLanguage();
+//		String lang = (String) session.getAttribute("language");
+//		if (lang == null)
+//			lang = req.getParameter("language");
+		req.setAttribute("language", lang);
 		String userId = req.getParameter("userid");
 		if (nullCheck(userId).length() > 0) {
 			req.setAttribute("questions", getQuestions(null));
@@ -229,8 +238,9 @@ public class SASController {
 		LOGGER.info("admin post called....");
 		LOGGER.info("=============admin post called=======================");
 		saveLangData(fileMap, request);
-		String requestedLang = req.getParameter("language");
-		session.setAttribute("language", requestedLang);
+		String requestedLang = setLanguage();
+//		String requestedLang = req.getParameter("language");
+//		session.setAttribute("language", requestedLang);
 		LOGGER.info("requested Lang from page is :" + requestedLang);
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLang));
 		req.setAttribute("questions", getQuestions(requestedLang));
@@ -505,18 +515,25 @@ public class SASController {
 		List<String> langs = getLangs();
 		String requestedLanguage = req.getServletPath().substring(1);
 		boolean noLanguage = true;
+		
 		for (String language : langs) {
 			if (requestedLanguage.equalsIgnoreCase(language) || requestedLanguage.equalsIgnoreCase("english")) {
 				noLanguage = false;
-				session.setAttribute("language", requestedLanguage);
+				//session.setAttribute("language", requestedLanguage);
 				req.setAttribute("language", requestedLanguage);
 			}
 		}
 		if(noLanguage) {
-			session.setAttribute("language", "english");
+			//session.setAttribute("language", "english");
 			req.setAttribute("language", "english");
+			requestedLanguage = "english";
 		}
-		loadData();
+		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", requestedLanguage));
+		req.setAttribute("language", requestedLanguage);
+		req.setAttribute("businessindustry", getData("businessindustry", "optkey", "optvalue", requestedLanguage));
+		req.setAttribute("country", getData("country", "optkey", "optvalue", requestedLanguage));
+		req.setAttribute("userformfields", getFormFields(requestedLanguage));
+		loadUserSelectionData(requestedLanguage);
 		if(noLanguage) {
 			return "redirect:/";
 		}
@@ -671,9 +688,10 @@ public class SASController {
 
 	private void loadData() {
 		LOGGER.info("loadData called ...");
-		String lang = (String) session.getAttribute("language");
-		if (lang == null)
-			lang = req.getParameter("language");
+		String lang = setLanguage();
+//		String lang = (String) session.getAttribute("language");
+//		if (lang == null)
+//			lang = req.getParameter("language");
 		
 		req.setAttribute("labels", getData("labels", "labelkey", "labelvalue", lang));
 		req.setAttribute("language", lang);
@@ -873,13 +891,14 @@ public class SASController {
 	}
 	private void saveLangData(Map<String, MultipartFile> fileMap, MultipartHttpServletRequest request) {
 		try {
-			String lang = req.getParameter("language");
-			if (lang == null) {
-				lang = (String) session.getAttribute("language");
-			}
-			if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
-				lang = "english";
-			}
+			String lang =  setLanguage();
+//			String lang = req.getParameter("language");
+//			if (lang == null) {
+//				lang = (String) session.getAttribute("language");
+//			}
+//			if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
+//				lang = "english";
+//			}
 			String editedquestions = req.getParameter("editedquestions");
 			for(String key: fileMap.keySet()) {
 				//System.out.println("key : " + key);
@@ -1019,14 +1038,14 @@ public class SASController {
 		String labels = req.getParameter("labels");
 		String questions = req.getParameter("questions");
 		String userformsfields = req.getParameter("userformsfields");
-		
-		String lang = req.getParameter("language");
-		if (lang == null) {
-			session.getAttribute("language");
-		}
-		if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
-			lang = "english";
-		}
+		String lang =  setLanguage();
+//		String lang = req.getParameter("language");
+//		if (lang == null) {
+//			session.getAttribute("language");
+//		}
+//		if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
+//			lang = "english";
+//		}
 		String deletedquestions = req.getParameter("deletedquestions");
 		String editedquestions = req.getParameter("editedquestions");
 		LOGGER.info("lang:" + lang);
@@ -1221,13 +1240,14 @@ public class SASController {
 	private void updateData() {
 		String labels = req.getParameter("labels");
 		String questions = req.getParameter("questions");
-		String lang = req.getParameter("language");
-		if (lang == null) {
-			session.getAttribute("language");
-		}
-		if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
-			lang = "english";
-		}
+		String lang =  setLanguage();
+//		String lang = req.getParameter("language");
+//		if (lang == null) {
+//			session.getAttribute("language");
+//		}
+//		if (nullCheck(lang).length() == 0 || lang.equals("en") || lang.equals("master")) {
+//			lang = "english";
+//		}
 		LOGGER.info("lang:" + lang);
 		LOGGER.info("labels:" + labels);
 		LOGGER.info("questions:" + questions);
@@ -1306,10 +1326,11 @@ public class SASController {
 		String temp = null;
 		String labels = req.getParameter("labels");
 		String questions = req.getParameter("questions");
-		String lang = req.getParameter("language");
-		if (lang == null) {
-			lang = (String) session.getAttribute("language");
-		}
+		String lang =  setLanguage();
+//		String lang = req.getParameter("language");
+//		if (lang == null) {
+//			lang = (String) session.getAttribute("language");
+//		}
 		LOGGER.info("lang:" + lang);
 		LOGGER.info("labels:" + labels);
 		LOGGER.info("questions:" + questions);
@@ -1925,5 +1946,15 @@ public class SASController {
 			close(stmt, con);
 		}
 		return translationConstantsTable;
+	}
+	
+	public String setLanguage() {
+		String requestedLang = req.getParameter("language");
+		if(requestedLang== null || requestedLang!= null && requestedLang.equals("master"))
+			requestedLang = "english";
+		else if (nullCheck(requestedLang).length() == 0 || requestedLang.equals("en")) {
+			requestedLang = "english";
+		}
+		return requestedLang;
 	}
 }

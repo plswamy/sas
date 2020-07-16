@@ -250,6 +250,7 @@
 
       <form name="surveyForm" method="post" action="report" id="surveyForm" onsubmit="javascript:return beforeSubmit();">
         <input type="hidden" id="userResponse" name="userResponse"/>
+        <input type="hidden" name="language" id = "language" value="<%= request.getAttribute("language") %>">
         <div class="container">
           <div id="outer" class="row">
             <div id="header" class="inner col-xs-12 col-sm-12 col-md-12 col-lg-12">
