@@ -31,11 +31,18 @@
       <script src="<%=webContext%>/support/lib/jquery-3.2.0.js"></script>
       <script src="<%=webContext%>/support/lib/bootstrap.min.js"></script>
       <script type="text/javascript" async="" src="<%=webContext%>support/js/assessment.js"></script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153388732-14"></script>
     </head>
 
     <body>
 
       <script>
+	      window.dataLayer = window.dataLayer || [];
+	      function gtag() {
+	      	dataLayer.push(arguments);
+	      }
+	      gtag('js', new Date());
+	      gtag('config', 'UA-153388732-14');
         var planSection = {}, doSection = {}, checkSection = {}, allSections = {};
 
         <%

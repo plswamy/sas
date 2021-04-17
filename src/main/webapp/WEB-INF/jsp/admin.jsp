@@ -10,6 +10,7 @@
         <script src="support/lib/jquery-ui.min.js"></script>
         <script src="support/lib/bootstrap.min.js"></script>
         <script src="support/lib/bootstrap-select.min.js"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-153388732-14"></script>
         <link href="support/lib/bootstrap.min.css" rel="stylesheet">
         <link href="support/lib/bootstrap-select.min.css" rel="stylesheet">
         <link href="support/lib/font-awesome.min.css" rel="stylesheet">
@@ -17,6 +18,13 @@
         <link href="support/css/site.css" rel="stylesheet">
 	<link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
         <script type="text/javascript">
+	        window.dataLayer = window.dataLayer || [];
+	        function gtag() {
+	        	dataLayer.push(arguments);
+	        }
+	        gtag('js', new Date());
+	        gtag('config', 'UA-153388732-14');
+	        
             var allData=[], allFieldsData=[];
             <%
                 Hashtable<String, List<Question>> hs = (Hashtable<String, List<Question>>) request.getAttribute("questions");  

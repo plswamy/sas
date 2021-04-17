@@ -4,10 +4,17 @@
     <%@page import="sas.bean.Answer"%>
     <%@ page import="java.util.*" %>
     <head>
-        
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153388732-14"></script>
 
       <script>
-        var userSession = {};
+	      window.dataLayer = window.dataLayer || [];
+	      function gtag() {
+	      	dataLayer.push(arguments);
+	      }
+	      gtag('js', new Date());
+	      gtag('config', 'UA-153388732-14');
+        	
+	      var userSession = {};
       </script>
       <%
         String webContext = "";
