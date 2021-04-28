@@ -10,7 +10,7 @@
         <script src="support/lib/jquery-ui.min.js"></script>
         <script src="support/lib/bootstrap.min.js"></script>
         <script src="support/lib/bootstrap-select.min.js"></script>
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-153388732-14"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-153388732-13"></script>
         <link href="support/lib/bootstrap.min.css" rel="stylesheet">
         <link href="support/lib/bootstrap-select.min.css" rel="stylesheet">
         <link href="support/lib/font-awesome.min.css" rel="stylesheet">
@@ -23,7 +23,7 @@
 	        	dataLayer.push(arguments);
 	        }
 	        gtag('js', new Date());
-	        gtag('config', 'UA-153388732-14');
+	        gtag('config', 'UA-153388732-13');
 	        
             var allData=[], allFieldsData=[];
             <%

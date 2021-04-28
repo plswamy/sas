@@ -4,7 +4,7 @@
     <%@page import="sas.bean.Answer"%>
     <%@ page import="java.util.*" %>
     <head>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153388732-14"></script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153388732-13"></script>
 
       <script>
 	      window.dataLayer = window.dataLayer || [];
@@ -12,7 +12,7 @@
 	      	dataLayer.push(arguments);
 	      }
 	      gtag('js', new Date());
-	      gtag('config', 'UA-153388732-14');
+	      gtag('config', 'UA-153388732-13');
         	
 	      var userSession = {};
       </script>

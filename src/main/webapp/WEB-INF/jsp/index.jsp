@@ -10,14 +10,14 @@
         <script src="support/lib/bootstrap.min.js"></script>
         <script src="support/lib/bootstrap-select.min.js"></script>
         <script src="support/js/countries2.js"></script>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153388732-14"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153388732-13"></script>
         <script>
 	        window.dataLayer = window.dataLayer || [];
 	        function gtag() {
 	        	dataLayer.push(arguments);
 	        }
 	        gtag('js', new Date());
-	        gtag('config', 'UA-153388732-14');
+	        gtag('config', 'UA-153388732-13');
             function fnOnUpdateValidators() {
                 var emailValScore = 0;
                 var showMsg = false;
